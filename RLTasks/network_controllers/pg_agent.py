@@ -1,0 +1,94 @@
+import numpy as np
+import torch
+import RLTasks.network_controllers as ai
+import sys
+import matplotlib.pyplot as plt
+import gym
+from Tools.TimeBuffer import TimeBuffer
+import RLTasks.config as cfg
+from tensorboardX import SummaryWriter
+
+if torch.cuda.is_available():
+    device = torch.device('cuda')
+else:
+    device = torch.device('cpu')
+type = torch.float
+args = {'device': device, 'dtype': type}
+
+
+class PGAgent():
+    # this agent can work with environments x, y, z (life and gym envs)
+    # try to make the encoding part separate
+    def __init__(self, model, env: gym.Env):
+        assert isinstance(env, gym.Env)
+
+        assert isinstance(env.action_space, gym.spaces.Discrete)
+        super(PGAgent, self).__init__()
+        self.model = model
+        self.policy_net = model
+        self.reward = 0
+        self.testing_rewards = TimeBuffer(cfg.rewards_eval_window)
+        self.average_rewards = []
+        self.log_probs = []
+        self.rewards = []
+        self.t = 0
+        self.optimizer = getattr(torch.optim, cfg.gym.OPTIMIZER)(self.model.parameters(), lr=cfg.gym.LR)
+        self.writer = SummaryWriter()
+
+    def step(self, env_input):
+        action, log_prob = self.policy_net.get_action(env_input)
+        self.log_probs.append(log_prob)
+        self.t += 1
+        return action
+
+    def update_policy(self, env_reward, episode_end):
+        self.rewards.append(env_reward)
+        if episode_end:
+            discounted_rewards = []
+
+            for t in range(len(self.rewards)):
+                Gt = 0
+                pw = 0
+                for r in self.rewards[t:]:
+                    Gt = Gt + cfg.discount_factor ** pw * r
+                    pw = pw + 1
+                discounted_rewards.append(Gt)
+
+            discounted_rewards = torch.tensor(discounted_rewards)
+            discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / (
+                    discounted_rewards.std() + 1e-9)  # normalize discounted rewards
+
+            policy_gradient = []
+            for log_prob, Gt in zip(self.log_probs, discounted_rewards):
+                policy_gradient.append(-log_prob * Gt)
+
+            self.optimizer.zero_grad()
+            policy_gradient = torch.stack(policy_gradient).sum()
+            policy_gradient.backward()
+            self.optimizer.step()
+
+            self.t = 0
+            self.rewards = []
+            self.log_probs = []
+
+
+    def log_predictions(self, writer=sys.stdout):
+        writer.write('\nAgent Summary at timestep ' + str(self.t) + '\n')
+        writer.write('prediction to environment: ' + str(self.model.get_env_pred_val()) + '\n')
+        writer.write(str(self.pred_val) + ', ' + str(self.pred_feel_val))
+        writer.write('\n\n full reward is: ' + str(self.reward))
+        writer.write('\n')
+        writer.flush()
+
+    def store_results(self, reward):
+        self.testing_rewards.insert(self.t, reward)
+        if not self.t % cfg.rewards_eval_window:
+            self.average_rewards.append(np.average(self.testing_rewards.getData()))
+
+    def plot_results(self):
+        if cfg.results_path is not None:
+            print('trying')
+            print(self.average_rewards)
+            print(cfg.results_path)
+            plt.plot(self.average_rewards)
+            plt.savefig(cfg.results_path + 'averageRewards.png')

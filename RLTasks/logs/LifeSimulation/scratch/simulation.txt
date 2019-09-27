@@ -1,0 +1,9000 @@
+
+Env State for agent at timestep 0
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 1
+Hear.cry, Feel.discomfort
+
+end of timestep 0_____________________________________
+
+
+Env State for agent at timestep 1
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 2
+Hear.cry, Feel.discomfort
+
+end of timestep 1_____________________________________
+
+
+Env State for agent at timestep 2
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 3
+Hear.cry, Feel.discomfort
+
+end of timestep 2_____________________________________
+
+
+Env State for agent at timestep 3
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 4
+Hear.cry, Feel.discomfort
+
+end of timestep 3_____________________________________
+
+
+Env State for agent at timestep 4
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 5
+Hear.cry, Feel.discomfort
+
+end of timestep 4_____________________________________
+
+
+Env State for agent at timestep 5
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 6
+Hear.cry, Feel.discomfort
+
+end of timestep 5_____________________________________
+
+
+Env State for agent at timestep 6
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 7
+Hear.cry, Feel.discomfort
+
+end of timestep 6_____________________________________
+
+
+Env State for agent at timestep 7
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 8
+Hear.nothing, Feel.discomfort
+
+end of timestep 7_____________________________________
+
+
+Env State for agent at timestep 8
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 9
+Hear.nothing, Feel.discomfort
+
+end of timestep 8_____________________________________
+
+
+Env State for agent at timestep 9
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 10
+Hear.nothing, Feel.discomfort
+
+end of timestep 9_____________________________________
+
+
+Env State for agent at timestep 10
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 11
+Hear.nothing, Feel.discomfort
+
+end of timestep 10_____________________________________
+
+
+Env State for agent at timestep 11
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 12
+Hear.nothing, Feel.discomfort
+
+end of timestep 11_____________________________________
+
+
+Env State for agent at timestep 12
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 13
+Hear.nothing, Feel.discomfort
+
+end of timestep 12_____________________________________
+
+
+Env State for agent at timestep 13
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 14
+Hear.nothing, Feel.discomfort
+
+end of timestep 13_____________________________________
+
+
+Env State for agent at timestep 14
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 15
+Hear.nothing, Feel.discomfort
+
+end of timestep 14_____________________________________
+
+
+Env State for agent at timestep 15
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 16
+Hear.nothing, Feel.discomfort
+
+end of timestep 15_____________________________________
+
+
+Env State for agent at timestep 16
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 17
+Hear.nothing, Feel.discomfort
+
+end of timestep 16_____________________________________
+
+
+Env State for agent at timestep 17
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 18
+Hear.nothing, Feel.discomfort
+
+end of timestep 17_____________________________________
+
+
+Env State for agent at timestep 18
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 19
+Hear.nothing, Feel.discomfort
+
+end of timestep 18_____________________________________
+
+
+Env State for agent at timestep 19
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 20
+Hear.nothing, Feel.discomfort
+
+end of timestep 19_____________________________________
+
+
+Env State for agent at timestep 20
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 21
+Hear.nothing, Feel.discomfort
+
+end of timestep 20_____________________________________
+
+
+Env State for agent at timestep 21
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 22
+Hear.nothing, Feel.discomfort
+
+end of timestep 21_____________________________________
+
+
+Env State for agent at timestep 22
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 23
+Hear.nothing, Feel.discomfort
+
+end of timestep 22_____________________________________
+
+
+Env State for agent at timestep 23
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 24
+Hear.nothing, Feel.discomfort
+
+end of timestep 23_____________________________________
+
+
+Env State for agent at timestep 24
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 25
+Hear.nothing, Feel.discomfort
+
+end of timestep 24_____________________________________
+
+
+Env State for agent at timestep 25
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 26
+Hear.nothing, Feel.discomfort
+
+end of timestep 25_____________________________________
+
+
+Env State for agent at timestep 26
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 27
+Hear.nothing, Feel.discomfort
+
+end of timestep 26_____________________________________
+
+
+Env State for agent at timestep 27
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 28
+Hear.nothing, Feel.discomfort
+
+end of timestep 27_____________________________________
+
+
+Env State for agent at timestep 28
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 29
+Hear.nothing, Feel.discomfort
+
+end of timestep 28_____________________________________
+
+
+Env State for agent at timestep 29
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 30
+Hear.nothing, Feel.discomfort
+
+end of timestep 29_____________________________________
+
+
+Env State for agent at timestep 30
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 31
+Hear.nothing, Feel.discomfort
+
+end of timestep 30_____________________________________
+
+
+Env State for agent at timestep 31
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 32
+Hear.nothing, Feel.discomfort
+
+end of timestep 31_____________________________________
+
+
+Env State for agent at timestep 32
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 33
+Hear.nothing, Feel.discomfort
+
+end of timestep 32_____________________________________
+
+
+Env State for agent at timestep 33
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 34
+Hear.nothing, Feel.discomfort
+
+end of timestep 33_____________________________________
+
+
+Env State for agent at timestep 34
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 35
+Hear.nothing, Feel.discomfort
+
+end of timestep 34_____________________________________
+
+
+Env State for agent at timestep 35
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 36
+Hear.nothing, Feel.discomfort
+
+end of timestep 35_____________________________________
+
+
+Env State for agent at timestep 36
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 37
+Hear.nothing, Feel.discomfort
+
+end of timestep 36_____________________________________
+
+
+Env State for agent at timestep 37
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 38
+Hear.nothing, Feel.discomfort
+
+end of timestep 37_____________________________________
+
+
+Env State for agent at timestep 38
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 39
+Hear.nothing, Feel.discomfort
+
+end of timestep 38_____________________________________
+
+
+Env State for agent at timestep 39
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 40
+Hear.nothing, Feel.discomfort
+
+end of timestep 39_____________________________________
+
+
+Env State for agent at timestep 40
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 41
+Hear.nothing, Feel.discomfort
+
+end of timestep 40_____________________________________
+
+
+Env State for agent at timestep 41
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 42
+Hear.nothing, Feel.discomfort
+
+end of timestep 41_____________________________________
+
+
+Env State for agent at timestep 42
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 43
+Hear.nothing, Feel.discomfort
+
+end of timestep 42_____________________________________
+
+
+Env State for agent at timestep 43
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 44
+Hear.nothing, Feel.discomfort
+
+end of timestep 43_____________________________________
+
+
+Env State for agent at timestep 44
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 45
+Hear.nothing, Feel.discomfort
+
+end of timestep 44_____________________________________
+
+
+Env State for agent at timestep 45
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 46
+Hear.nothing, Feel.discomfort
+
+end of timestep 45_____________________________________
+
+
+Env State for agent at timestep 46
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 47
+Hear.nothing, Feel.discomfort
+
+end of timestep 46_____________________________________
+
+
+Env State for agent at timestep 47
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 48
+Hear.nothing, Feel.discomfort
+
+end of timestep 47_____________________________________
+
+
+Env State for agent at timestep 48
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 49
+Hear.nothing, Feel.discomfort
+
+end of timestep 48_____________________________________
+
+
+Env State for agent at timestep 49
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 50
+Hear.nothing, Feel.discomfort
+
+end of timestep 49_____________________________________
+
+
+Env State for agent at timestep 50
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 51
+Hear.nothing, Feel.discomfort
+
+end of timestep 50_____________________________________
+
+
+Env State for agent at timestep 51
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 52
+Hear.nothing, Feel.discomfort
+
+end of timestep 51_____________________________________
+
+
+Env State for agent at timestep 52
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 53
+Hear.nothing, Feel.discomfort
+
+end of timestep 52_____________________________________
+
+
+Env State for agent at timestep 53
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 54
+Hear.nothing, Feel.discomfort
+
+end of timestep 53_____________________________________
+
+
+Env State for agent at timestep 54
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 55
+Hear.nothing, Feel.discomfort
+
+end of timestep 54_____________________________________
+
+
+Env State for agent at timestep 55
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 56
+Hear.nothing, Feel.discomfort
+
+end of timestep 55_____________________________________
+
+
+Env State for agent at timestep 56
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 57
+Hear.nothing, Feel.discomfort
+
+end of timestep 56_____________________________________
+
+
+Env State for agent at timestep 57
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 58
+Hear.nothing, Feel.discomfort
+
+end of timestep 57_____________________________________
+
+
+Env State for agent at timestep 58
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 59
+Hear.nothing, Feel.discomfort
+
+end of timestep 58_____________________________________
+
+
+Env State for agent at timestep 59
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 60
+Hear.nothing, Feel.discomfort
+
+end of timestep 59_____________________________________
+
+
+Env State for agent at timestep 60
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 61
+Hear.nothing, Feel.discomfort
+
+end of timestep 60_____________________________________
+
+
+Env State for agent at timestep 61
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 62
+Hear.origin3, Feel.discomfort
+
+end of timestep 61_____________________________________
+
+
+Env State for agent at timestep 62
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 63
+Hear.origin3, Feel.discomfort
+
+end of timestep 62_____________________________________
+
+
+Env State for agent at timestep 63
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 64
+Hear.origin3, Feel.discomfort
+
+end of timestep 63_____________________________________
+
+
+Env State for agent at timestep 64
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 65
+Hear.origin3, Feel.discomfort
+
+end of timestep 64_____________________________________
+
+
+Env State for agent at timestep 65
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 66
+Hear.origin3, Feel.discomfort
+
+end of timestep 65_____________________________________
+
+
+Env State for agent at timestep 66
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 67
+Hear.nothing, Feel.discomfort
+
+end of timestep 66_____________________________________
+
+
+Env State for agent at timestep 67
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 68
+Hear.nothing, Feel.discomfort
+
+end of timestep 67_____________________________________
+
+
+Env State for agent at timestep 68
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 69
+Hear.nothing, Feel.discomfort
+
+end of timestep 68_____________________________________
+
+
+Env State for agent at timestep 69
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 70
+Hear.nothing, Feel.discomfort
+
+end of timestep 69_____________________________________
+
+
+Env State for agent at timestep 70
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 71
+Hear.nothing, Feel.discomfort
+
+end of timestep 70_____________________________________
+
+
+Env State for agent at timestep 71
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 72
+Hear.nothing, Feel.discomfort
+
+end of timestep 71_____________________________________
+
+
+Env State for agent at timestep 72
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 73
+Hear.nothing, Feel.discomfort
+
+end of timestep 72_____________________________________
+
+
+Env State for agent at timestep 73
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 74
+Hear.nothing, Feel.discomfort
+
+end of timestep 73_____________________________________
+
+
+Env State for agent at timestep 74
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 75
+Hear.nothing, Feel.discomfort
+
+end of timestep 74_____________________________________
+
+
+Env State for agent at timestep 75
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 76
+Hear.nothing, Feel.discomfort
+
+end of timestep 75_____________________________________
+
+
+Env State for agent at timestep 76
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 77
+Hear.nothing, Feel.discomfort
+
+end of timestep 76_____________________________________
+
+
+Env State for agent at timestep 77
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 78
+Hear.nothing, Feel.discomfort
+
+end of timestep 77_____________________________________
+
+
+Env State for agent at timestep 78
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 79
+Hear.origin3, Feel.discomfort
+
+end of timestep 78_____________________________________
+
+
+Env State for agent at timestep 79
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 80
+Hear.origin3, Feel.discomfort
+
+end of timestep 79_____________________________________
+
+
+Env State for agent at timestep 80
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 81
+Hear.origin3, Feel.discomfort
+
+end of timestep 80_____________________________________
+
+
+Env State for agent at timestep 81
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 82
+Hear.origin3, Feel.discomfort
+
+end of timestep 81_____________________________________
+
+
+Env State for agent at timestep 82
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 83
+Hear.origin3, Feel.discomfort
+
+end of timestep 82_____________________________________
+
+
+Env State for agent at timestep 83
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 84
+Hear.nothing, Feel.discomfort
+
+end of timestep 83_____________________________________
+
+
+Env State for agent at timestep 84
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 85
+Hear.nothing, Feel.discomfort
+
+end of timestep 84_____________________________________
+
+
+Env State for agent at timestep 85
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 86
+Hear.nothing, Feel.discomfort
+
+end of timestep 85_____________________________________
+
+
+Env State for agent at timestep 86
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 87
+Hear.nothing, Feel.discomfort
+
+end of timestep 86_____________________________________
+
+
+Env State for agent at timestep 87
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 88
+Hear.nothing, Feel.discomfort
+
+end of timestep 87_____________________________________
+
+
+Env State for agent at timestep 88
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 89
+Hear.nothing, Feel.discomfort
+
+end of timestep 88_____________________________________
+
+
+Env State for agent at timestep 89
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 90
+Hear.nothing, Feel.discomfort
+
+end of timestep 89_____________________________________
+
+
+Env State for agent at timestep 90
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 91
+Hear.nothing, Feel.discomfort
+
+end of timestep 90_____________________________________
+
+
+Env State for agent at timestep 91
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 92
+Hear.nothing, Feel.discomfort
+
+end of timestep 91_____________________________________
+
+
+Env State for agent at timestep 92
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 93
+Hear.nothing, Feel.discomfort
+
+end of timestep 92_____________________________________
+
+
+Env State for agent at timestep 93
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 94
+Hear.nothing, Feel.discomfort
+
+end of timestep 93_____________________________________
+
+
+Env State for agent at timestep 94
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 95
+Hear.nothing, Feel.discomfort
+
+end of timestep 94_____________________________________
+
+
+Env State for agent at timestep 95
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 96
+Hear.origin3, Feel.discomfort
+
+end of timestep 95_____________________________________
+
+
+Env State for agent at timestep 96
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 97
+Hear.origin3, Feel.discomfort
+
+end of timestep 96_____________________________________
+
+
+Env State for agent at timestep 97
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 98
+Hear.origin3, Feel.discomfort
+
+end of timestep 97_____________________________________
+
+
+Env State for agent at timestep 98
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 99
+Hear.origin3, Feel.discomfort
+
+end of timestep 98_____________________________________
+
+
+Env State for agent at timestep 99
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 100
+Hear.origin3, Feel.discomfort
+
+end of timestep 99_____________________________________
+
+
+Env State for agent at timestep 100
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 101
+Hear.nothing, Feel.discomfort
+
+end of timestep 100_____________________________________
+
+
+Env State for agent at timestep 101
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 102
+Hear.nothing, Feel.discomfort
+
+end of timestep 101_____________________________________
+
+
+Env State for agent at timestep 102
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 103
+Hear.nothing, Feel.discomfort
+
+end of timestep 102_____________________________________
+
+
+Env State for agent at timestep 103
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 104
+Hear.nothing, Feel.discomfort
+
+end of timestep 103_____________________________________
+
+
+Env State for agent at timestep 104
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 105
+Hear.nothing, Feel.discomfort
+
+end of timestep 104_____________________________________
+
+
+Env State for agent at timestep 105
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 106
+Hear.nothing, Feel.discomfort
+
+end of timestep 105_____________________________________
+
+
+Env State for agent at timestep 106
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 107
+Hear.nothing, Feel.discomfort
+
+end of timestep 106_____________________________________
+
+
+Env State for agent at timestep 107
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 108
+Hear.nothing, Feel.discomfort
+
+end of timestep 107_____________________________________
+
+
+Env State for agent at timestep 108
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 109
+Hear.nothing, Feel.discomfort
+
+end of timestep 108_____________________________________
+
+
+Env State for agent at timestep 109
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 110
+Hear.nothing, Feel.discomfort
+
+end of timestep 109_____________________________________
+
+
+Env State for agent at timestep 110
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 111
+Hear.nothing, Feel.discomfort
+
+end of timestep 110_____________________________________
+
+
+Env State for agent at timestep 111
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 112
+Hear.origin3, Feel.discomfort
+
+end of timestep 111_____________________________________
+
+
+Env State for agent at timestep 112
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 113
+Hear.origin3, Feel.discomfort
+
+end of timestep 112_____________________________________
+
+
+Env State for agent at timestep 113
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 114
+Hear.origin3, Feel.discomfort
+
+end of timestep 113_____________________________________
+
+
+Env State for agent at timestep 114
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 115
+See.cry, Feel.discomfort
+
+end of timestep 114_____________________________________
+
+
+Env State for agent at timestep 115
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 116
+See.cry, Feel.discomfort
+
+end of timestep 115_____________________________________
+
+
+Env State for agent at timestep 116
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 117
+See.cry, Feel.discomfort
+
+end of timestep 116_____________________________________
+
+
+Env State for agent at timestep 117
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 118
+See.cry, Feel.discomfort
+
+end of timestep 117_____________________________________
+
+
+Env State for agent at timestep 118
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 119
+See.cry, Feel.discomfort
+
+end of timestep 118_____________________________________
+
+
+Env State for agent at timestep 119
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 120
+See.cry, Feel.discomfort
+
+end of timestep 119_____________________________________
+
+
+Env State for agent at timestep 120
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 121
+See.cry, Feel.discomfort
+
+end of timestep 120_____________________________________
+
+
+Env State for agent at timestep 121
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 122
+See.cry, Feel.discomfort
+
+end of timestep 121_____________________________________
+
+
+Env State for agent at timestep 122
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 123
+See.cry, Feel.discomfort
+
+end of timestep 122_____________________________________
+
+
+Env State for agent at timestep 123
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 124
+See.cry, Feel.discomfort
+
+end of timestep 123_____________________________________
+
+
+Env State for agent at timestep 124
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 125
+See.cry, Feel.discomfort
+
+end of timestep 124_____________________________________
+
+
+Env State for agent at timestep 125
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 126
+See.cry, Feel.discomfort
+
+end of timestep 125_____________________________________
+
+
+Env State for agent at timestep 126
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 127
+See.cry, Feel.discomfort
+
+end of timestep 126_____________________________________
+
+
+Env State for agent at timestep 127
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 128
+See.cry, Feel.discomfort
+
+end of timestep 127_____________________________________
+
+
+Env State for agent at timestep 128
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 129
+See.cry, Feel.discomfort
+
+end of timestep 128_____________________________________
+
+
+Env State for agent at timestep 129
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 130
+See.cry, Feel.discomfort
+
+end of timestep 129_____________________________________
+
+
+Env State for agent at timestep 130
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 131
+See.cry, Feel.discomfort
+
+end of timestep 130_____________________________________
+
+
+Env State for agent at timestep 131
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 132
+See.cry, Feel.discomfort
+
+end of timestep 131_____________________________________
+
+
+Env State for agent at timestep 132
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 133
+See.cry, Feel.discomfort
+
+end of timestep 132_____________________________________
+
+
+Env State for agent at timestep 133
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 134
+Say.food, Feel.discomfort
+
+end of timestep 133_____________________________________
+
+
+Env State for agent at timestep 134
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 135
+Hear.origin3, Feel.discomfort
+
+end of timestep 134_____________________________________
+
+
+Env State for agent at timestep 135
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 136
+Say.food, Feel.discomfort
+
+end of timestep 135_____________________________________
+
+
+Env State for agent at timestep 136
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 137
+Hear.origin3, Feel.discomfort
+
+end of timestep 136_____________________________________
+
+
+Env State for agent at timestep 137
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 138
+Say.food, Feel.discomfort
+
+end of timestep 137_____________________________________
+
+
+Env State for agent at timestep 138
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 139
+Hear.origin3, Feel.discomfort
+
+end of timestep 138_____________________________________
+
+
+Env State for agent at timestep 139
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 140
+Say.food, Feel.discomfort
+
+end of timestep 139_____________________________________
+
+
+Env State for agent at timestep 140
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 141
+Hear.origin3, Feel.discomfort
+
+end of timestep 140_____________________________________
+
+
+Env State for agent at timestep 141
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 142
+Say.food, Feel.discomfort
+
+end of timestep 141_____________________________________
+
+
+Env State for agent at timestep 142
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 143
+Hear.origin3, Feel.discomfort
+
+end of timestep 142_____________________________________
+
+
+Env State for agent at timestep 143
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 144
+Say.food, Feel.discomfort
+
+end of timestep 143_____________________________________
+
+
+Env State for agent at timestep 144
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 145
+Hear.origin3, Feel.discomfort
+
+end of timestep 144_____________________________________
+
+
+Env State for agent at timestep 145
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 146
+Say.food, Feel.discomfort
+
+end of timestep 145_____________________________________
+
+
+Env State for agent at timestep 146
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 147
+Hear.origin3, Feel.discomfort
+
+end of timestep 146_____________________________________
+
+
+Env State for agent at timestep 147
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 148
+Say.food, Feel.discomfort
+
+end of timestep 147_____________________________________
+
+
+Env State for agent at timestep 148
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 149
+Hear.origin3, Feel.discomfort
+
+end of timestep 148_____________________________________
+
+
+Env State for agent at timestep 149
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 150
+Say.food, Feel.discomfort
+
+end of timestep 149_____________________________________
+
+
+Env State for agent at timestep 150
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 151
+Hear.origin3, Feel.discomfort
+
+end of timestep 150_____________________________________
+
+
+Env State for agent at timestep 151
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 152
+Say.food, Feel.discomfort
+
+end of timestep 151_____________________________________
+
+
+Env State for agent at timestep 152
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 153
+Hear.origin3, Feel.discomfort
+
+end of timestep 152_____________________________________
+
+
+Env State for agent at timestep 153
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 154
+Say.food, Feel.discomfort
+
+end of timestep 153_____________________________________
+
+
+Env State for agent at timestep 154
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 155
+Hear.origin3, Feel.discomfort
+
+end of timestep 154_____________________________________
+
+
+Env State for agent at timestep 155
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 156
+Say.food, Feel.discomfort
+
+end of timestep 155_____________________________________
+
+
+Env State for agent at timestep 156
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 157
+Hear.origin3, Feel.discomfort
+
+end of timestep 156_____________________________________
+
+
+Env State for agent at timestep 157
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 158
+Say.food, Feel.discomfort
+
+end of timestep 157_____________________________________
+
+
+Env State for agent at timestep 158
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 159
+Hear.origin3, Feel.discomfort
+
+end of timestep 158_____________________________________
+
+
+Env State for agent at timestep 159
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 160
+Say.food, Feel.discomfort
+
+end of timestep 159_____________________________________
+
+
+Env State for agent at timestep 160
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 161
+Hear.origin3, Feel.discomfort
+
+end of timestep 160_____________________________________
+
+
+Env State for agent at timestep 161
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 162
+See.cry, Feel.discomfort
+
+end of timestep 161_____________________________________
+
+
+Env State for agent at timestep 162
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 163
+See.cry, Feel.discomfort
+
+end of timestep 162_____________________________________
+
+
+Env State for agent at timestep 163
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 164
+See.cry, Feel.discomfort
+
+end of timestep 163_____________________________________
+
+
+Env State for agent at timestep 164
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 165
+See.cry, Feel.discomfort
+
+end of timestep 164_____________________________________
+
+
+Env State for agent at timestep 165
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 166
+Say.food, Feel.discomfort
+
+end of timestep 165_____________________________________
+
+
+Env State for agent at timestep 166
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 167
+Hear.nothing, Feel.discomfort
+
+end of timestep 166_____________________________________
+
+
+Env State for agent at timestep 167
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 168
+Say.food, Feel.discomfort
+
+end of timestep 167_____________________________________
+
+
+Env State for agent at timestep 168
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 169
+Hear.nothing, Feel.discomfort
+
+end of timestep 168_____________________________________
+
+
+Env State for agent at timestep 169
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 170
+Say.food, Feel.discomfort
+
+end of timestep 169_____________________________________
+
+
+Env State for agent at timestep 170
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 171
+Hear.nothing, Feel.discomfort
+
+end of timestep 170_____________________________________
+
+
+Env State for agent at timestep 171
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 172
+Say.food, Feel.discomfort
+
+end of timestep 171_____________________________________
+
+
+Env State for agent at timestep 172
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 173
+Hear.nothing, Feel.discomfort
+
+end of timestep 172_____________________________________
+
+
+Env State for agent at timestep 173
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 174
+Say.food, Feel.discomfort
+
+end of timestep 173_____________________________________
+
+
+Env State for agent at timestep 174
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 175
+Hear.nothing, Feel.discomfort
+
+end of timestep 174_____________________________________
+
+
+Env State for agent at timestep 175
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 176
+Say.food, Feel.discomfort
+
+end of timestep 175_____________________________________
+
+
+Env State for agent at timestep 176
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 177
+Hear.nothing, Feel.discomfort
+
+end of timestep 176_____________________________________
+
+
+Env State for agent at timestep 177
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 178
+Say.food, Feel.discomfort
+
+end of timestep 177_____________________________________
+
+
+Env State for agent at timestep 178
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 179
+Hear.nothing, Feel.discomfort
+
+end of timestep 178_____________________________________
+
+
+Env State for agent at timestep 179
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 180
+Say.food, Feel.discomfort
+
+end of timestep 179_____________________________________
+
+
+Env State for agent at timestep 180
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 181
+Hear.nothing, Feel.discomfort
+
+end of timestep 180_____________________________________
+
+
+Env State for agent at timestep 181
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 182
+Say.food, Feel.discomfort
+
+end of timestep 181_____________________________________
+
+
+Env State for agent at timestep 182
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 183
+Hear.nothing, Feel.discomfort
+
+end of timestep 182_____________________________________
+
+
+Env State for agent at timestep 183
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 184
+Say.food, Feel.discomfort
+
+end of timestep 183_____________________________________
+
+
+Env State for agent at timestep 184
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 185
+Hear.origin3, Feel.discomfort
+
+end of timestep 184_____________________________________
+
+
+Env State for agent at timestep 185
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 186
+Say.food, Feel.hungry
+
+end of timestep 185_____________________________________
+
+
+Env State for agent at timestep 186
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 187
+Say.food, Feel.discomfort
+
+end of timestep 186_____________________________________
+
+
+Env State for agent at timestep 187
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 188
+Say.food, Feel.discomfort
+
+end of timestep 187_____________________________________
+
+
+Env State for agent at timestep 188
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 189
+Say.food, Feel.discomfort
+
+end of timestep 188_____________________________________
+
+
+Env State for agent at timestep 189
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 190
+Say.food, Feel.discomfort
+
+end of timestep 189_____________________________________
+
+
+Env State for agent at timestep 190
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 191
+Say.food, Feel.discomfort
+
+end of timestep 190_____________________________________
+
+
+Env State for agent at timestep 191
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 192
+Say.food, Feel.discomfort
+
+end of timestep 191_____________________________________
+
+
+Env State for agent at timestep 192
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 193
+Hear.nothing, Feel.discomfort
+
+end of timestep 192_____________________________________
+
+
+Env State for agent at timestep 193
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 194
+See.cry, Feel.hungry
+
+end of timestep 193_____________________________________
+
+
+Env State for agent at timestep 194
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 195
+See.cry, Feel.hungry
+
+end of timestep 194_____________________________________
+
+
+Env State for agent at timestep 195
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 196
+See.cry, Feel.hungry
+
+end of timestep 195_____________________________________
+
+
+Env State for agent at timestep 196
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 197
+See.cry, Feel.hungry
+
+end of timestep 196_____________________________________
+
+
+Env State for agent at timestep 197
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 198
+See.cry, Feel.hungry
+
+end of timestep 197_____________________________________
+
+
+Env State for agent at timestep 198
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 199
+See.cry, Feel.hungry
+
+end of timestep 198_____________________________________
+
+
+Env State for agent at timestep 199
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 200
+See.cry, Feel.hungry
+
+end of timestep 199_____________________________________
+
+
+Env State for agent at timestep 200
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 201
+Say.food, Feel.discomfort
+
+end of timestep 200_____________________________________
+
+
+Env State for agent at timestep 201
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 202
+Hear.nothing, Feel.discomfort
+
+end of timestep 201_____________________________________
+
+
+Env State for agent at timestep 202
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 203
+Say.food, Feel.discomfort
+
+end of timestep 202_____________________________________
+
+
+Env State for agent at timestep 203
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 204
+Hear.nothing, Feel.discomfort
+
+end of timestep 203_____________________________________
+
+
+Env State for agent at timestep 204
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 205
+Say.food, Feel.discomfort
+
+end of timestep 204_____________________________________
+
+
+Env State for agent at timestep 205
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 206
+Hear.nothing, Feel.discomfort
+
+end of timestep 205_____________________________________
+
+
+Env State for agent at timestep 206
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 207
+Say.food, Feel.discomfort
+
+end of timestep 206_____________________________________
+
+
+Env State for agent at timestep 207
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 208
+Hear.nothing, Feel.discomfort
+
+end of timestep 207_____________________________________
+
+
+Env State for agent at timestep 208
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 209
+Say.food, Feel.discomfort
+
+end of timestep 208_____________________________________
+
+
+Env State for agent at timestep 209
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 210
+Hear.nothing, Feel.discomfort
+
+end of timestep 209_____________________________________
+
+
+Env State for agent at timestep 210
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 211
+Say.food, Feel.discomfort
+
+end of timestep 210_____________________________________
+
+
+Env State for agent at timestep 211
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 212
+Say.food, Feel.discomfort
+
+end of timestep 211_____________________________________
+
+
+Env State for agent at timestep 212
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 213
+Say.food, Feel.discomfort
+
+end of timestep 212_____________________________________
+
+
+Env State for agent at timestep 213
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 214
+Say.food, Feel.discomfort
+
+end of timestep 213_____________________________________
+
+
+Env State for agent at timestep 214
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 215
+Say.food, Feel.discomfort
+
+end of timestep 214_____________________________________
+
+
+Env State for agent at timestep 215
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 216
+Say.food, Feel.discomfort
+
+end of timestep 215_____________________________________
+
+
+Env State for agent at timestep 216
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 217
+Say.food, Feel.discomfort
+
+end of timestep 216_____________________________________
+
+
+Env State for agent at timestep 217
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 218
+Say.food, Feel.discomfort
+
+end of timestep 217_____________________________________
+
+
+Env State for agent at timestep 218
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 219
+Hear.nothing, Feel.discomfort
+
+end of timestep 218_____________________________________
+
+
+Env State for agent at timestep 219
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 220
+See.cry, Feel.hungry
+
+end of timestep 219_____________________________________
+
+
+Env State for agent at timestep 220
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 221
+See.cry, Feel.hungry
+
+end of timestep 220_____________________________________
+
+
+Env State for agent at timestep 221
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 222
+See.cry, Feel.hungry
+
+end of timestep 221_____________________________________
+
+
+Env State for agent at timestep 222
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 223
+See.cry, Feel.hungry
+
+end of timestep 222_____________________________________
+
+
+Env State for agent at timestep 223
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 224
+See.cry, Feel.hungry
+
+end of timestep 223_____________________________________
+
+
+Env State for agent at timestep 224
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 225
+See.cry, Feel.thirsty
+
+end of timestep 224_____________________________________
+
+
+Env State for agent at timestep 225
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 226
+See.cry, Feel.thirsty
+
+end of timestep 225_____________________________________
+
+
+Env State for agent at timestep 226
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 227
+See.cry, Feel.thirsty
+
+end of timestep 226_____________________________________
+
+
+Env State for agent at timestep 227
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 228
+Say.food, Feel.thirsty
+
+end of timestep 227_____________________________________
+
+
+Env State for agent at timestep 228
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 229
+Hear.origin1, Feel.discomfort
+
+end of timestep 228_____________________________________
+
+
+Env State for agent at timestep 229
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 230
+Say.food, Feel.discomfort
+
+end of timestep 229_____________________________________
+
+
+Env State for agent at timestep 230
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 231
+Hear.origin1, Feel.discomfort
+
+end of timestep 230_____________________________________
+
+
+Env State for agent at timestep 231
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 232
+Say.food, Feel.discomfort
+
+end of timestep 231_____________________________________
+
+
+Env State for agent at timestep 232
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 233
+Hear.origin1, Feel.discomfort
+
+end of timestep 232_____________________________________
+
+
+Env State for agent at timestep 233
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 234
+Say.food, Feel.discomfort
+
+end of timestep 233_____________________________________
+
+
+Env State for agent at timestep 234
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 235
+Hear.origin1, Feel.discomfort
+
+end of timestep 234_____________________________________
+
+
+Env State for agent at timestep 235
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 236
+Say.food, Feel.discomfort
+
+end of timestep 235_____________________________________
+
+
+Env State for agent at timestep 236
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 237
+Hear.nothing, Feel.discomfort
+
+end of timestep 236_____________________________________
+
+
+Env State for agent at timestep 237
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 238
+Say.food, Feel.hungry
+
+end of timestep 237_____________________________________
+
+
+Env State for agent at timestep 238
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 239
+Hear.cry, Feel.discomfort
+
+end of timestep 238_____________________________________
+
+
+Env State for agent at timestep 239
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 240
+Say.food, Feel.hungry
+
+end of timestep 239_____________________________________
+
+
+Env State for agent at timestep 240
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 241
+Hear.cry, Feel.discomfort
+
+end of timestep 240_____________________________________
+
+
+Env State for agent at timestep 241
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 242
+Say.food, Feel.hungry
+
+end of timestep 241_____________________________________
+
+
+Env State for agent at timestep 242
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 243
+Hear.cry, Feel.discomfort
+
+end of timestep 242_____________________________________
+
+
+Env State for agent at timestep 243
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 244
+Say.food, Feel.hungry
+
+end of timestep 243_____________________________________
+
+
+Env State for agent at timestep 244
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 245
+Hear.origin1, Feel.discomfort
+
+end of timestep 244_____________________________________
+
+
+Env State for agent at timestep 245
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 246
+Say.food, Feel.hungry
+
+end of timestep 245_____________________________________
+
+
+Env State for agent at timestep 246
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 247
+Hear.origin1, Feel.discomfort
+
+end of timestep 246_____________________________________
+
+
+Env State for agent at timestep 247
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 248
+Say.food, Feel.thirsty
+
+end of timestep 247_____________________________________
+
+
+Env State for agent at timestep 248
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 249
+Hear.origin1, Feel.discomfort
+
+end of timestep 248_____________________________________
+
+
+Env State for agent at timestep 249
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 250
+Say.food, Feel.hungry
+
+end of timestep 249_____________________________________
+
+
+Env State for agent at timestep 250
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 251
+Hear.origin1, Feel.discomfort
+
+end of timestep 250_____________________________________
+
+
+Env State for agent at timestep 251
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 252
+Say.food, Feel.hungry
+
+end of timestep 251_____________________________________
+
+
+Env State for agent at timestep 252
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 253
+Hear.cry, Feel.discomfort
+
+end of timestep 252_____________________________________
+
+
+Env State for agent at timestep 253
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 254
+Say.food, Feel.hungry
+
+end of timestep 253_____________________________________
+
+
+Env State for agent at timestep 254
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 255
+Hear.cry, Feel.discomfort
+
+end of timestep 254_____________________________________
+
+
+Env State for agent at timestep 255
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 256
+Say.food, Feel.hungry
+
+end of timestep 255_____________________________________
+
+
+Env State for agent at timestep 256
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 257
+Hear.cry, Feel.discomfort
+
+end of timestep 256_____________________________________
+
+
+Env State for agent at timestep 257
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 258
+See.cry, Feel.hungry
+
+end of timestep 257_____________________________________
+
+
+Env State for agent at timestep 258
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 259
+See.cry, Feel.thirsty
+
+end of timestep 258_____________________________________
+
+
+Env State for agent at timestep 259
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 260
+See.cry, Feel.thirsty
+
+end of timestep 259_____________________________________
+
+
+Env State for agent at timestep 260
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 261
+See.cry, Feel.thirsty
+
+end of timestep 260_____________________________________
+
+
+Env State for agent at timestep 261
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 262
+See.cry, Feel.thirsty
+
+end of timestep 261_____________________________________
+
+
+Env State for agent at timestep 262
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 263
+See.cry, Feel.thirsty
+
+end of timestep 262_____________________________________
+
+
+Env State for agent at timestep 263
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 264
+Say.food, Feel.thirsty
+
+end of timestep 263_____________________________________
+
+
+Env State for agent at timestep 264
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 265
+Hear.origin1, Feel.discomfort
+
+end of timestep 264_____________________________________
+
+
+Env State for agent at timestep 265
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 266
+Say.food, Feel.discomfort
+
+end of timestep 265_____________________________________
+
+
+Env State for agent at timestep 266
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 267
+Hear.cry, Feel.discomfort
+
+end of timestep 266_____________________________________
+
+
+Env State for agent at timestep 267
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 268
+Say.food, Feel.discomfort
+
+end of timestep 267_____________________________________
+
+
+Env State for agent at timestep 268
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 269
+Hear.cry, Feel.discomfort
+
+end of timestep 268_____________________________________
+
+
+Env State for agent at timestep 269
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 270
+Say.food, Feel.discomfort
+
+end of timestep 269_____________________________________
+
+
+Env State for agent at timestep 270
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 271
+Hear.cry, Feel.discomfort
+
+end of timestep 270_____________________________________
+
+
+Env State for agent at timestep 271
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 272
+Say.food, Feel.discomfort
+
+end of timestep 271_____________________________________
+
+
+Env State for agent at timestep 272
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 273
+Hear.cry, Feel.discomfort
+
+end of timestep 272_____________________________________
+
+
+Env State for agent at timestep 273
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 274
+Say.food, Feel.hungry
+
+end of timestep 273_____________________________________
+
+
+Env State for agent at timestep 274
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 275
+Hear.origin1, Feel.discomfort
+
+end of timestep 274_____________________________________
+
+
+Env State for agent at timestep 275
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 276
+See.cry, Feel.thirsty
+
+end of timestep 275_____________________________________
+
+
+Env State for agent at timestep 276
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 277
+See.cry, Feel.thirsty
+
+end of timestep 276_____________________________________
+
+
+Env State for agent at timestep 277
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 278
+See.cry, Feel.thirsty
+
+end of timestep 277_____________________________________
+
+
+Env State for agent at timestep 278
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 279
+See.cry, Feel.thirsty
+
+end of timestep 278_____________________________________
+
+
+Env State for agent at timestep 279
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 280
+See.cry, Feel.thirsty
+
+end of timestep 279_____________________________________
+
+
+Env State for agent at timestep 280
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 281
+Say.food, Feel.hungry
+
+end of timestep 280_____________________________________
+
+
+Env State for agent at timestep 281
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 282
+Hear.cry, Feel.discomfort
+
+end of timestep 281_____________________________________
+
+
+Env State for agent at timestep 282
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 283
+Say.food, Feel.discomfort
+
+end of timestep 282_____________________________________
+
+
+Env State for agent at timestep 283
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 284
+Hear.cry, Feel.discomfort
+
+end of timestep 283_____________________________________
+
+
+Env State for agent at timestep 284
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 285
+Say.food, Feel.discomfort
+
+end of timestep 284_____________________________________
+
+
+Env State for agent at timestep 285
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 286
+Hear.origin1, Feel.discomfort
+
+end of timestep 285_____________________________________
+
+
+Env State for agent at timestep 286
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 287
+Say.food, Feel.discomfort
+
+end of timestep 286_____________________________________
+
+
+Env State for agent at timestep 287
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 288
+Hear.origin1, Feel.discomfort
+
+end of timestep 287_____________________________________
+
+
+Env State for agent at timestep 288
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 289
+Say.food, Feel.thirsty
+
+end of timestep 288_____________________________________
+
+
+Env State for agent at timestep 289
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 290
+Hear.origin1, Feel.discomfort
+
+end of timestep 289_____________________________________
+
+
+Env State for agent at timestep 290
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 291
+Say.food, Feel.hungry
+
+end of timestep 290_____________________________________
+
+
+Env State for agent at timestep 291
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 292
+Hear.cry, Feel.discomfort
+
+end of timestep 291_____________________________________
+
+
+Env State for agent at timestep 292
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 293
+Say.food, Feel.hungry
+
+end of timestep 292_____________________________________
+
+
+Env State for agent at timestep 293
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 294
+Hear.cry, Feel.discomfort
+
+end of timestep 293_____________________________________
+
+
+Env State for agent at timestep 294
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 295
+Say.food, Feel.hungry
+
+end of timestep 294_____________________________________
+
+
+Env State for agent at timestep 295
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 296
+Hear.cry, Feel.discomfort
+
+end of timestep 295_____________________________________
+
+
+Env State for agent at timestep 296
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 297
+Say.food, Feel.hungry
+
+end of timestep 296_____________________________________
+
+
+Env State for agent at timestep 297
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 298
+Hear.cry, Feel.discomfort
+
+end of timestep 297_____________________________________
+
+
+Env State for agent at timestep 298
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 299
+See.cry, Feel.hungry
+
+end of timestep 298_____________________________________
+
+
+Env State for agent at timestep 299
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 300
+See.cry, Feel.thirsty
+
+end of timestep 299_____________________________________
+
+
+Env State for agent at timestep 300
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 301
+See.cry, Feel.thirsty
+
+end of timestep 300_____________________________________
+
+
+Env State for agent at timestep 301
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 302
+See.cry, Feel.thirsty
+
+end of timestep 301_____________________________________
+
+
+Env State for agent at timestep 302
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 303
+See.cry, Feel.thirsty
+
+end of timestep 302_____________________________________
+
+
+Env State for agent at timestep 303
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 304
+See.cry, Feel.thirsty
+
+end of timestep 303_____________________________________
+
+
+Env State for agent at timestep 304
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 305
+Say.food, Feel.thirsty
+
+end of timestep 304_____________________________________
+
+
+Env State for agent at timestep 305
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 306
+Hear.origin1, Feel.discomfort
+
+end of timestep 305_____________________________________
+
+
+Env State for agent at timestep 306
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 307
+Say.food, Feel.discomfort
+
+end of timestep 306_____________________________________
+
+
+Env State for agent at timestep 307
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 308
+See.room, Feel.discomfort
+
+end of timestep 307_____________________________________
+
+
+Env State for agent at timestep 308
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 309
+Say.food, Feel.discomfort
+
+end of timestep 308_____________________________________
+
+
+Env State for agent at timestep 309
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 310
+See.room, Feel.discomfort
+
+end of timestep 309_____________________________________
+
+
+Env State for agent at timestep 310
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 311
+Say.food, Feel.discomfort
+
+end of timestep 310_____________________________________
+
+
+Env State for agent at timestep 311
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 312
+Hear.cry, Feel.discomfort
+
+end of timestep 311_____________________________________
+
+
+Env State for agent at timestep 312
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 313
+Say.food, Feel.hungry
+
+end of timestep 312_____________________________________
+
+
+Env State for agent at timestep 313
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 314
+Hear.cry, Feel.discomfort
+
+end of timestep 313_____________________________________
+
+
+Env State for agent at timestep 314
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 315
+Say.food, Feel.hungry
+
+end of timestep 314_____________________________________
+
+
+Env State for agent at timestep 315
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 316
+Hear.cry, Feel.discomfort
+
+end of timestep 315_____________________________________
+
+
+Env State for agent at timestep 316
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 317
+Say.food, Feel.thirsty
+
+end of timestep 316_____________________________________
+
+
+Env State for agent at timestep 317
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 318
+Hear.origin1, Feel.discomfort
+
+end of timestep 317_____________________________________
+
+
+Env State for agent at timestep 318
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 319
+Say.food, Feel.thirsty
+
+end of timestep 318_____________________________________
+
+
+Env State for agent at timestep 319
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 320
+Hear.origin1, Feel.discomfort
+
+end of timestep 319_____________________________________
+
+
+Env State for agent at timestep 320
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 321
+Say.food, Feel.thirsty
+
+end of timestep 320_____________________________________
+
+
+Env State for agent at timestep 321
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 322
+Hear.origin1, Feel.discomfort
+
+end of timestep 321_____________________________________
+
+
+Env State for agent at timestep 322
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 323
+Say.food, Feel.thirsty
+
+end of timestep 322_____________________________________
+
+
+Env State for agent at timestep 323
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 324
+See.room, Feel.discomfort
+
+end of timestep 323_____________________________________
+
+
+Env State for agent at timestep 324
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 325
+Say.food, Feel.hungry
+
+end of timestep 324_____________________________________
+
+
+Env State for agent at timestep 325
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 326
+Hear.cry, Feel.discomfort
+
+end of timestep 325_____________________________________
+
+
+Env State for agent at timestep 326
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 327
+Say.food, Feel.hungry
+
+end of timestep 326_____________________________________
+
+
+Env State for agent at timestep 327
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 328
+Hear.cry, Feel.discomfort
+
+end of timestep 327_____________________________________
+
+
+Env State for agent at timestep 328
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 329
+Say.food, Feel.hungry
+
+end of timestep 328_____________________________________
+
+
+Env State for agent at timestep 329
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 330
+Hear.cry, Feel.discomfort
+
+end of timestep 329_____________________________________
+
+
+Env State for agent at timestep 330
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 331
+Say.food, Feel.hungry
+
+end of timestep 330_____________________________________
+
+
+Env State for agent at timestep 331
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 332
+See.room, Feel.discomfort
+
+end of timestep 331_____________________________________
+
+
+Env State for agent at timestep 332
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 333
+See.cry, Feel.thirsty
+
+end of timestep 332_____________________________________
+
+
+Env State for agent at timestep 333
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 334
+See.cry, Feel.thirsty
+
+end of timestep 333_____________________________________
+
+
+Env State for agent at timestep 334
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 335
+See.cry, Feel.thirsty
+
+end of timestep 334_____________________________________
+
+
+Env State for agent at timestep 335
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 336
+See.cry, Feel.thirsty
+
+end of timestep 335_____________________________________
+
+
+Env State for agent at timestep 336
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 337
+Say.food, Feel.fed
+
+end of timestep 336_____________________________________
+
+
+Env State for agent at timestep 337
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 338
+See.room, Feel.discomfort
+
+end of timestep 337_____________________________________
+
+
+Env State for agent at timestep 338
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 339
+Say.food, Feel.fed
+
+end of timestep 338_____________________________________
+
+
+Env State for agent at timestep 339
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 340
+See.room, Feel.discomfort
+
+end of timestep 339_____________________________________
+
+
+Env State for agent at timestep 340
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 341
+Say.food, Feel.fed
+
+end of timestep 340_____________________________________
+
+
+Env State for agent at timestep 341
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 342
+Hear.cry, Feel.discomfort
+
+end of timestep 341_____________________________________
+
+
+Env State for agent at timestep 342
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 343
+Say.food, Feel.fed
+
+end of timestep 342_____________________________________
+
+
+Env State for agent at timestep 343
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 344
+Hear.cry, Feel.discomfort
+
+end of timestep 343_____________________________________
+
+
+Env State for agent at timestep 344
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 345
+See.cry, Feel.fed
+
+end of timestep 344_____________________________________
+
+
+Env State for agent at timestep 345
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 346
+See.smiles, Feel.thirsty
+
+end of timestep 345_____________________________________
+
+
+Env State for agent at timestep 346
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 347
+See.smiles, Feel.thirsty
+
+end of timestep 346_____________________________________
+
+
+Env State for agent at timestep 347
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 348
+See.smiles, Feel.thirsty
+
+end of timestep 347_____________________________________
+
+
+Env State for agent at timestep 348
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 349
+See.smiles, Feel.thirsty
+
+end of timestep 348_____________________________________
+
+
+Env State for agent at timestep 349
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 350
+See.smiles, Feel.thirsty
+
+end of timestep 349_____________________________________
+
+
+Env State for agent at timestep 350
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 351
+See.cry, Feel.fed
+
+end of timestep 350_____________________________________
+
+
+Env State for agent at timestep 351
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 352
+See.cry, Feel.fed
+
+end of timestep 351_____________________________________
+
+
+Env State for agent at timestep 352
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 353
+Say.food, Feel.fed
+
+end of timestep 352_____________________________________
+
+
+Env State for agent at timestep 353
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 354
+Hear.cry, Feel.discomfort
+
+end of timestep 353_____________________________________
+
+
+Env State for agent at timestep 354
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 355
+Say.food, Feel.fed
+
+end of timestep 354_____________________________________
+
+
+Env State for agent at timestep 355
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 356
+Hear.cry, Feel.discomfort
+
+end of timestep 355_____________________________________
+
+
+Env State for agent at timestep 356
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 357
+Say.food, Feel.discomfort
+
+end of timestep 356_____________________________________
+
+
+Env State for agent at timestep 357
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 358
+Hear.cry, Feel.discomfort
+
+end of timestep 357_____________________________________
+
+
+Env State for agent at timestep 358
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 359
+See.cry, Feel.discomfort
+
+end of timestep 358_____________________________________
+
+
+Env State for agent at timestep 359
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 360
+See.cry, Feel.discomfort
+
+end of timestep 359_____________________________________
+
+
+Env State for agent at timestep 360
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 361
+See.cry, Feel.discomfort
+
+end of timestep 360_____________________________________
+
+
+Env State for agent at timestep 361
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 362
+See.cry, Feel.discomfort
+
+end of timestep 361_____________________________________
+
+
+Env State for agent at timestep 362
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 363
+See.smiles, Feel.fed
+
+end of timestep 362_____________________________________
+
+
+Env State for agent at timestep 363
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 364
+See.smiles, Feel.fed
+
+end of timestep 363_____________________________________
+
+
+Env State for agent at timestep 364
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 365
+See.smiles, Feel.fed
+
+end of timestep 364_____________________________________
+
+
+Env State for agent at timestep 365
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 366
+See.smiles, Feel.fed
+
+end of timestep 365_____________________________________
+
+
+Env State for agent at timestep 366
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 367
+See.smiles, Feel.fed
+
+end of timestep 366_____________________________________
+
+
+Env State for agent at timestep 367
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 368
+See.smiles, Feel.fed
+
+end of timestep 367_____________________________________
+
+
+Env State for agent at timestep 368
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 369
+See.cry, Feel.discomfort
+
+end of timestep 368_____________________________________
+
+
+Env State for agent at timestep 369
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 370
+See.cry, Feel.discomfort
+
+end of timestep 369_____________________________________
+
+
+Env State for agent at timestep 370
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 371
+See.cry, Feel.discomfort
+
+end of timestep 370_____________________________________
+
+
+Env State for agent at timestep 371
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 372
+See.cry, Feel.discomfort
+
+end of timestep 371_____________________________________
+
+
+Env State for agent at timestep 372
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 373
+See.cry, Feel.discomfort
+
+end of timestep 372_____________________________________
+
+
+Env State for agent at timestep 373
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 374
+See.cry, Feel.discomfort
+
+end of timestep 373_____________________________________
+
+
+Env State for agent at timestep 374
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 375
+See.cry, Feel.discomfort
+
+end of timestep 374_____________________________________
+
+
+Env State for agent at timestep 375
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 376
+See.cry, Feel.discomfort
+
+end of timestep 375_____________________________________
+
+
+Env State for agent at timestep 376
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 377
+See.cry, Feel.discomfort
+
+end of timestep 376_____________________________________
+
+
+Env State for agent at timestep 377
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 378
+See.cry, Feel.discomfort
+
+end of timestep 377_____________________________________
+
+
+Env State for agent at timestep 378
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 379
+See.smiles, Feel.fed
+
+end of timestep 378_____________________________________
+
+
+Env State for agent at timestep 379
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 380
+See.smiles, Feel.fed
+
+end of timestep 379_____________________________________
+
+
+Env State for agent at timestep 380
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 381
+See.smiles, Feel.fed
+
+end of timestep 380_____________________________________
+
+
+Env State for agent at timestep 381
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 382
+See.smiles, Feel.fed
+
+end of timestep 381_____________________________________
+
+
+Env State for agent at timestep 382
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 383
+See.smiles, Feel.fed
+
+end of timestep 382_____________________________________
+
+
+Env State for agent at timestep 383
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 384
+See.smiles, Feel.fed
+
+end of timestep 383_____________________________________
+
+
+Env State for agent at timestep 384
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 385
+See.cry, Feel.discomfort
+
+end of timestep 384_____________________________________
+
+
+Env State for agent at timestep 385
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 386
+See.cry, Feel.discomfort
+
+end of timestep 385_____________________________________
+
+
+Env State for agent at timestep 386
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 387
+See.cry, Feel.discomfort
+
+end of timestep 386_____________________________________
+
+
+Env State for agent at timestep 387
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 388
+See.cry, Feel.discomfort
+
+end of timestep 387_____________________________________
+
+
+Env State for agent at timestep 388
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 389
+See.cry, Feel.discomfort
+
+end of timestep 388_____________________________________
+
+
+Env State for agent at timestep 389
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 390
+Hear.cry, Feel.discomfort
+
+end of timestep 389_____________________________________
+
+
+Env State for agent at timestep 390
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 391
+Hear.cry, Feel.discomfort
+
+end of timestep 390_____________________________________
+
+
+Env State for agent at timestep 391
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 392
+Hear.cry, Feel.discomfort
+
+end of timestep 391_____________________________________
+
+
+Env State for agent at timestep 392
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 393
+Hear.cry, Feel.discomfort
+
+end of timestep 392_____________________________________
+
+
+Env State for agent at timestep 393
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 394
+Hear.cry, Feel.content
+
+end of timestep 393_____________________________________
+
+
+Env State for agent at timestep 394
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 395
+See.cry, Feel.fed
+
+end of timestep 394_____________________________________
+
+
+Env State for agent at timestep 395
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 396
+See.cry, Feel.fed
+
+end of timestep 395_____________________________________
+
+
+Env State for agent at timestep 396
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 397
+See.nothing, Feel.fed
+
+end of timestep 396_____________________________________
+
+
+Env State for agent at timestep 397
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 398
+See.nothing, Feel.fed
+
+end of timestep 397_____________________________________
+
+
+Env State for agent at timestep 398
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 399
+See.nothing, Feel.fed
+
+end of timestep 398_____________________________________
+
+
+Env State for agent at timestep 399
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 400
+See.nothing, Feel.fed
+
+end of timestep 399_____________________________________
+
+
+Env State for agent at timestep 400
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 401
+See.nothing, Feel.content
+
+end of timestep 400_____________________________________
+
+
+Env State for agent at timestep 401
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 402
+See.nothing, Feel.discomfort
+
+end of timestep 401_____________________________________
+
+
+Env State for agent at timestep 402
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 403
+See.cry, Feel.discomfort
+
+end of timestep 402_____________________________________
+
+
+Env State for agent at timestep 403
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 404
+See.cry, Feel.discomfort
+
+end of timestep 403_____________________________________
+
+
+Env State for agent at timestep 404
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 405
+See.cry, Feel.discomfort
+
+end of timestep 404_____________________________________
+
+
+Env State for agent at timestep 405
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 406
+See.cry, Feel.discomfort
+
+end of timestep 405_____________________________________
+
+
+Env State for agent at timestep 406
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 407
+See.cry, Feel.discomfort
+
+end of timestep 406_____________________________________
+
+
+Env State for agent at timestep 407
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 408
+See.cry, Feel.discomfort
+
+end of timestep 407_____________________________________
+
+
+Env State for agent at timestep 408
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 409
+See.cry, Feel.content
+
+end of timestep 408_____________________________________
+
+
+Env State for agent at timestep 409
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 410
+See.cry, Feel.content
+
+end of timestep 409_____________________________________
+
+
+Env State for agent at timestep 410
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 411
+See.cry, Feel.content
+
+end of timestep 410_____________________________________
+
+
+Env State for agent at timestep 411
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 412
+See.smiles, Feel.content
+
+end of timestep 411_____________________________________
+
+
+Env State for agent at timestep 412
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 413
+See.smiles, Feel.content
+
+end of timestep 412_____________________________________
+
+
+Env State for agent at timestep 413
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 414
+See.nothing, Feel.content
+
+end of timestep 413_____________________________________
+
+
+Env State for agent at timestep 414
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 415
+See.nothing, Feel.fed
+
+end of timestep 414_____________________________________
+
+
+Env State for agent at timestep 415
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 416
+See.nothing, Feel.fed
+
+end of timestep 415_____________________________________
+
+
+Env State for agent at timestep 416
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 417
+See.nothing, Feel.discomfort
+
+end of timestep 416_____________________________________
+
+
+Env State for agent at timestep 417
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 418
+Say.food, Feel.discomfort
+
+end of timestep 417_____________________________________
+
+
+Env State for agent at timestep 418
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 419
+Hear.cry, Feel.discomfort
+
+end of timestep 418_____________________________________
+
+
+Env State for agent at timestep 419
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 420
+Say.food, Feel.discomfort
+
+end of timestep 419_____________________________________
+
+
+Env State for agent at timestep 420
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 421
+Hear.cry, Feel.discomfort
+
+end of timestep 420_____________________________________
+
+
+Env State for agent at timestep 421
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 422
+Say.food, Feel.discomfort
+
+end of timestep 421_____________________________________
+
+
+Env State for agent at timestep 422
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 423
+Hear.cry, Feel.discomfort
+
+end of timestep 422_____________________________________
+
+
+Env State for agent at timestep 423
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 424
+Say.food, Feel.fed
+
+end of timestep 423_____________________________________
+
+
+Env State for agent at timestep 424
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 425
+See.room, Feel.discomfort
+
+end of timestep 424_____________________________________
+
+
+Env State for agent at timestep 425
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 426
+See.cry, Feel.fed
+
+end of timestep 425_____________________________________
+
+
+Env State for agent at timestep 426
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 427
+See.nothing, Feel.fed
+
+end of timestep 426_____________________________________
+
+
+Env State for agent at timestep 427
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 428
+See.nothing, Feel.fed
+
+end of timestep 427_____________________________________
+
+
+Env State for agent at timestep 428
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 429
+See.nothing, Feel.fed
+
+end of timestep 428_____________________________________
+
+
+Env State for agent at timestep 429
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 430
+See.nothing, Feel.fed
+
+end of timestep 429_____________________________________
+
+
+Env State for agent at timestep 430
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 431
+See.nothing, Feel.content
+
+end of timestep 430_____________________________________
+
+
+Env State for agent at timestep 431
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 432
+See.nothing, Feel.content
+
+end of timestep 431_____________________________________
+
+
+Env State for agent at timestep 432
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 433
+See.cry, Feel.discomfort
+
+end of timestep 432_____________________________________
+
+
+Env State for agent at timestep 433
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 434
+See.cry, Feel.discomfort
+
+end of timestep 433_____________________________________
+
+
+Env State for agent at timestep 434
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 435
+See.cry, Feel.discomfort
+
+end of timestep 434_____________________________________
+
+
+Env State for agent at timestep 435
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 436
+See.cry, Feel.discomfort
+
+end of timestep 435_____________________________________
+
+
+Env State for agent at timestep 436
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 437
+Say.food, Feel.discomfort
+
+end of timestep 436_____________________________________
+
+
+Env State for agent at timestep 437
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 438
+See.room, Feel.discomfort
+
+end of timestep 437_____________________________________
+
+
+Env State for agent at timestep 438
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 439
+Say.food, Feel.discomfort
+
+end of timestep 438_____________________________________
+
+
+Env State for agent at timestep 439
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 440
+See.room, Feel.discomfort
+
+end of timestep 439_____________________________________
+
+
+Env State for agent at timestep 440
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 441
+Say.water, Feel.content
+
+end of timestep 440_____________________________________
+
+
+Env State for agent at timestep 441
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 442
+See.smiles, Feel.happy
+
+end of timestep 441_____________________________________
+
+
+Env State for agent at timestep 442
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 443
+See.water, Feel.thirsty
+
+end of timestep 442_____________________________________
+
+
+Env State for agent at timestep 443
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 444
+Hear.cry, Feel.happy
+
+end of timestep 443_____________________________________
+
+
+Env State for agent at timestep 444
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 445
+Hear.cry, Feel.happy
+
+end of timestep 444_____________________________________
+
+
+Env State for agent at timestep 445
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 446
+Hear.cry, Feel.happy
+
+end of timestep 445_____________________________________
+
+
+Env State for agent at timestep 446
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 447
+Hear.cry, Feel.happy
+
+end of timestep 446_____________________________________
+
+
+Env State for agent at timestep 447
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 448
+Hear.cry, Feel.happy
+
+end of timestep 447_____________________________________
+
+
+Env State for agent at timestep 448
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 449
+Hear.cry, Feel.happy
+
+end of timestep 448_____________________________________
+
+
+Env State for agent at timestep 449
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 450
+Hear.cry, Feel.happy
+
+end of timestep 449_____________________________________
+
+
+Env State for agent at timestep 450
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 451
+Hear.cry, Feel.happy
+
+end of timestep 450_____________________________________
+
+
+Env State for agent at timestep 451
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 452
+Hear.cry, Feel.happy
+
+end of timestep 451_____________________________________
+
+
+Env State for agent at timestep 452
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 453
+Hear.cry, Feel.happy
+
+end of timestep 452_____________________________________
+
+
+Env State for agent at timestep 453
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 454
+Hear.cry, Feel.happy
+
+end of timestep 453_____________________________________
+
+
+Env State for agent at timestep 454
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 455
+Hear.cry, Feel.happy
+
+end of timestep 454_____________________________________
+
+
+Env State for agent at timestep 455
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 456
+Hear.cry, Feel.happy
+
+end of timestep 455_____________________________________
+
+
+Env State for agent at timestep 456
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 457
+Hear.cry, Feel.happy
+
+end of timestep 456_____________________________________
+
+
+Env State for agent at timestep 457
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 458
+Hear.cry, Feel.happy
+
+end of timestep 457_____________________________________
+
+
+Env State for agent at timestep 458
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 459
+Hear.cry, Feel.happy
+
+end of timestep 458_____________________________________
+
+
+Env State for agent at timestep 459
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 460
+Hear.cry, Feel.happy
+
+end of timestep 459_____________________________________
+
+
+Env State for agent at timestep 460
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 461
+Hear.cry, Feel.happy
+
+end of timestep 460_____________________________________
+
+
+Env State for agent at timestep 461
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 462
+Hear.cry, Feel.happy
+
+end of timestep 461_____________________________________
+
+
+Env State for agent at timestep 462
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 463
+Hear.cry, Feel.happy
+
+end of timestep 462_____________________________________
+
+
+Env State for agent at timestep 463
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 464
+Hear.cry, Feel.happy
+
+end of timestep 463_____________________________________
+
+
+Env State for agent at timestep 464
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 465
+Hear.cry, Feel.happy
+
+end of timestep 464_____________________________________
+
+
+Env State for agent at timestep 465
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 466
+Hear.cry, Feel.discomfort
+
+end of timestep 465_____________________________________
+
+
+Env State for agent at timestep 466
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 467
+Hear.cry, Feel.discomfort
+
+end of timestep 466_____________________________________
+
+
+Env State for agent at timestep 467
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 468
+Hear.cry, Feel.discomfort
+
+end of timestep 467_____________________________________
+
+
+Env State for agent at timestep 468
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 469
+Hear.cry, Feel.discomfort
+
+end of timestep 468_____________________________________
+
+
+Env State for agent at timestep 469
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 470
+Hear.cry, Feel.discomfort
+
+end of timestep 469_____________________________________
+
+
+Env State for agent at timestep 470
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 471
+Hear.cry, Feel.discomfort
+
+end of timestep 470_____________________________________
+
+
+Env State for agent at timestep 471
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 472
+Hear.cry, Feel.discomfort
+
+end of timestep 471_____________________________________
+
+
+Env State for agent at timestep 472
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 473
+Hear.cry, Feel.discomfort
+
+end of timestep 472_____________________________________
+
+
+Env State for agent at timestep 473
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 474
+Hear.cry, Feel.discomfort
+
+end of timestep 473_____________________________________
+
+
+Env State for agent at timestep 474
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 475
+Hear.cry, Feel.discomfort
+
+end of timestep 474_____________________________________
+
+
+Env State for agent at timestep 475
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 476
+Hear.cry, Feel.discomfort
+
+end of timestep 475_____________________________________
+
+
+Env State for agent at timestep 476
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 477
+Hear.cry, Feel.discomfort
+
+end of timestep 476_____________________________________
+
+
+Env State for agent at timestep 477
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 478
+Hear.cry, Feel.discomfort
+
+end of timestep 477_____________________________________
+
+
+Env State for agent at timestep 478
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 479
+Hear.cry, Feel.discomfort
+
+end of timestep 478_____________________________________
+
+
+Env State for agent at timestep 479
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 480
+Hear.cry, Feel.discomfort
+
+end of timestep 479_____________________________________
+
+
+Env State for agent at timestep 480
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 481
+Hear.cry, Feel.discomfort
+
+end of timestep 480_____________________________________
+
+
+Env State for agent at timestep 481
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 482
+Hear.cry, Feel.discomfort
+
+end of timestep 481_____________________________________
+
+
+Env State for agent at timestep 482
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 483
+Hear.cry, Feel.discomfort
+
+end of timestep 482_____________________________________
+
+
+Env State for agent at timestep 483
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 484
+Hear.cry, Feel.discomfort
+
+end of timestep 483_____________________________________
+
+
+Env State for agent at timestep 484
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 485
+Hear.cry, Feel.discomfort
+
+end of timestep 484_____________________________________
+
+
+Env State for agent at timestep 485
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 486
+Hear.cry, Feel.discomfort
+
+end of timestep 485_____________________________________
+
+
+Env State for agent at timestep 486
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 487
+See.food, Feel.discomfort
+
+end of timestep 486_____________________________________
+
+
+Env State for agent at timestep 487
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 488
+See.food, Feel.discomfort
+
+end of timestep 487_____________________________________
+
+
+Env State for agent at timestep 488
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 489
+See.food, Feel.discomfort
+
+end of timestep 488_____________________________________
+
+
+Env State for agent at timestep 489
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 490
+See.food, Feel.discomfort
+
+end of timestep 489_____________________________________
+
+
+Env State for agent at timestep 490
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 491
+See.food, Feel.discomfort
+
+end of timestep 490_____________________________________
+
+
+Env State for agent at timestep 491
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 492
+See.food, Feel.discomfort
+
+end of timestep 491_____________________________________
+
+
+Env State for agent at timestep 492
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 493
+See.food, Feel.discomfort
+
+end of timestep 492_____________________________________
+
+
+Env State for agent at timestep 493
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 494
+Hear.cry, Feel.discomfort
+
+end of timestep 493_____________________________________
+
+
+Env State for agent at timestep 494
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 495
+Hear.cry, Feel.discomfort
+
+end of timestep 494_____________________________________
+
+
+Env State for agent at timestep 495
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 496
+Hear.cry, Feel.discomfort
+
+end of timestep 495_____________________________________
+
+
+Env State for agent at timestep 496
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 497
+Hear.cry, Feel.discomfort
+
+end of timestep 496_____________________________________
+
+
+Env State for agent at timestep 497
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 498
+Hear.cry, Feel.discomfort
+
+end of timestep 497_____________________________________
+
+
+Env State for agent at timestep 498
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 499
+Hear.cry, Feel.discomfort
+
+end of timestep 498_____________________________________
+
+
+Env State for agent at timestep 499
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 500
+Hear.cry, Feel.discomfort
+
+end of timestep 499_____________________________________
+
+
+Env State for agent at timestep 500
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 501
+Hear.cry, Feel.discomfort
+
+end of timestep 500_____________________________________
+
+
+Env State for agent at timestep 501
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 502
+See.food, Feel.discomfort
+
+end of timestep 501_____________________________________
+
+
+Env State for agent at timestep 502
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 503
+See.food, Feel.happy
+
+end of timestep 502_____________________________________
+
+
+Env State for agent at timestep 503
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 504
+See.food, Feel.happy
+
+end of timestep 503_____________________________________
+
+
+Env State for agent at timestep 504
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 505
+See.food, Feel.happy
+
+end of timestep 504_____________________________________
+
+
+Env State for agent at timestep 505
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 506
+See.food, Feel.happy
+
+end of timestep 505_____________________________________
+
+
+Env State for agent at timestep 506
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 507
+See.food, Feel.discomfort
+
+end of timestep 506_____________________________________
+
+
+Env State for agent at timestep 507
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 508
+See.food, Feel.discomfort
+
+end of timestep 507_____________________________________
+
+
+Env State for agent at timestep 508
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 509
+Hear.cry, Feel.discomfort
+
+end of timestep 508_____________________________________
+
+
+Env State for agent at timestep 509
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 510
+Hear.cry, Feel.discomfort
+
+end of timestep 509_____________________________________
+
+
+Env State for agent at timestep 510
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 511
+Hear.cry, Feel.discomfort
+
+end of timestep 510_____________________________________
+
+
+Env State for agent at timestep 511
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 512
+Hear.cry, Feel.discomfort
+
+end of timestep 511_____________________________________
+
+
+Env State for agent at timestep 512
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 513
+Hear.cry, Feel.discomfort
+
+end of timestep 512_____________________________________
+
+
+Env State for agent at timestep 513
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 514
+Hear.cry, Feel.discomfort
+
+end of timestep 513_____________________________________
+
+
+Env State for agent at timestep 514
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 515
+Hear.cry, Feel.discomfort
+
+end of timestep 514_____________________________________
+
+
+Env State for agent at timestep 515
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 516
+Hear.cry, Feel.discomfort
+
+end of timestep 515_____________________________________
+
+
+Env State for agent at timestep 516
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 517
+See.food, Feel.hungry
+
+end of timestep 516_____________________________________
+
+
+Env State for agent at timestep 517
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 518
+See.food, Feel.hungry
+
+end of timestep 517_____________________________________
+
+
+Env State for agent at timestep 518
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 519
+See.food, Feel.hungry
+
+end of timestep 518_____________________________________
+
+
+Env State for agent at timestep 519
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 520
+See.food, Feel.hungry
+
+end of timestep 519_____________________________________
+
+
+Env State for agent at timestep 520
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 521
+See.food, Feel.hungry
+
+end of timestep 520_____________________________________
+
+
+Env State for agent at timestep 521
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 522
+See.food, Feel.hungry
+
+end of timestep 521_____________________________________
+
+
+Env State for agent at timestep 522
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 523
+See.food, Feel.hungry
+
+end of timestep 522_____________________________________
+
+
+Env State for agent at timestep 523
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 524
+Hear.cry, Feel.discomfort
+
+end of timestep 523_____________________________________
+
+
+Env State for agent at timestep 524
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 525
+Hear.cry, Feel.discomfort
+
+end of timestep 524_____________________________________
+
+
+Env State for agent at timestep 525
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 526
+Hear.cry, Feel.discomfort
+
+end of timestep 525_____________________________________
+
+
+Env State for agent at timestep 526
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 527
+Hear.cry, Feel.discomfort
+
+end of timestep 526_____________________________________
+
+
+Env State for agent at timestep 527
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 528
+Hear.cry, Feel.discomfort
+
+end of timestep 527_____________________________________
+
+
+Env State for agent at timestep 528
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 529
+Hear.cry, Feel.discomfort
+
+end of timestep 528_____________________________________
+
+
+Env State for agent at timestep 529
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 530
+Hear.cry, Feel.discomfort
+
+end of timestep 529_____________________________________
+
+
+Env State for agent at timestep 530
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 531
+Hear.cry, Feel.hungry
+
+end of timestep 530_____________________________________
+
+
+Env State for agent at timestep 531
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 532
+See.food, Feel.hungry
+
+end of timestep 531_____________________________________
+
+
+Env State for agent at timestep 532
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 533
+See.food, Feel.hungry
+
+end of timestep 532_____________________________________
+
+
+Env State for agent at timestep 533
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 534
+See.food, Feel.fed
+
+end of timestep 533_____________________________________
+
+
+Env State for agent at timestep 534
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 535
+See.food, Feel.fed
+
+end of timestep 534_____________________________________
+
+
+Env State for agent at timestep 535
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 536
+See.food, Feel.fed
+
+end of timestep 535_____________________________________
+
+
+Env State for agent at timestep 536
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 537
+See.food, Feel.fed
+
+end of timestep 536_____________________________________
+
+
+Env State for agent at timestep 537
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 538
+See.food, Feel.fed
+
+end of timestep 537_____________________________________
+
+
+Env State for agent at timestep 538
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 539
+See.food, Feel.fed
+
+end of timestep 538_____________________________________
+
+
+Env State for agent at timestep 539
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 540
+Hear.cry, Feel.fed
+
+end of timestep 539_____________________________________
+
+
+Env State for agent at timestep 540
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 541
+Hear.cry, Feel.fed
+
+end of timestep 540_____________________________________
+
+
+Env State for agent at timestep 541
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 542
+Hear.cry, Feel.fed
+
+end of timestep 541_____________________________________
+
+
+Env State for agent at timestep 542
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 543
+Hear.cry, Feel.fed
+
+end of timestep 542_____________________________________
+
+
+Env State for agent at timestep 543
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 544
+Hear.cry, Feel.discomfort
+
+end of timestep 543_____________________________________
+
+
+Env State for agent at timestep 544
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 545
+Hear.cry, Feel.discomfort
+
+end of timestep 544_____________________________________
+
+
+Env State for agent at timestep 545
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 546
+See.food, Feel.discomfort
+
+end of timestep 545_____________________________________
+
+
+Env State for agent at timestep 546
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 547
+See.food, Feel.discomfort
+
+end of timestep 546_____________________________________
+
+
+Env State for agent at timestep 547
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 548
+See.food, Feel.discomfort
+
+end of timestep 547_____________________________________
+
+
+Env State for agent at timestep 548
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 549
+See.food, Feel.discomfort
+
+end of timestep 548_____________________________________
+
+
+Env State for agent at timestep 549
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 550
+See.food, Feel.hungry
+
+end of timestep 549_____________________________________
+
+
+Env State for agent at timestep 550
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 551
+See.food, Feel.fed
+
+end of timestep 550_____________________________________
+
+
+Env State for agent at timestep 551
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 552
+See.food, Feel.fed
+
+end of timestep 551_____________________________________
+
+
+Env State for agent at timestep 552
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 553
+Hear.cry, Feel.fed
+
+end of timestep 552_____________________________________
+
+
+Env State for agent at timestep 553
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 554
+Say.food, Feel.fed
+
+end of timestep 553_____________________________________
+
+
+Env State for agent at timestep 554
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 555
+Say.food, Feel.fed
+
+end of timestep 554_____________________________________
+
+
+Env State for agent at timestep 555
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 556
+See.water, Feel.discomfort
+
+end of timestep 555_____________________________________
+
+
+Env State for agent at timestep 556
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 557
+Hear.cry, Feel.fed
+
+end of timestep 556_____________________________________
+
+
+Env State for agent at timestep 557
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 558
+Hear.origin2, Feel.fed
+
+end of timestep 557_____________________________________
+
+
+Env State for agent at timestep 558
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 559
+Hear.origin2, Feel.fed
+
+end of timestep 558_____________________________________
+
+
+Env State for agent at timestep 559
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 560
+Hear.origin2, Feel.fed
+
+end of timestep 559_____________________________________
+
+
+Env State for agent at timestep 560
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 561
+Hear.origin2, Feel.fed
+
+end of timestep 560_____________________________________
+
+
+Env State for agent at timestep 561
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 562
+Hear.origin2, Feel.fed
+
+end of timestep 561_____________________________________
+
+
+Env State for agent at timestep 562
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 563
+Hear.origin2, Feel.fed
+
+end of timestep 562_____________________________________
+
+
+Env State for agent at timestep 563
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 564
+Hear.origin2, Feel.fed
+
+end of timestep 563_____________________________________
+
+
+Env State for agent at timestep 564
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 565
+Hear.origin2, Feel.fed
+
+end of timestep 564_____________________________________
+
+
+Env State for agent at timestep 565
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 566
+Say.water, Feel.fed
+
+end of timestep 565_____________________________________
+
+
+Env State for agent at timestep 566
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 567
+See.smiles, Feel.happy
+
+end of timestep 566_____________________________________
+
+
+Env State for agent at timestep 567
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 568
+See.water, Feel.discomfort
+
+end of timestep 567_____________________________________
+
+
+Env State for agent at timestep 568
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 569
+Hear.cry, Feel.fed
+
+end of timestep 568_____________________________________
+
+
+Env State for agent at timestep 569
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 570
+Hear.cry, Feel.fed
+
+end of timestep 569_____________________________________
+
+
+Env State for agent at timestep 570
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 571
+Hear.cry, Feel.fed
+
+end of timestep 570_____________________________________
+
+
+Env State for agent at timestep 571
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 572
+See.food, Feel.hungry
+
+end of timestep 571_____________________________________
+
+
+Env State for agent at timestep 572
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 573
+See.food, Feel.hungry
+
+end of timestep 572_____________________________________
+
+
+Env State for agent at timestep 573
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 574
+See.food, Feel.discomfort
+
+end of timestep 573_____________________________________
+
+
+Env State for agent at timestep 574
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 575
+See.food, Feel.discomfort
+
+end of timestep 574_____________________________________
+
+
+Env State for agent at timestep 575
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 576
+See.food, Feel.discomfort
+
+end of timestep 575_____________________________________
+
+
+Env State for agent at timestep 576
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 577
+See.food, Feel.discomfort
+
+end of timestep 576_____________________________________
+
+
+Env State for agent at timestep 577
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 578
+Hear.cry, Feel.discomfort
+
+end of timestep 577_____________________________________
+
+
+Env State for agent at timestep 578
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 579
+Hear.cry, Feel.fed
+
+end of timestep 578_____________________________________
+
+
+Env State for agent at timestep 579
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 580
+Hear.cry, Feel.fed
+
+end of timestep 579_____________________________________
+
+
+Env State for agent at timestep 580
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 581
+Hear.cry, Feel.fed
+
+end of timestep 580_____________________________________
+
+
+Env State for agent at timestep 581
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 582
+Say.food, Feel.fed
+
+end of timestep 581_____________________________________
+
+
+Env State for agent at timestep 582
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 583
+Say.food, Feel.fed
+
+end of timestep 582_____________________________________
+
+
+Env State for agent at timestep 583
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 584
+See.water, Feel.discomfort
+
+end of timestep 583_____________________________________
+
+
+Env State for agent at timestep 584
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 585
+Hear.cry, Feel.fed
+
+end of timestep 584_____________________________________
+
+
+Env State for agent at timestep 585
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 586
+Hear.origin2, Feel.fed
+
+end of timestep 585_____________________________________
+
+
+Env State for agent at timestep 586
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 587
+Say.water, Feel.fed
+
+end of timestep 586_____________________________________
+
+
+Env State for agent at timestep 587
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 588
+See.smiles, Feel.happy
+
+end of timestep 587_____________________________________
+
+
+Env State for agent at timestep 588
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 589
+See.water, Feel.discomfort
+
+end of timestep 588_____________________________________
+
+
+Env State for agent at timestep 589
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 590
+Hear.cry, Feel.fed
+
+end of timestep 589_____________________________________
+
+
+Env State for agent at timestep 590
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 591
+Hear.cry, Feel.fed
+
+end of timestep 590_____________________________________
+
+
+Env State for agent at timestep 591
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 592
+Hear.cry, Feel.fed
+
+end of timestep 591_____________________________________
+
+
+Env State for agent at timestep 592
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 593
+Hear.cry, Feel.fed
+
+end of timestep 592_____________________________________
+
+
+Env State for agent at timestep 593
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 594
+Hear.cry, Feel.fed
+
+end of timestep 593_____________________________________
+
+
+Env State for agent at timestep 594
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 595
+Say.water, Feel.fed
+
+end of timestep 594_____________________________________
+
+
+Env State for agent at timestep 595
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 596
+See.smiles, Feel.happy
+
+end of timestep 595_____________________________________
+
+
+Env State for agent at timestep 596
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 597
+See.water, Feel.discomfort
+
+end of timestep 596_____________________________________
+
+
+Env State for agent at timestep 597
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 598
+Hear.cry, Feel.fed
+
+end of timestep 597_____________________________________
+
+
+Env State for agent at timestep 598
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 599
+Hear.cry, Feel.fed
+
+end of timestep 598_____________________________________
+
+
+Env State for agent at timestep 599
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 600
+Hear.cry, Feel.fed
+
+end of timestep 599_____________________________________
+
+
+Env State for agent at timestep 600
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 601
+Hear.cry, Feel.fed
+
+end of timestep 600_____________________________________
+
+
+Env State for agent at timestep 601
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 602
+Hear.cry, Feel.fed
+
+end of timestep 601_____________________________________
+
+
+Env State for agent at timestep 602
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 603
+Hear.cry, Feel.fed
+
+end of timestep 602_____________________________________
+
+
+Env State for agent at timestep 603
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 604
+Hear.cry, Feel.fed
+
+end of timestep 603_____________________________________
+
+
+Env State for agent at timestep 604
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 605
+See.food, Feel.hungry
+
+end of timestep 604_____________________________________
+
+
+Env State for agent at timestep 605
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 606
+See.food, Feel.hungry
+
+end of timestep 605_____________________________________
+
+
+Env State for agent at timestep 606
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 607
+See.food, Feel.discomfort
+
+end of timestep 606_____________________________________
+
+
+Env State for agent at timestep 607
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 608
+See.food, Feel.discomfort
+
+end of timestep 607_____________________________________
+
+
+Env State for agent at timestep 608
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 609
+See.food, Feel.discomfort
+
+end of timestep 608_____________________________________
+
+
+Env State for agent at timestep 609
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 610
+See.food, Feel.discomfort
+
+end of timestep 609_____________________________________
+
+
+Env State for agent at timestep 610
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 611
+See.food, Feel.discomfort
+
+end of timestep 610_____________________________________
+
+
+Env State for agent at timestep 611
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 612
+Say.food, Feel.fed
+
+end of timestep 611_____________________________________
+
+
+Env State for agent at timestep 612
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 613
+Say.food, Feel.fed
+
+end of timestep 612_____________________________________
+
+
+Env State for agent at timestep 613
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 614
+See.water, Feel.discomfort
+
+end of timestep 613_____________________________________
+
+
+Env State for agent at timestep 614
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 615
+Hear.cry, Feel.fed
+
+end of timestep 614_____________________________________
+
+
+Env State for agent at timestep 615
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 616
+Say.water, Feel.fed
+
+end of timestep 615_____________________________________
+
+
+Env State for agent at timestep 616
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 617
+See.smiles, Feel.happy
+
+end of timestep 616_____________________________________
+
+
+Env State for agent at timestep 617
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 618
+See.water, Feel.discomfort
+
+end of timestep 617_____________________________________
+
+
+Env State for agent at timestep 618
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 619
+Hear.cry, Feel.fed
+
+end of timestep 618_____________________________________
+
+
+Env State for agent at timestep 619
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 620
+Hear.cry, Feel.fed
+
+end of timestep 619_____________________________________
+
+
+Env State for agent at timestep 620
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 621
+Hear.cry, Feel.fed
+
+end of timestep 620_____________________________________
+
+
+Env State for agent at timestep 621
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 622
+Hear.cry, Feel.fed
+
+end of timestep 621_____________________________________
+
+
+Env State for agent at timestep 622
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 623
+Hear.cry, Feel.fed
+
+end of timestep 622_____________________________________
+
+
+Env State for agent at timestep 623
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 624
+Say.water, Feel.fed
+
+end of timestep 623_____________________________________
+
+
+Env State for agent at timestep 624
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 625
+See.smiles, Feel.happy
+
+end of timestep 624_____________________________________
+
+
+Env State for agent at timestep 625
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 626
+See.water, Feel.discomfort
+
+end of timestep 625_____________________________________
+
+
+Env State for agent at timestep 626
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 627
+Hear.cry, Feel.fed
+
+end of timestep 626_____________________________________
+
+
+Env State for agent at timestep 627
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 628
+Hear.cry, Feel.fed
+
+end of timestep 627_____________________________________
+
+
+Env State for agent at timestep 628
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 629
+Hear.cry, Feel.fed
+
+end of timestep 628_____________________________________
+
+
+Env State for agent at timestep 629
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 630
+See.food, Feel.fed
+
+end of timestep 629_____________________________________
+
+
+Env State for agent at timestep 630
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 631
+Say.food, Feel.fed
+
+end of timestep 630_____________________________________
+
+
+Env State for agent at timestep 631
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 632
+Say.food, Feel.fed
+
+end of timestep 631_____________________________________
+
+
+Env State for agent at timestep 632
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 633
+See.water, Feel.discomfort
+
+end of timestep 632_____________________________________
+
+
+Env State for agent at timestep 633
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 634
+Hear.cry, Feel.fed
+
+end of timestep 633_____________________________________
+
+
+Env State for agent at timestep 634
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 635
+Say.water, Feel.fed
+
+end of timestep 634_____________________________________
+
+
+Env State for agent at timestep 635
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 636
+See.smiles, Feel.happy
+
+end of timestep 635_____________________________________
+
+
+Env State for agent at timestep 636
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 637
+See.water, Feel.discomfort
+
+end of timestep 636_____________________________________
+
+
+Env State for agent at timestep 637
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 638
+Hear.cry, Feel.fed
+
+end of timestep 637_____________________________________
+
+
+Env State for agent at timestep 638
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 639
+Hear.cry, Feel.fed
+
+end of timestep 638_____________________________________
+
+
+Env State for agent at timestep 639
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 640
+Hear.cry, Feel.fed
+
+end of timestep 639_____________________________________
+
+
+Env State for agent at timestep 640
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 641
+Hear.cry, Feel.fed
+
+end of timestep 640_____________________________________
+
+
+Env State for agent at timestep 641
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 642
+Hear.cry, Feel.fed
+
+end of timestep 641_____________________________________
+
+
+Env State for agent at timestep 642
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 643
+Say.water, Feel.fed
+
+end of timestep 642_____________________________________
+
+
+Env State for agent at timestep 643
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 644
+See.smiles, Feel.happy
+
+end of timestep 643_____________________________________
+
+
+Env State for agent at timestep 644
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 645
+See.water, Feel.discomfort
+
+end of timestep 644_____________________________________
+
+
+Env State for agent at timestep 645
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 646
+Hear.cry, Feel.fed
+
+end of timestep 645_____________________________________
+
+
+Env State for agent at timestep 646
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 647
+Hear.cry, Feel.fed
+
+end of timestep 646_____________________________________
+
+
+Env State for agent at timestep 647
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 648
+Hear.cry, Feel.fed
+
+end of timestep 647_____________________________________
+
+
+Env State for agent at timestep 648
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 649
+See.food, Feel.fed
+
+end of timestep 648_____________________________________
+
+
+Env State for agent at timestep 649
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 650
+Say.food, Feel.fed
+
+end of timestep 649_____________________________________
+
+
+Env State for agent at timestep 650
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 651
+Say.food, Feel.fed
+
+end of timestep 650_____________________________________
+
+
+Env State for agent at timestep 651
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 652
+See.water, Feel.discomfort
+
+end of timestep 651_____________________________________
+
+
+Env State for agent at timestep 652
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 653
+Hear.cry, Feel.fed
+
+end of timestep 652_____________________________________
+
+
+Env State for agent at timestep 653
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 654
+Say.water, Feel.fed
+
+end of timestep 653_____________________________________
+
+
+Env State for agent at timestep 654
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 655
+See.smiles, Feel.happy
+
+end of timestep 654_____________________________________
+
+
+Env State for agent at timestep 655
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 656
+See.water, Feel.discomfort
+
+end of timestep 655_____________________________________
+
+
+Env State for agent at timestep 656
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 657
+Hear.cry, Feel.fed
+
+end of timestep 656_____________________________________
+
+
+Env State for agent at timestep 657
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 658
+Hear.cry, Feel.fed
+
+end of timestep 657_____________________________________
+
+
+Env State for agent at timestep 658
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 659
+Hear.cry, Feel.fed
+
+end of timestep 658_____________________________________
+
+
+Env State for agent at timestep 659
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 660
+Hear.cry, Feel.fed
+
+end of timestep 659_____________________________________
+
+
+Env State for agent at timestep 660
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 661
+Hear.cry, Feel.fed
+
+end of timestep 660_____________________________________
+
+
+Env State for agent at timestep 661
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 662
+Say.water, Feel.fed
+
+end of timestep 661_____________________________________
+
+
+Env State for agent at timestep 662
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 663
+See.smiles, Feel.happy
+
+end of timestep 662_____________________________________
+
+
+Env State for agent at timestep 663
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 664
+See.water, Feel.discomfort
+
+end of timestep 663_____________________________________
+
+
+Env State for agent at timestep 664
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 665
+Hear.cry, Feel.fed
+
+end of timestep 664_____________________________________
+
+
+Env State for agent at timestep 665
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 666
+Hear.cry, Feel.fed
+
+end of timestep 665_____________________________________
+
+
+Env State for agent at timestep 666
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 667
+Hear.cry, Feel.fed
+
+end of timestep 666_____________________________________
+
+
+Env State for agent at timestep 667
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 668
+See.food, Feel.fed
+
+end of timestep 667_____________________________________
+
+
+Env State for agent at timestep 668
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 669
+Say.food, Feel.discomfort
+
+end of timestep 668_____________________________________
+
+
+Env State for agent at timestep 669
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 670
+Say.food, Feel.fed
+
+end of timestep 669_____________________________________
+
+
+Env State for agent at timestep 670
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 671
+See.water, Feel.discomfort
+
+end of timestep 670_____________________________________
+
+
+Env State for agent at timestep 671
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 672
+Hear.cry, Feel.fed
+
+end of timestep 671_____________________________________
+
+
+Env State for agent at timestep 672
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 673
+Say.water, Feel.fed
+
+end of timestep 672_____________________________________
+
+
+Env State for agent at timestep 673
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 674
+See.smiles, Feel.happy
+
+end of timestep 673_____________________________________
+
+
+Env State for agent at timestep 674
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 675
+See.water, Feel.discomfort
+
+end of timestep 674_____________________________________
+
+
+Env State for agent at timestep 675
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 676
+Hear.cry, Feel.fed
+
+end of timestep 675_____________________________________
+
+
+Env State for agent at timestep 676
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 677
+Hear.cry, Feel.fed
+
+end of timestep 676_____________________________________
+
+
+Env State for agent at timestep 677
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 678
+Hear.cry, Feel.fed
+
+end of timestep 677_____________________________________
+
+
+Env State for agent at timestep 678
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 679
+Hear.cry, Feel.fed
+
+end of timestep 678_____________________________________
+
+
+Env State for agent at timestep 679
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 680
+Hear.cry, Feel.fed
+
+end of timestep 679_____________________________________
+
+
+Env State for agent at timestep 680
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 681
+Say.water, Feel.fed
+
+end of timestep 680_____________________________________
+
+
+Env State for agent at timestep 681
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 682
+See.smiles, Feel.happy
+
+end of timestep 681_____________________________________
+
+
+Env State for agent at timestep 682
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 683
+See.water, Feel.discomfort
+
+end of timestep 682_____________________________________
+
+
+Env State for agent at timestep 683
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 684
+Hear.cry, Feel.fed
+
+end of timestep 683_____________________________________
+
+
+Env State for agent at timestep 684
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 685
+Hear.cry, Feel.fed
+
+end of timestep 684_____________________________________
+
+
+Env State for agent at timestep 685
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 686
+Hear.cry, Feel.fed
+
+end of timestep 685_____________________________________
+
+
+Env State for agent at timestep 686
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 687
+See.food, Feel.fed
+
+end of timestep 686_____________________________________
+
+
+Env State for agent at timestep 687
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 688
+See.food, Feel.discomfort
+
+end of timestep 687_____________________________________
+
+
+Env State for agent at timestep 688
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 689
+See.food, Feel.discomfort
+
+end of timestep 688_____________________________________
+
+
+Env State for agent at timestep 689
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 690
+See.food, Feel.discomfort
+
+end of timestep 689_____________________________________
+
+
+Env State for agent at timestep 690
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 691
+See.food, Feel.discomfort
+
+end of timestep 690_____________________________________
+
+
+Env State for agent at timestep 691
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 692
+Say.food, Feel.discomfort
+
+end of timestep 691_____________________________________
+
+
+Env State for agent at timestep 692
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 693
+Say.food, Feel.fed
+
+end of timestep 692_____________________________________
+
+
+Env State for agent at timestep 693
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 694
+See.water, Feel.discomfort
+
+end of timestep 693_____________________________________
+
+
+Env State for agent at timestep 694
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 695
+Hear.cry, Feel.fed
+
+end of timestep 694_____________________________________
+
+
+Env State for agent at timestep 695
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 696
+Say.water, Feel.fed
+
+end of timestep 695_____________________________________
+
+
+Env State for agent at timestep 696
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 697
+See.smiles, Feel.happy
+
+end of timestep 696_____________________________________
+
+
+Env State for agent at timestep 697
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 698
+See.water, Feel.discomfort
+
+end of timestep 697_____________________________________
+
+
+Env State for agent at timestep 698
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 699
+Hear.cry, Feel.fed
+
+end of timestep 698_____________________________________
+
+
+Env State for agent at timestep 699
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 700
+Hear.cry, Feel.fed
+
+end of timestep 699_____________________________________
+
+
+Env State for agent at timestep 700
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 701
+Hear.cry, Feel.fed
+
+end of timestep 700_____________________________________
+
+
+Env State for agent at timestep 701
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 702
+Hear.cry, Feel.fed
+
+end of timestep 701_____________________________________
+
+
+Env State for agent at timestep 702
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 703
+Hear.cry, Feel.fed
+
+end of timestep 702_____________________________________
+
+
+Env State for agent at timestep 703
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 704
+Say.water, Feel.fed
+
+end of timestep 703_____________________________________
+
+
+Env State for agent at timestep 704
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 705
+See.smiles, Feel.happy
+
+end of timestep 704_____________________________________
+
+
+Env State for agent at timestep 705
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 706
+See.water, Feel.discomfort
+
+end of timestep 705_____________________________________
+
+
+Env State for agent at timestep 706
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 707
+Hear.cry, Feel.fed
+
+end of timestep 706_____________________________________
+
+
+Env State for agent at timestep 707
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 708
+Hear.cry, Feel.fed
+
+end of timestep 707_____________________________________
+
+
+Env State for agent at timestep 708
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 709
+Hear.cry, Feel.fed
+
+end of timestep 708_____________________________________
+
+
+Env State for agent at timestep 709
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 710
+See.food, Feel.discomfort
+
+end of timestep 709_____________________________________
+
+
+Env State for agent at timestep 710
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 711
+See.food, Feel.discomfort
+
+end of timestep 710_____________________________________
+
+
+Env State for agent at timestep 711
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 712
+See.food, Feel.discomfort
+
+end of timestep 711_____________________________________
+
+
+Env State for agent at timestep 712
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 713
+See.food, Feel.discomfort
+
+end of timestep 712_____________________________________
+
+
+Env State for agent at timestep 713
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 714
+See.food, Feel.discomfort
+
+end of timestep 713_____________________________________
+
+
+Env State for agent at timestep 714
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 715
+Say.food, Feel.discomfort
+
+end of timestep 714_____________________________________
+
+
+Env State for agent at timestep 715
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 716
+Say.food, Feel.fed
+
+end of timestep 715_____________________________________
+
+
+Env State for agent at timestep 716
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 717
+See.water, Feel.discomfort
+
+end of timestep 716_____________________________________
+
+
+Env State for agent at timestep 717
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 718
+Hear.cry, Feel.fed
+
+end of timestep 717_____________________________________
+
+
+Env State for agent at timestep 718
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 719
+Say.water, Feel.fed
+
+end of timestep 718_____________________________________
+
+
+Env State for agent at timestep 719
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 720
+See.smiles, Feel.happy
+
+end of timestep 719_____________________________________
+
+
+Env State for agent at timestep 720
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 721
+See.water, Feel.discomfort
+
+end of timestep 720_____________________________________
+
+
+Env State for agent at timestep 721
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 722
+Hear.cry, Feel.fed
+
+end of timestep 721_____________________________________
+
+
+Env State for agent at timestep 722
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 723
+Hear.cry, Feel.fed
+
+end of timestep 722_____________________________________
+
+
+Env State for agent at timestep 723
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 724
+Hear.cry, Feel.fed
+
+end of timestep 723_____________________________________
+
+
+Env State for agent at timestep 724
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 725
+Hear.cry, Feel.fed
+
+end of timestep 724_____________________________________
+
+
+Env State for agent at timestep 725
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 726
+Hear.cry, Feel.fed
+
+end of timestep 725_____________________________________
+
+
+Env State for agent at timestep 726
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 727
+Say.water, Feel.fed
+
+end of timestep 726_____________________________________
+
+
+Env State for agent at timestep 727
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 728
+See.smiles, Feel.happy
+
+end of timestep 727_____________________________________
+
+
+Env State for agent at timestep 728
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 729
+See.water, Feel.discomfort
+
+end of timestep 728_____________________________________
+
+
+Env State for agent at timestep 729
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 730
+Hear.cry, Feel.fed
+
+end of timestep 729_____________________________________
+
+
+Env State for agent at timestep 730
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 731
+Hear.cry, Feel.fed
+
+end of timestep 730_____________________________________
+
+
+Env State for agent at timestep 731
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 732
+Hear.cry, Feel.fed
+
+end of timestep 731_____________________________________
+
+
+Env State for agent at timestep 732
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 733
+Say.food, Feel.discomfort
+
+end of timestep 732_____________________________________
+
+
+Env State for agent at timestep 733
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 734
+Say.food, Feel.fed
+
+end of timestep 733_____________________________________
+
+
+Env State for agent at timestep 734
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 735
+See.water, Feel.discomfort
+
+end of timestep 734_____________________________________
+
+
+Env State for agent at timestep 735
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 736
+Hear.cry, Feel.fed
+
+end of timestep 735_____________________________________
+
+
+Env State for agent at timestep 736
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 737
+Say.water, Feel.fed
+
+end of timestep 736_____________________________________
+
+
+Env State for agent at timestep 737
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 738
+See.smiles, Feel.happy
+
+end of timestep 737_____________________________________
+
+
+Env State for agent at timestep 738
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 739
+See.water, Feel.discomfort
+
+end of timestep 738_____________________________________
+
+
+Env State for agent at timestep 739
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 740
+Hear.cry, Feel.fed
+
+end of timestep 739_____________________________________
+
+
+Env State for agent at timestep 740
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 741
+Hear.cry, Feel.fed
+
+end of timestep 740_____________________________________
+
+
+Env State for agent at timestep 741
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 742
+Hear.cry, Feel.fed
+
+end of timestep 741_____________________________________
+
+
+Env State for agent at timestep 742
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 743
+Hear.cry, Feel.fed
+
+end of timestep 742_____________________________________
+
+
+Env State for agent at timestep 743
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 744
+Hear.cry, Feel.fed
+
+end of timestep 743_____________________________________
+
+
+Env State for agent at timestep 744
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 745
+Say.water, Feel.fed
+
+end of timestep 744_____________________________________
+
+
+Env State for agent at timestep 745
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 746
+See.smiles, Feel.happy
+
+end of timestep 745_____________________________________
+
+
+Env State for agent at timestep 746
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 747
+See.water, Feel.discomfort
+
+end of timestep 746_____________________________________
+
+
+Env State for agent at timestep 747
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 748
+Hear.cry, Feel.fed
+
+end of timestep 747_____________________________________
+
+
+Env State for agent at timestep 748
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 749
+Hear.cry, Feel.fed
+
+end of timestep 748_____________________________________
+
+
+Env State for agent at timestep 749
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 750
+Hear.cry, Feel.fed
+
+end of timestep 749_____________________________________
+
+
+Env State for agent at timestep 750
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 751
+Say.food, Feel.discomfort
+
+end of timestep 750_____________________________________
+
+
+Env State for agent at timestep 751
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 752
+Say.food, Feel.fed
+
+end of timestep 751_____________________________________
+
+
+Env State for agent at timestep 752
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 753
+See.water, Feel.discomfort
+
+end of timestep 752_____________________________________
+
+
+Env State for agent at timestep 753
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 754
+Hear.cry, Feel.fed
+
+end of timestep 753_____________________________________
+
+
+Env State for agent at timestep 754
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 755
+Say.water, Feel.fed
+
+end of timestep 754_____________________________________
+
+
+Env State for agent at timestep 755
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 756
+See.smiles, Feel.happy
+
+end of timestep 755_____________________________________
+
+
+Env State for agent at timestep 756
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 757
+See.water, Feel.discomfort
+
+end of timestep 756_____________________________________
+
+
+Env State for agent at timestep 757
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 758
+Hear.cry, Feel.fed
+
+end of timestep 757_____________________________________
+
+
+Env State for agent at timestep 758
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 759
+Hear.cry, Feel.fed
+
+end of timestep 758_____________________________________
+
+
+Env State for agent at timestep 759
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 760
+Hear.cry, Feel.fed
+
+end of timestep 759_____________________________________
+
+
+Env State for agent at timestep 760
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 761
+Hear.cry, Feel.fed
+
+end of timestep 760_____________________________________
+
+
+Env State for agent at timestep 761
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 762
+Hear.cry, Feel.fed
+
+end of timestep 761_____________________________________
+
+
+Env State for agent at timestep 762
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 763
+Say.water, Feel.fed
+
+end of timestep 762_____________________________________
+
+
+Env State for agent at timestep 763
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 764
+See.smiles, Feel.happy
+
+end of timestep 763_____________________________________
+
+
+Env State for agent at timestep 764
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 765
+See.water, Feel.discomfort
+
+end of timestep 764_____________________________________
+
+
+Env State for agent at timestep 765
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 766
+Hear.cry, Feel.fed
+
+end of timestep 765_____________________________________
+
+
+Env State for agent at timestep 766
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 767
+Hear.cry, Feel.fed
+
+end of timestep 766_____________________________________
+
+
+Env State for agent at timestep 767
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 768
+Hear.cry, Feel.fed
+
+end of timestep 767_____________________________________
+
+
+Env State for agent at timestep 768
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 769
+Say.food, Feel.fed
+
+end of timestep 768_____________________________________
+
+
+Env State for agent at timestep 769
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 770
+Say.food, Feel.fed
+
+end of timestep 769_____________________________________
+
+
+Env State for agent at timestep 770
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 771
+See.water, Feel.discomfort
+
+end of timestep 770_____________________________________
+
+
+Env State for agent at timestep 771
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 772
+Hear.cry, Feel.fed
+
+end of timestep 771_____________________________________
+
+
+Env State for agent at timestep 772
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 773
+Say.water, Feel.fed
+
+end of timestep 772_____________________________________
+
+
+Env State for agent at timestep 773
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 774
+See.smiles, Feel.happy
+
+end of timestep 773_____________________________________
+
+
+Env State for agent at timestep 774
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 775
+See.water, Feel.discomfort
+
+end of timestep 774_____________________________________
+
+
+Env State for agent at timestep 775
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 776
+Hear.cry, Feel.fed
+
+end of timestep 775_____________________________________
+
+
+Env State for agent at timestep 776
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 777
+Hear.cry, Feel.fed
+
+end of timestep 776_____________________________________
+
+
+Env State for agent at timestep 777
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 778
+Hear.cry, Feel.fed
+
+end of timestep 777_____________________________________
+
+
+Env State for agent at timestep 778
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 779
+Hear.cry, Feel.fed
+
+end of timestep 778_____________________________________
+
+
+Env State for agent at timestep 779
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 780
+Hear.cry, Feel.fed
+
+end of timestep 779_____________________________________
+
+
+Env State for agent at timestep 780
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 781
+Say.water, Feel.fed
+
+end of timestep 780_____________________________________
+
+
+Env State for agent at timestep 781
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 782
+See.smiles, Feel.happy
+
+end of timestep 781_____________________________________
+
+
+Env State for agent at timestep 782
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 783
+See.water, Feel.discomfort
+
+end of timestep 782_____________________________________
+
+
+Env State for agent at timestep 783
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 784
+Hear.cry, Feel.fed
+
+end of timestep 783_____________________________________
+
+
+Env State for agent at timestep 784
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 785
+Hear.cry, Feel.fed
+
+end of timestep 784_____________________________________
+
+
+Env State for agent at timestep 785
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 786
+Hear.cry, Feel.fed
+
+end of timestep 785_____________________________________
+
+
+Env State for agent at timestep 786
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 787
+Say.food, Feel.discomfort
+
+end of timestep 786_____________________________________
+
+
+Env State for agent at timestep 787
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 788
+Say.food, Feel.fed
+
+end of timestep 787_____________________________________
+
+
+Env State for agent at timestep 788
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 789
+See.water, Feel.discomfort
+
+end of timestep 788_____________________________________
+
+
+Env State for agent at timestep 789
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 790
+Hear.cry, Feel.fed
+
+end of timestep 789_____________________________________
+
+
+Env State for agent at timestep 790
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 791
+Say.water, Feel.fed
+
+end of timestep 790_____________________________________
+
+
+Env State for agent at timestep 791
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 792
+See.smiles, Feel.happy
+
+end of timestep 791_____________________________________
+
+
+Env State for agent at timestep 792
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 793
+See.water, Feel.discomfort
+
+end of timestep 792_____________________________________
+
+
+Env State for agent at timestep 793
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 794
+Hear.cry, Feel.fed
+
+end of timestep 793_____________________________________
+
+
+Env State for agent at timestep 794
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 795
+Hear.cry, Feel.fed
+
+end of timestep 794_____________________________________
+
+
+Env State for agent at timestep 795
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 796
+Hear.cry, Feel.fed
+
+end of timestep 795_____________________________________
+
+
+Env State for agent at timestep 796
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 797
+Hear.cry, Feel.fed
+
+end of timestep 796_____________________________________
+
+
+Env State for agent at timestep 797
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 798
+Hear.cry, Feel.fed
+
+end of timestep 797_____________________________________
+
+
+Env State for agent at timestep 798
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 799
+Say.water, Feel.fed
+
+end of timestep 798_____________________________________
+
+
+Env State for agent at timestep 799
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 800
+See.smiles, Feel.happy
+
+end of timestep 799_____________________________________
+
+
+Env State for agent at timestep 800
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 801
+See.water, Feel.discomfort
+
+end of timestep 800_____________________________________
+
+
+Env State for agent at timestep 801
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 802
+Hear.cry, Feel.fed
+
+end of timestep 801_____________________________________
+
+
+Env State for agent at timestep 802
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 803
+Hear.cry, Feel.fed
+
+end of timestep 802_____________________________________
+
+
+Env State for agent at timestep 803
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 804
+Hear.cry, Feel.fed
+
+end of timestep 803_____________________________________
+
+
+Env State for agent at timestep 804
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 805
+Say.food, Feel.fed
+
+end of timestep 804_____________________________________
+
+
+Env State for agent at timestep 805
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 806
+Say.food, Feel.fed
+
+end of timestep 805_____________________________________
+
+
+Env State for agent at timestep 806
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 807
+See.water, Feel.discomfort
+
+end of timestep 806_____________________________________
+
+
+Env State for agent at timestep 807
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 808
+Hear.cry, Feel.fed
+
+end of timestep 807_____________________________________
+
+
+Env State for agent at timestep 808
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 809
+Say.water, Feel.fed
+
+end of timestep 808_____________________________________
+
+
+Env State for agent at timestep 809
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 810
+See.smiles, Feel.happy
+
+end of timestep 809_____________________________________
+
+
+Env State for agent at timestep 810
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 811
+See.water, Feel.discomfort
+
+end of timestep 810_____________________________________
+
+
+Env State for agent at timestep 811
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 812
+Hear.cry, Feel.fed
+
+end of timestep 811_____________________________________
+
+
+Env State for agent at timestep 812
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 813
+Hear.cry, Feel.fed
+
+end of timestep 812_____________________________________
+
+
+Env State for agent at timestep 813
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 814
+Hear.cry, Feel.fed
+
+end of timestep 813_____________________________________
+
+
+Env State for agent at timestep 814
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 815
+Hear.cry, Feel.fed
+
+end of timestep 814_____________________________________
+
+
+Env State for agent at timestep 815
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 816
+Hear.cry, Feel.fed
+
+end of timestep 815_____________________________________
+
+
+Env State for agent at timestep 816
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 817
+Say.water, Feel.fed
+
+end of timestep 816_____________________________________
+
+
+Env State for agent at timestep 817
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 818
+See.smiles, Feel.happy
+
+end of timestep 817_____________________________________
+
+
+Env State for agent at timestep 818
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 819
+See.water, Feel.discomfort
+
+end of timestep 818_____________________________________
+
+
+Env State for agent at timestep 819
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 820
+Hear.cry, Feel.fed
+
+end of timestep 819_____________________________________
+
+
+Env State for agent at timestep 820
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 821
+Hear.cry, Feel.fed
+
+end of timestep 820_____________________________________
+
+
+Env State for agent at timestep 821
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 822
+Hear.cry, Feel.fed
+
+end of timestep 821_____________________________________
+
+
+Env State for agent at timestep 822
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 823
+Say.food, Feel.discomfort
+
+end of timestep 822_____________________________________
+
+
+Env State for agent at timestep 823
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 824
+Say.food, Feel.fed
+
+end of timestep 823_____________________________________
+
+
+Env State for agent at timestep 824
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 825
+See.water, Feel.discomfort
+
+end of timestep 824_____________________________________
+
+
+Env State for agent at timestep 825
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 826
+Hear.cry, Feel.fed
+
+end of timestep 825_____________________________________
+
+
+Env State for agent at timestep 826
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 827
+Say.water, Feel.fed
+
+end of timestep 826_____________________________________
+
+
+Env State for agent at timestep 827
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 828
+See.smiles, Feel.happy
+
+end of timestep 827_____________________________________
+
+
+Env State for agent at timestep 828
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 829
+See.water, Feel.discomfort
+
+end of timestep 828_____________________________________
+
+
+Env State for agent at timestep 829
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 830
+Hear.cry, Feel.fed
+
+end of timestep 829_____________________________________
+
+
+Env State for agent at timestep 830
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 831
+Hear.cry, Feel.fed
+
+end of timestep 830_____________________________________
+
+
+Env State for agent at timestep 831
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 832
+Hear.cry, Feel.fed
+
+end of timestep 831_____________________________________
+
+
+Env State for agent at timestep 832
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 833
+Hear.cry, Feel.fed
+
+end of timestep 832_____________________________________
+
+
+Env State for agent at timestep 833
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 834
+Hear.cry, Feel.fed
+
+end of timestep 833_____________________________________
+
+
+Env State for agent at timestep 834
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 835
+Say.water, Feel.fed
+
+end of timestep 834_____________________________________
+
+
+Env State for agent at timestep 835
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 836
+See.smiles, Feel.happy
+
+end of timestep 835_____________________________________
+
+
+Env State for agent at timestep 836
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 837
+See.water, Feel.discomfort
+
+end of timestep 836_____________________________________
+
+
+Env State for agent at timestep 837
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 838
+Hear.cry, Feel.fed
+
+end of timestep 837_____________________________________
+
+
+Env State for agent at timestep 838
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 839
+Hear.cry, Feel.fed
+
+end of timestep 838_____________________________________
+
+
+Env State for agent at timestep 839
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 840
+Hear.cry, Feel.fed
+
+end of timestep 839_____________________________________
+
+
+Env State for agent at timestep 840
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 841
+Say.food, Feel.fed
+
+end of timestep 840_____________________________________
+
+
+Env State for agent at timestep 841
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 842
+Say.food, Feel.fed
+
+end of timestep 841_____________________________________
+
+
+Env State for agent at timestep 842
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 843
+See.water, Feel.discomfort
+
+end of timestep 842_____________________________________
+
+
+Env State for agent at timestep 843
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 844
+Hear.cry, Feel.fed
+
+end of timestep 843_____________________________________
+
+
+Env State for agent at timestep 844
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 845
+Say.water, Feel.fed
+
+end of timestep 844_____________________________________
+
+
+Env State for agent at timestep 845
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 846
+See.smiles, Feel.happy
+
+end of timestep 845_____________________________________
+
+
+Env State for agent at timestep 846
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 847
+See.water, Feel.discomfort
+
+end of timestep 846_____________________________________
+
+
+Env State for agent at timestep 847
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 848
+Hear.cry, Feel.fed
+
+end of timestep 847_____________________________________
+
+
+Env State for agent at timestep 848
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 849
+Hear.cry, Feel.fed
+
+end of timestep 848_____________________________________
+
+
+Env State for agent at timestep 849
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 850
+Hear.cry, Feel.fed
+
+end of timestep 849_____________________________________
+
+
+Env State for agent at timestep 850
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 851
+Hear.cry, Feel.fed
+
+end of timestep 850_____________________________________
+
+
+Env State for agent at timestep 851
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 852
+Hear.cry, Feel.fed
+
+end of timestep 851_____________________________________
+
+
+Env State for agent at timestep 852
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 853
+Say.water, Feel.fed
+
+end of timestep 852_____________________________________
+
+
+Env State for agent at timestep 853
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 854
+See.smiles, Feel.happy
+
+end of timestep 853_____________________________________
+
+
+Env State for agent at timestep 854
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 855
+See.water, Feel.discomfort
+
+end of timestep 854_____________________________________
+
+
+Env State for agent at timestep 855
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 856
+Hear.cry, Feel.fed
+
+end of timestep 855_____________________________________
+
+
+Env State for agent at timestep 856
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 857
+Hear.cry, Feel.fed
+
+end of timestep 856_____________________________________
+
+
+Env State for agent at timestep 857
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 858
+Hear.cry, Feel.fed
+
+end of timestep 857_____________________________________
+
+
+Env State for agent at timestep 858
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 859
+Say.food, Feel.discomfort
+
+end of timestep 858_____________________________________
+
+
+Env State for agent at timestep 859
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 860
+Say.food, Feel.fed
+
+end of timestep 859_____________________________________
+
+
+Env State for agent at timestep 860
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 861
+See.water, Feel.discomfort
+
+end of timestep 860_____________________________________
+
+
+Env State for agent at timestep 861
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 862
+Hear.cry, Feel.fed
+
+end of timestep 861_____________________________________
+
+
+Env State for agent at timestep 862
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 863
+Say.water, Feel.fed
+
+end of timestep 862_____________________________________
+
+
+Env State for agent at timestep 863
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 864
+See.smiles, Feel.happy
+
+end of timestep 863_____________________________________
+
+
+Env State for agent at timestep 864
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 865
+See.water, Feel.discomfort
+
+end of timestep 864_____________________________________
+
+
+Env State for agent at timestep 865
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 866
+Hear.cry, Feel.fed
+
+end of timestep 865_____________________________________
+
+
+Env State for agent at timestep 866
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 867
+Hear.cry, Feel.fed
+
+end of timestep 866_____________________________________
+
+
+Env State for agent at timestep 867
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 868
+Hear.cry, Feel.fed
+
+end of timestep 867_____________________________________
+
+
+Env State for agent at timestep 868
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 869
+Hear.cry, Feel.fed
+
+end of timestep 868_____________________________________
+
+
+Env State for agent at timestep 869
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 870
+Hear.cry, Feel.fed
+
+end of timestep 869_____________________________________
+
+
+Env State for agent at timestep 870
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 871
+Say.water, Feel.fed
+
+end of timestep 870_____________________________________
+
+
+Env State for agent at timestep 871
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 872
+See.smiles, Feel.happy
+
+end of timestep 871_____________________________________
+
+
+Env State for agent at timestep 872
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 873
+See.water, Feel.discomfort
+
+end of timestep 872_____________________________________
+
+
+Env State for agent at timestep 873
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 874
+Hear.cry, Feel.fed
+
+end of timestep 873_____________________________________
+
+
+Env State for agent at timestep 874
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 875
+Hear.cry, Feel.fed
+
+end of timestep 874_____________________________________
+
+
+Env State for agent at timestep 875
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 876
+Hear.cry, Feel.fed
+
+end of timestep 875_____________________________________
+
+
+Env State for agent at timestep 876
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 877
+Say.food, Feel.fed
+
+end of timestep 876_____________________________________
+
+
+Env State for agent at timestep 877
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 878
+Say.food, Feel.fed
+
+end of timestep 877_____________________________________
+
+
+Env State for agent at timestep 878
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 879
+See.water, Feel.discomfort
+
+end of timestep 878_____________________________________
+
+
+Env State for agent at timestep 879
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 880
+Hear.cry, Feel.fed
+
+end of timestep 879_____________________________________
+
+
+Env State for agent at timestep 880
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 881
+Say.water, Feel.fed
+
+end of timestep 880_____________________________________
+
+
+Env State for agent at timestep 881
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 882
+See.smiles, Feel.happy
+
+end of timestep 881_____________________________________
+
+
+Env State for agent at timestep 882
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 883
+See.water, Feel.discomfort
+
+end of timestep 882_____________________________________
+
+
+Env State for agent at timestep 883
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 884
+Hear.cry, Feel.fed
+
+end of timestep 883_____________________________________
+
+
+Env State for agent at timestep 884
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 885
+Hear.cry, Feel.fed
+
+end of timestep 884_____________________________________
+
+
+Env State for agent at timestep 885
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 886
+Hear.cry, Feel.fed
+
+end of timestep 885_____________________________________
+
+
+Env State for agent at timestep 886
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 887
+Hear.cry, Feel.fed
+
+end of timestep 886_____________________________________
+
+
+Env State for agent at timestep 887
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 888
+Hear.cry, Feel.fed
+
+end of timestep 887_____________________________________
+
+
+Env State for agent at timestep 888
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 889
+Say.water, Feel.fed
+
+end of timestep 888_____________________________________
+
+
+Env State for agent at timestep 889
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 890
+See.smiles, Feel.happy
+
+end of timestep 889_____________________________________
+
+
+Env State for agent at timestep 890
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 891
+See.water, Feel.discomfort
+
+end of timestep 890_____________________________________
+
+
+Env State for agent at timestep 891
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 892
+Hear.cry, Feel.fed
+
+end of timestep 891_____________________________________
+
+
+Env State for agent at timestep 892
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 893
+Hear.cry, Feel.fed
+
+end of timestep 892_____________________________________
+
+
+Env State for agent at timestep 893
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 894
+Hear.cry, Feel.fed
+
+end of timestep 893_____________________________________
+
+
+Env State for agent at timestep 894
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 895
+Say.food, Feel.fed
+
+end of timestep 894_____________________________________
+
+
+Env State for agent at timestep 895
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 896
+Say.food, Feel.fed
+
+end of timestep 895_____________________________________
+
+
+Env State for agent at timestep 896
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 897
+See.water, Feel.discomfort
+
+end of timestep 896_____________________________________
+
+
+Env State for agent at timestep 897
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 898
+Hear.cry, Feel.fed
+
+end of timestep 897_____________________________________
+
+
+Env State for agent at timestep 898
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 899
+Say.water, Feel.fed
+
+end of timestep 898_____________________________________
+
+
+Env State for agent at timestep 899
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 900
+See.smiles, Feel.happy
+
+end of timestep 899_____________________________________
+
+
+Env State for agent at timestep 900
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 901
+See.water, Feel.discomfort
+
+end of timestep 900_____________________________________
+
+
+Env State for agent at timestep 901
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 902
+Hear.cry, Feel.fed
+
+end of timestep 901_____________________________________
+
+
+Env State for agent at timestep 902
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 903
+Hear.cry, Feel.fed
+
+end of timestep 902_____________________________________
+
+
+Env State for agent at timestep 903
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 904
+Hear.cry, Feel.fed
+
+end of timestep 903_____________________________________
+
+
+Env State for agent at timestep 904
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 905
+Hear.cry, Feel.fed
+
+end of timestep 904_____________________________________
+
+
+Env State for agent at timestep 905
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 906
+Hear.cry, Feel.fed
+
+end of timestep 905_____________________________________
+
+
+Env State for agent at timestep 906
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 907
+Say.water, Feel.fed
+
+end of timestep 906_____________________________________
+
+
+Env State for agent at timestep 907
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 908
+See.smiles, Feel.happy
+
+end of timestep 907_____________________________________
+
+
+Env State for agent at timestep 908
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 909
+See.water, Feel.discomfort
+
+end of timestep 908_____________________________________
+
+
+Env State for agent at timestep 909
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 910
+Hear.cry, Feel.fed
+
+end of timestep 909_____________________________________
+
+
+Env State for agent at timestep 910
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 911
+Hear.cry, Feel.fed
+
+end of timestep 910_____________________________________
+
+
+Env State for agent at timestep 911
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 912
+Hear.cry, Feel.fed
+
+end of timestep 911_____________________________________
+
+
+Env State for agent at timestep 912
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 913
+Say.food, Feel.discomfort
+
+end of timestep 912_____________________________________
+
+
+Env State for agent at timestep 913
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 914
+Say.food, Feel.fed
+
+end of timestep 913_____________________________________
+
+
+Env State for agent at timestep 914
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 915
+See.water, Feel.discomfort
+
+end of timestep 914_____________________________________
+
+
+Env State for agent at timestep 915
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 916
+Hear.cry, Feel.fed
+
+end of timestep 915_____________________________________
+
+
+Env State for agent at timestep 916
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 917
+Say.water, Feel.fed
+
+end of timestep 916_____________________________________
+
+
+Env State for agent at timestep 917
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 918
+See.smiles, Feel.happy
+
+end of timestep 917_____________________________________
+
+
+Env State for agent at timestep 918
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 919
+See.water, Feel.discomfort
+
+end of timestep 918_____________________________________
+
+
+Env State for agent at timestep 919
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 920
+Hear.cry, Feel.fed
+
+end of timestep 919_____________________________________
+
+
+Env State for agent at timestep 920
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 921
+Hear.cry, Feel.fed
+
+end of timestep 920_____________________________________
+
+
+Env State for agent at timestep 921
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 922
+Hear.cry, Feel.fed
+
+end of timestep 921_____________________________________
+
+
+Env State for agent at timestep 922
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 923
+Hear.cry, Feel.fed
+
+end of timestep 922_____________________________________
+
+
+Env State for agent at timestep 923
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 924
+Hear.cry, Feel.fed
+
+end of timestep 923_____________________________________
+
+
+Env State for agent at timestep 924
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 925
+Say.water, Feel.fed
+
+end of timestep 924_____________________________________
+
+
+Env State for agent at timestep 925
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 926
+See.smiles, Feel.happy
+
+end of timestep 925_____________________________________
+
+
+Env State for agent at timestep 926
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 927
+See.water, Feel.discomfort
+
+end of timestep 926_____________________________________
+
+
+Env State for agent at timestep 927
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 928
+Hear.cry, Feel.fed
+
+end of timestep 927_____________________________________
+
+
+Env State for agent at timestep 928
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 929
+Hear.cry, Feel.fed
+
+end of timestep 928_____________________________________
+
+
+Env State for agent at timestep 929
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 930
+Hear.cry, Feel.fed
+
+end of timestep 929_____________________________________
+
+
+Env State for agent at timestep 930
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 931
+Say.food, Feel.fed
+
+end of timestep 930_____________________________________
+
+
+Env State for agent at timestep 931
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 932
+Say.food, Feel.fed
+
+end of timestep 931_____________________________________
+
+
+Env State for agent at timestep 932
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 933
+See.water, Feel.discomfort
+
+end of timestep 932_____________________________________
+
+
+Env State for agent at timestep 933
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 934
+Hear.cry, Feel.fed
+
+end of timestep 933_____________________________________
+
+
+Env State for agent at timestep 934
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 935
+Say.water, Feel.fed
+
+end of timestep 934_____________________________________
+
+
+Env State for agent at timestep 935
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 936
+See.smiles, Feel.happy
+
+end of timestep 935_____________________________________
+
+
+Env State for agent at timestep 936
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 937
+See.water, Feel.discomfort
+
+end of timestep 936_____________________________________
+
+
+Env State for agent at timestep 937
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 938
+Hear.cry, Feel.fed
+
+end of timestep 937_____________________________________
+
+
+Env State for agent at timestep 938
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 939
+Hear.cry, Feel.fed
+
+end of timestep 938_____________________________________
+
+
+Env State for agent at timestep 939
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 940
+Hear.cry, Feel.fed
+
+end of timestep 939_____________________________________
+
+
+Env State for agent at timestep 940
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 941
+Hear.cry, Feel.fed
+
+end of timestep 940_____________________________________
+
+
+Env State for agent at timestep 941
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 942
+Hear.cry, Feel.fed
+
+end of timestep 941_____________________________________
+
+
+Env State for agent at timestep 942
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 943
+Say.water, Feel.fed
+
+end of timestep 942_____________________________________
+
+
+Env State for agent at timestep 943
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 944
+See.smiles, Feel.happy
+
+end of timestep 943_____________________________________
+
+
+Env State for agent at timestep 944
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 945
+See.water, Feel.discomfort
+
+end of timestep 944_____________________________________
+
+
+Env State for agent at timestep 945
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 946
+Hear.cry, Feel.fed
+
+end of timestep 945_____________________________________
+
+
+Env State for agent at timestep 946
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 947
+Hear.cry, Feel.fed
+
+end of timestep 946_____________________________________
+
+
+Env State for agent at timestep 947
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 948
+Hear.cry, Feel.fed
+
+end of timestep 947_____________________________________
+
+
+Env State for agent at timestep 948
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 949
+Say.food, Feel.discomfort
+
+end of timestep 948_____________________________________
+
+
+Env State for agent at timestep 949
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 950
+Say.food, Feel.fed
+
+end of timestep 949_____________________________________
+
+
+Env State for agent at timestep 950
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 951
+See.water, Feel.discomfort
+
+end of timestep 950_____________________________________
+
+
+Env State for agent at timestep 951
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 952
+Hear.cry, Feel.fed
+
+end of timestep 951_____________________________________
+
+
+Env State for agent at timestep 952
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 953
+Say.water, Feel.fed
+
+end of timestep 952_____________________________________
+
+
+Env State for agent at timestep 953
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 954
+See.smiles, Feel.happy
+
+end of timestep 953_____________________________________
+
+
+Env State for agent at timestep 954
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 955
+See.water, Feel.discomfort
+
+end of timestep 954_____________________________________
+
+
+Env State for agent at timestep 955
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 956
+Hear.cry, Feel.fed
+
+end of timestep 955_____________________________________
+
+
+Env State for agent at timestep 956
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 957
+Hear.cry, Feel.fed
+
+end of timestep 956_____________________________________
+
+
+Env State for agent at timestep 957
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 958
+Hear.cry, Feel.fed
+
+end of timestep 957_____________________________________
+
+
+Env State for agent at timestep 958
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 959
+Hear.cry, Feel.fed
+
+end of timestep 958_____________________________________
+
+
+Env State for agent at timestep 959
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 960
+Hear.cry, Feel.fed
+
+end of timestep 959_____________________________________
+
+
+Env State for agent at timestep 960
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 961
+Say.water, Feel.fed
+
+end of timestep 960_____________________________________
+
+
+Env State for agent at timestep 961
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 962
+See.smiles, Feel.happy
+
+end of timestep 961_____________________________________
+
+
+Env State for agent at timestep 962
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 963
+See.water, Feel.discomfort
+
+end of timestep 962_____________________________________
+
+
+Env State for agent at timestep 963
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 964
+Hear.cry, Feel.fed
+
+end of timestep 963_____________________________________
+
+
+Env State for agent at timestep 964
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 965
+Hear.cry, Feel.fed
+
+end of timestep 964_____________________________________
+
+
+Env State for agent at timestep 965
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 966
+Hear.cry, Feel.fed
+
+end of timestep 965_____________________________________
+
+
+Env State for agent at timestep 966
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 967
+Say.food, Feel.fed
+
+end of timestep 966_____________________________________
+
+
+Env State for agent at timestep 967
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 968
+Say.food, Feel.fed
+
+end of timestep 967_____________________________________
+
+
+Env State for agent at timestep 968
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 969
+See.water, Feel.discomfort
+
+end of timestep 968_____________________________________
+
+
+Env State for agent at timestep 969
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 970
+Hear.cry, Feel.fed
+
+end of timestep 969_____________________________________
+
+
+Env State for agent at timestep 970
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 971
+Say.water, Feel.fed
+
+end of timestep 970_____________________________________
+
+
+Env State for agent at timestep 971
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 972
+See.smiles, Feel.happy
+
+end of timestep 971_____________________________________
+
+
+Env State for agent at timestep 972
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 973
+See.water, Feel.discomfort
+
+end of timestep 972_____________________________________
+
+
+Env State for agent at timestep 973
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 974
+Hear.cry, Feel.fed
+
+end of timestep 973_____________________________________
+
+
+Env State for agent at timestep 974
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 975
+Hear.cry, Feel.fed
+
+end of timestep 974_____________________________________
+
+
+Env State for agent at timestep 975
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 976
+Hear.cry, Feel.fed
+
+end of timestep 975_____________________________________
+
+
+Env State for agent at timestep 976
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 977
+Hear.cry, Feel.fed
+
+end of timestep 976_____________________________________
+
+
+Env State for agent at timestep 977
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 978
+Hear.cry, Feel.fed
+
+end of timestep 977_____________________________________
+
+
+Env State for agent at timestep 978
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 979
+Say.water, Feel.fed
+
+end of timestep 978_____________________________________
+
+
+Env State for agent at timestep 979
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 980
+See.smiles, Feel.happy
+
+end of timestep 979_____________________________________
+
+
+Env State for agent at timestep 980
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 981
+See.water, Feel.discomfort
+
+end of timestep 980_____________________________________
+
+
+Env State for agent at timestep 981
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 982
+Hear.cry, Feel.fed
+
+end of timestep 981_____________________________________
+
+
+Env State for agent at timestep 982
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 983
+Hear.cry, Feel.fed
+
+end of timestep 982_____________________________________
+
+
+Env State for agent at timestep 983
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 984
+Hear.cry, Feel.fed
+
+end of timestep 983_____________________________________
+
+
+Env State for agent at timestep 984
+See.nothing, Hear.nothing, Feel.hungry, 
+
+agent action at timestep 985
+Say.food, Feel.discomfort
+
+end of timestep 984_____________________________________
+
+
+Env State for agent at timestep 985
+See.food, Hear.food, Feel.fed, 
+
+agent action at timestep 986
+Say.food, Feel.fed
+
+end of timestep 985_____________________________________
+
+
+Env State for agent at timestep 986
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 987
+See.water, Feel.discomfort
+
+end of timestep 986_____________________________________
+
+
+Env State for agent at timestep 987
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 988
+Hear.cry, Feel.fed
+
+end of timestep 987_____________________________________
+
+
+Env State for agent at timestep 988
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 989
+Say.water, Feel.fed
+
+end of timestep 988_____________________________________
+
+
+Env State for agent at timestep 989
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 990
+See.smiles, Feel.happy
+
+end of timestep 989_____________________________________
+
+
+Env State for agent at timestep 990
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 991
+See.water, Feel.discomfort
+
+end of timestep 990_____________________________________
+
+
+Env State for agent at timestep 991
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 992
+Hear.cry, Feel.fed
+
+end of timestep 991_____________________________________
+
+
+Env State for agent at timestep 992
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 993
+Hear.cry, Feel.fed
+
+end of timestep 992_____________________________________
+
+
+Env State for agent at timestep 993
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 994
+Hear.cry, Feel.fed
+
+end of timestep 993_____________________________________
+
+
+Env State for agent at timestep 994
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 995
+Hear.cry, Feel.fed
+
+end of timestep 994_____________________________________
+
+
+Env State for agent at timestep 995
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 996
+Hear.cry, Feel.fed
+
+end of timestep 995_____________________________________
+
+
+Env State for agent at timestep 996
+See.nothing, Hear.nothing, Feel.thirsty, 
+
+agent action at timestep 997
+Say.water, Feel.fed
+
+end of timestep 996_____________________________________
+
+
+Env State for agent at timestep 997
+See.water, Hear.water, Feel.drank, 
+
+agent action at timestep 998
+See.smiles, Feel.happy
+
+end of timestep 997_____________________________________
+
+
+Env State for agent at timestep 998
+See.mom, Hear.nothing, Feel.happy, 
+
+agent action at timestep 999
+See.water, Feel.discomfort
+
+end of timestep 998_____________________________________
+
+
+Env State for agent at timestep 999
+See.nothing, Hear.nothing, Feel.content, 
+
+agent action at timestep 1000
+Hear.cry, Feel.fed
+
+end of timestep 999_____________________________________
+

@@ -1,0 +1,30 @@
+no mom, no sibling
+    come mom, no sibling
+        yes mom no sibling
+            mom leave, no sibling
+                mom, no sibling
+                    no mom, come sibling
+
+    no mom, come sibling
+        no mom, yes sibling
+
+when mom there
+happy
+    hungry
+        ask for food
+            happy
+    thirsty
+        ask for water
+            happy
+
+when food there
+take food
+    wrong
+
+room1
+    move room2
+        room2
+    move room1
+        room 1
+    move outside
+        outside
