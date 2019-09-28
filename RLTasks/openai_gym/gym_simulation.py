@@ -20,7 +20,8 @@ class GymSimulation():
         avg_numsteps = []
 
         for episode in range(cfg.MAX_EPISODES):
-            state = self.env.reset()
+            self.env.render()
+
             rewards = []
             for step in range(cfg.max_steps):
                 action = agent.step(state)

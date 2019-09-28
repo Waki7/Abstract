@@ -30,7 +30,7 @@ def start_experiment():
     copy_file(cfg.__file__, cfg.results_path)
     return experiment_writer
 
-def teach_agents(self, env, agent):
+def teach_agents(env, agent):
     is_episodic = hasattr(env, 'is_episodic') and env.is_episodic
     update_rate = 1 if is_episodic else cfg.experiment.UPDATE_RATE
     max_episodes = 1 if is_episodic else cfg.experiment.MAX_EPISODES
@@ -39,12 +39,12 @@ def teach_agents(self, env, agent):
     avg_numsteps = []
 
     for episode in range(max_episodes):
-        state = self.env.reset()
+        state = env.reset()
         rewards = []
         step = 0
         while True:
             action = agent.step(state)
-            state, reward, episode_end, _ = self.env.step(action)
+            state, reward, episode_end, _ = env.step(action)
             rewards.append(reward)
             agent.update_policy(reward, episode_end)
 
@@ -82,10 +82,15 @@ def GymSim():
     agent.plot_results()
 
 def main():
-    # LifeSim()
-    print(0%-10)
-    print(exit(9))
-    GymSim()
+    # GymSim()
+    # name = 'CartPole-v0' #
+    name = 'Life-v0'
+
+    env = gym.make(name)
+
+    network = PolicyNetwork(env)
+    agent = PGAgent(model=network, env=env)
+    teach_agents(env=env, agent=agent)
 
 
 if __name__ == "__main__":

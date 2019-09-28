@@ -18,9 +18,15 @@ def save_grad(name):
 
 
 class PolicyNetwork(nn.Module):
-    def __init__(self, env):
+    def __init__(self, env: gym.Env):
         super(PolicyNetwork, self).__init__()
-        num_inputs = env.observation_space.shape[0]
+        if isinstance(env.observation_space, gym.spaces.Box):
+            num_inputs = env.observation_space.shape[0]
+        else:
+            if isinstance(env.observation_space, gym.spaces.Discrete):
+                num_inputs = env.observation_space.n
+            else:
+                raise NotImplementedError
         num_actions = env.action_space.n
         assert isinstance(env.action_space, gym.spaces.Discrete)
 

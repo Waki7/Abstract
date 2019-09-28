@@ -1,3 +1,10 @@
+class experiment:
+    UPDATE_RATE = 50
+    MAX_EPISODES = 5000
+    MAX_STEPS = 1000
+    ENV = 'Life-v0' # 'CartPole-v0'
+
+
 backprop_through_input = True
 experiment_name = 'initial'
 results_path = 'logs/LifeSimulationWorld/' + experiment_name + '/'
@@ -7,7 +14,7 @@ iterations = 2000
 rewards_eval_window = 10
 
 # running episodic
-max_episodes = 5000
+MAX_EPISODES = 5000
 max_steps = 10000
 episode_eval_window = 1
 

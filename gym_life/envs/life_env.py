@@ -56,8 +56,10 @@ class LifeEnv(gym.Env):
             done (bool): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
+
         agent_feel = []
         agent_action_map = ch.decode_to_enum(agent_action, ch.AGENT_ACTION_CHANNELS)
+        self.print_summary(agent_action_map)
 
         previous_feel = self.state_map[ch.Feel]  # todo... proper history tracking
         if ch.Feel.fed in previous_feel and self.hunger_level > self.hunger_threshold:
@@ -150,8 +152,8 @@ class LifeEnv(gym.Env):
     def get_current_state(self):
         return self.state
 
-    def print_summary(self, agent):
-        logging.debug('agent prediction : ' + str(self.agent_prediction))
+    def print_summary(self, agent_action_map):
+        logging.debug('agent prediction : ' + str(agent.agent_prediction))
         logging.debug('\nEnv State for agent at timestep ' + str(self.t) + '\n')
 
         for channel in self.state:
