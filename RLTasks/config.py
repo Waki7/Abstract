@@ -1,9 +1,12 @@
 class experiment:
-    UPDATE_RATE = 50
+    UPDATE_RATE = 1
     MAX_EPISODES = 5000
     MAX_STEPS = 1000
     ENV = 'Life-v0' # 'CartPole-v0'
+    EVAL_REWARDS_WINDOW = 10
 
+class pg:
+    CONTINUOUS_EPISODE_LENGTH = 10
 
 backprop_through_input = True
 experiment_name = 'initial'

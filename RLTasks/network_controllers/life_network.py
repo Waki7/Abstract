@@ -72,10 +72,8 @@ class LifeNetwork(nn.Module):
                 in_features=self.wl2.out_features, out_features=self.out_shapes[channel_idx], bias=bias).cuda())
 
     def forward(self, env_input, hidden_input):
-        if not isinstance(env_input, torch.Tensor):
-            env_input = torch.tensor(env_input, **args)
-        if not isinstance(hidden_input, torch.Tensor):
-            hidden_input = torch.tensor(hidden_input, **args)
+        assert isinstance(hidden_input, torch.Tensor)
+        env_input = torch.from_numpy(env_input, **args).float().unsqueeze(0)
 
         l0, l1 = [], []
         input = torch.cat((env_input, hidden_input), dim=1)
@@ -98,7 +96,7 @@ class LifeNetwork(nn.Module):
         ly_cmbn = torch.cat(ly, dim=1)
         output = F.softmax(ly_cmbn, dim=1)
         hiddenStartIndex = self.out_vector_idx[self.hidden_out_channel_index]
-        hidden = output[:, hiddenStartIndex:]
+        hidden = output[:, hiddenStartIndex:] #todo try to experiment with having all of the output part of hidden state.
         output = output[:, :hiddenStartIndex]
         return output, hidden
 

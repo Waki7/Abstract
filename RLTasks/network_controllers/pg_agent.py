@@ -21,9 +21,9 @@ class PGAgent():
     # try to make the encoding part separate
     def __init__(self, model, env: gym.Env):
         assert isinstance(env, gym.Env)
-
         assert isinstance(env.action_space, gym.spaces.Discrete)
         super(PGAgent, self).__init__()
+        self.is_episodic = not hasattr(env, 'is_episodic') or (hasattr(env, 'is_episodic') and env.is_episodic)
         self.model = model
         self.policy_net = model
         self.reward = 0
@@ -43,16 +43,12 @@ class PGAgent():
 
     def update_policy(self, env_reward, episode_end):
         self.rewards.append(env_reward)
-        if episode_end:
-            discounted_rewards = []
-
-            for t in range(len(self.rewards)):
-                Gt = 0
-                pw = 0
-                for r in self.rewards[t:]:
-                    Gt = Gt + cfg.discount_factor ** pw * r
-                    pw = pw + 1
-                discounted_rewards.append(Gt)
+        if episode_end or (not self.is_episodic and self.t == cfg.pg.CONTINUOUS_EPISODE_LENGTH):
+            discounted_rewards = [0]
+            while self.rewards:
+                # latest reward + (future reward * gamma)
+                discounted_rewards.insert(0, self.rewards.pop() + (cfg.discount_factor * discounted_rewards[0]))
+            discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
             discounted_rewards = torch.tensor(discounted_rewards)
             discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / (
@@ -60,7 +56,7 @@ class PGAgent():
 
             policy_gradient = []
             for log_prob, Gt in zip(self.log_probs, discounted_rewards):
-                policy_gradient.append(-log_prob * Gt)
+                policy_gradient.append(log_prob * Gt)
 
             self.optimizer.zero_grad()
             policy_gradient = torch.stack(policy_gradient).sum()
@@ -70,7 +66,6 @@ class PGAgent():
             self.t = 0
             self.rewards = []
             self.log_probs = []
-
 
     def log_predictions(self, writer=sys.stdout):
         writer.write('\nAgent Summary at timestep ' + str(self.t) + '\n')

@@ -30,10 +30,11 @@ def start_experiment():
     copy_file(cfg.__file__, cfg.results_path)
     return experiment_writer
 
-def teach_agents(env, agent):
-    is_episodic = hasattr(env, 'is_episodic') and env.is_episodic
+
+def teach_agents(env: gym.Env, agent):
+    is_episodic = not hasattr(env, 'is_episodic') or (hasattr(env, 'is_episodic') and env.is_episodic)
     update_rate = 1 if is_episodic else cfg.experiment.UPDATE_RATE
-    max_episodes = 1 if is_episodic else cfg.experiment.MAX_EPISODES
+    max_episodes = cfg.experiment.MAX_EPISODES if is_episodic else 1
     all_rewards = []
     numsteps = []
     avg_numsteps = []
@@ -47,18 +48,22 @@ def teach_agents(env, agent):
             state, reward, episode_end, _ = env.step(action)
             rewards.append(reward)
             agent.update_policy(reward, episode_end)
-
             if (is_episodic and episode_end) or (not is_episodic and step % update_rate == 0):
                 numsteps.append(step)
-                avg_numsteps.append(np.mean(numsteps[-10:]))
+                avg_numsteps.append(np.mean(numsteps[-cfg.experiment.EVAL_REWARDS_WINDOW:]))
                 all_rewards.append(np.sum(rewards))
-                if episode % cfg.episode_eval_window == 0:
-                    logging.debug("episode: {}, total reward: {}, average_reward: {}, length: {}\n".format(episode, np.round(
-                            np.sum(rewards), decimals=3), np.round(np.mean(all_rewards[-10:]), decimals=3), step))
+                logging.debug(
+                    "episode: {}, total reward: {}, average_reward: {}, length: {}\n".format(episode, np.round(
+                        np.sum(rewards), decimals=3), np.round(
+                        np.mean(all_rewards[-cfg.experiment.EVAL_REWARDS_WINDOW:]), decimals=3), step))
+                if is_episodic:
+                    break
+                else:
+                    rewards = []
             if step > cfg.max_steps:
-                # todo : plot results ?
                 break
             step += 1
+    # todo : plot results ?
 
 
 def LifeSim():
@@ -68,7 +73,6 @@ def LifeSim():
     agent = CRAgent(network, simulation.env)
     simulation.teach_agents(agent)
     agent.plot_results()
-
 
 
 def GymSim():
@@ -81,11 +85,12 @@ def GymSim():
     simulation.teach_agents(agent)
     agent.plot_results()
 
+
 def main():
     # GymSim()
     # name = 'CartPole-v0' #
     name = 'Life-v0'
-
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     env = gym.make(name)
 
     network = PolicyNetwork(env)
@@ -95,4 +100,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

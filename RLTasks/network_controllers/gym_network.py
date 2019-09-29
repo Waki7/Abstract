@@ -43,10 +43,10 @@ class PolicyNetwork(nn.Module):
 
 
     def get_action(self, state):
-        state = torch.from_numpy(state).float().unsqueeze(0)
-        probs = self.forward(Variable(state))
+        state = Variable(torch.from_numpy(state).float().unsqueeze(0))
+        probs = self.forward(state)
         highest_prob_action = np.random.choice(self.num_actions, p=np.squeeze(probs.detach().numpy()))
-        log_prob = torch.log(probs.squeeze(0)[highest_prob_action])
+        log_prob = -torch.log(probs.squeeze(0)[highest_prob_action]) # same as nlloss(log(softmax(x))
         return highest_prob_action, log_prob
 
 

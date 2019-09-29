@@ -17,14 +17,13 @@ class LifeEnv(gym.Env):
         '''
         This environment is a continuous task (non episodic)
         '''
-        self.t = 0
-        self.hunger_level = 0
-        self.thirst_level = 0
+        self.is_episodic = False
         self.hunger_threshold = 15
         self.thirst_threshold = 5
         self.agent_history = TimeBuffer(5)  # this is arbitrary for the maximum history tracking length
-        self.agent_state_channels = [ch.See, ch.Hear, ch.Feel, ch.Movement]
-        self.action_space = spaces.Discrete(2)
+        self.agent_state_channels = ch.AGENT_STATE_CHANNELS
+        self.agent_action_channels = ch.AGENT_ACTION_CHANNELS
+        self.action_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
         self.observation_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
         self.reset()
 
@@ -37,13 +36,16 @@ class LifeEnv(gym.Env):
         # self.food = Object(ch.See.food, ch.See.food_close)
         self.locations = [self.room1, self.room2, self.outside]
         self.t = 0
-
+        self.hunger_level = 0
+        self.thirst_level = 0
+        self.current_reward = 0
         self.current_location = self.room1
         self.mom.go_to_room(self.room1)
         # self.sibling.go_to_room(self.room2)
         # self.food.put_in_room(self.room2)
-
-        return self.get_initial_state()
+        self.state_map = self.initialize_empty_map()
+        self.state = ch.encode_from_map(self.state_map, ch.AGENT_STATE_CHANNELS)
+        return self.state
 
     def step(self, agent_action):
         """
@@ -104,12 +106,9 @@ class LifeEnv(gym.Env):
         self.agent_history.insert(self.t, self.state_map)
 
         self.t += 1
-
         # calculate reward
         self.current_reward = self.calc_reward()
-
         self.state = ch.encode_from_map(self.state_map, ch.AGENT_STATE_CHANNELS)
-
         return self.state, self.current_reward, False, {}
 
     def update_state(self, agent_prediction: Union[ch.Movement, ch.Speak]):
@@ -143,9 +142,6 @@ class LifeEnv(gym.Env):
         if true_with_probability(.5):
             self.state_map[ch.Hear].append(ch.Hear.water)
 
-    def get_initial_state(self):
-        return ch.encode_from_map(self.initialize_empty_map(), ch.AGENT_STATE_CHANNELS)
-
     def initialize_empty_map(self):
         return dict(zip(self.agent_state_channels, [[], [], [], []]))
 
@@ -153,14 +149,16 @@ class LifeEnv(gym.Env):
         return self.state
 
     def print_summary(self, agent_action_map):
-        logging.debug('agent prediction : ' + str(agent.agent_prediction))
-        logging.debug('\nEnv State for agent at timestep ' + str(self.t) + '\n')
+        logging.debug('agent prediction : ' + str(agent_action_map))
+        logging.debug('Env State for agent at timestep ' + str(self.t) + '\n')
 
-        for channel in self.state:
-            logging.debug(str(self.state[channel]) + ', ')
-        logging.debug('\n')
-        agent.log_predictions()
-        self.writer.write('env reward is : ' + str(self.current_reward) + '\n')
+        for channel in self.state_map:
+            val = self.state_map[channel]
+            if len(val) > 0:
+                logging.debug(str(self.state_map[channel]) + ', ')
+        # agent.log_predictions()
+        logging.debug('env reward is : ' + str(self.current_reward) + '\n')
+
 
 class Seeable():
     def __init__(self, see_value):

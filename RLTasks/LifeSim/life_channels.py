@@ -104,12 +104,12 @@ AGENT_ACTION_CHANNELS = [Speak, Movement]
 
 def encode(msg, channel):
     import numpy as np
-    encoded = np.zeros((1, len(channel)))
+    encoded = np.zeros(len(channel))
     if isinstance(msg, list):
         for i in msg:
-            encoded[0, i.value] = 1.0
+            encoded[i.value] = 1.0
     else:
-        encoded[0, msg.value] = 1.0
+        encoded[msg.value] = 1.0
     return encoded
 
 
@@ -129,12 +129,12 @@ def encode_from_map(map, channels):
     for channel in channels:
         channel_vals = map[channel]
         encoded_input.append(encode(channel_vals, channel))
-    return np.concatenate(encoded_input, axis=1)
+    return np.concatenate(encoded_input, axis=0)
 
-def decode_to_enum(vector, channels):
+def decode_to_enum(action, channels):
     index = 0
-    max = np.argmax(vector)
+    max = action if isinstance(action, int) else np.argmax(action)
     for c in channels:
+        if max < index + len(c):
+            return c(max - index)
         index += len(c)
-        if max < index:
-            return c(max)
