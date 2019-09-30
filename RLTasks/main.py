@@ -60,10 +60,16 @@ def teach_agents(env: gym.Env, agent):
                     break
                 else:
                     rewards = []
-            if step > cfg.max_steps:
+            if step > cfg.experiment.MAX_STEPS:
                 break
             step += 1
-    # todo : plot results ?
+
+    if cfg.results_path is not '':
+        plot_rewards = [np.mean(all_rewards[i:i+50]) for i in range(0, len(all_rewards), 50)]
+        print(plot_rewards)
+        print(cfg.results_path)
+        plt.plot(plot_rewards)
+        plt.savefig(cfg.results_path + 'averageRewards.png')
 
 
 def LifeSim():

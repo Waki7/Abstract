@@ -1,7 +1,7 @@
 class experiment:
     UPDATE_RATE = 1
     MAX_EPISODES = 5000
-    MAX_STEPS = 1000
+    MAX_STEPS = 20000
     ENV = 'Life-v0' # 'CartPole-v0'
     EVAL_REWARDS_WINDOW = 10
 
@@ -43,7 +43,7 @@ class life:
     EXPLOITATION_PENALTY = -.3
 
 class gym:
-    LR = 3e-4
+    LR = .001
     OPTIMIZER = 'Adam'
     _atari7 = ['BeamRider', 'Breakout', 'Enduro', 'Pong', 'Qbert', 'Seaquest', 'SpaceInvaders']
     # gym_env = 'Pong-v0'
