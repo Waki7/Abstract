@@ -5,16 +5,16 @@ import sys
 import matplotlib.pyplot as plt
 import gym_life.envs.life_env as life_env
 import gym
-from Tools.TimeBuffer import TimeBuffer
+from utils.TimeBuffer import TimeBuffer
 import RLTasks.config as cfg
 from tensorboardX import SummaryWriter
 
 if torch.cuda.is_available():
-    device = torch.device('cuda')
+    DEVICE = torch.device('cuda')
 else:
-    device = torch.device('cpu')
-type = torch.float
-args = {'device': device, 'dtype': type}
+    DEVICE = torch.device('cpu')
+DTYPE = torch.float
+ARGS = {'device': DEVICE, 'dtype': DTYPE}
 
 
 def logLoss(output, target):
@@ -33,7 +33,7 @@ class CRAgent():
         self.pred_val, self.pred_feel_val = None, None
         self.reward = 0
 
-        self.initial_state = torch.zeros((1, self.model.hidden_in_size), **args)
+        self.initial_state = torch.zeros((1, self.model.hidden_in_size), **ARGS)
         self.hidden_states = [(None, self.initial_state)]
         self.outputs = []
         self.rewards = []

@@ -1,6 +1,6 @@
 class experiment:
     UPDATE_RATE = 1
-    MAX_EPISODES = 5000
+    MAX_EPISODES = 1000
     MAX_STEPS = 20000
     ENV = 'Life-v0' # 'CartPole-v0'
     EVAL_REWARDS_WINDOW = 10
@@ -9,9 +9,7 @@ class pg:
     CONTINUOUS_EPISODE_LENGTH = 10
 
 backprop_through_input = True
-experiment_name = 'initial'
-results_path = 'logs/LifeSimulationWorld/' + experiment_name + '/'
-
+results_path = 'logs/'
 # running continuous
 iterations = 2000
 rewards_eval_window = 10

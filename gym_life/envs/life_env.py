@@ -1,7 +1,7 @@
 import RLTasks.LifeSim.life_channels as ch
 import numpy as np
 from typing import Union
-from Tools.TimeBuffer import TimeBuffer
+from utils.TimeBuffer import TimeBuffer
 import RLTasks.config as cfg
 import gym
 from gym import spaces

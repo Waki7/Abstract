@@ -16,7 +16,7 @@ type = torch.float
 args = {'device': device, 'dtype': type}
 
 
-class PGAgent():
+class PPOAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
     def __init__(self, model, env: gym.Env):

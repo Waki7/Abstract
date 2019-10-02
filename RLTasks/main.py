@@ -3,7 +3,7 @@ from RLTasks.LifeSim.life_simulation import *
 import logging
 
 from RLTasks.network_controllers.life_network import *
-from RLTasks.network_controllers.gym_network import *
+from RLTasks.network_controllers.base_networks import *
 from RLTasks.network_controllers.pg_agent import PGAgent
 
 from RLTasks.openai_gym.gym_simulation import *
@@ -65,41 +65,25 @@ def teach_agents(env: gym.Env, agent):
             step += 1
 
     if cfg.results_path is not '':
-        plot_rewards = [np.mean(all_rewards[i:i+50]) for i in range(0, len(all_rewards), 50)]
+        plot_rewards = [np.mean(all_rewards[i:i + 50]) for i in range(0, len(all_rewards), 50)]
+        results_path = cfg.results_path + (
+            env.unwrapped.spec.id if not hasattr(env, 'envs') else env.envs[0].unwrapped.spec.id)
         print(plot_rewards)
         print(cfg.results_path)
+        if not os.path.exists(results_path):
+            os.makedirs(results_path)
         plt.plot(plot_rewards)
-        plt.savefig(cfg.results_path + 'averageRewards.png')
-
-
-def LifeSim():
-    experiment_writer = start_experiment()
-    network = LifeNetwork().cuda()
-    simulation = LifeSimulation(writer=experiment_writer)
-    agent = CRAgent(network, simulation.env)
-    simulation.teach_agents(agent)
-    agent.plot_results()
-
-
-def GymSim():
-    experiment_writer = start_experiment()
-    simulation = GymSimulation(writer=experiment_writer)
-
-    network = PolicyNetwork(simulation.env)
-    agent = PGAgent(network, simulation.env)
-
-    simulation.teach_agents(agent)
-    agent.plot_results()
+        print(env)
+        plt.savefig('{}/averageRewards.png'.format(results_path))
 
 
 def main():
-    # GymSim()
-    # name = 'CartPole-v0' #
-    name = 'Life-v0'
+    name = 'CartPole-v0'  #
+    # name = 'Life-v0'
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     env = gym.make(name)
 
-    network = PolicyNetwork(env)
+    network = PolicyNetworkBasic(env)
     agent = PGAgent(model=network, env=env)
     teach_agents(env=env, agent=agent)
 

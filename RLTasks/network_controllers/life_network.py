@@ -1,17 +1,17 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from Tools.NetworkTypes import *
+from utils.NetworkTypes import *
 import RLTasks.LifeSim.life_channels as ch
 import numpy as np
 
 grads = {}
 if torch.cuda.is_available():
-    device = torch.device('cuda')
+    DEVICE = torch.device('cuda')
 else:
-    device = torch.device('cpu')
-type = torch.float
-args = {'device': device, 'dtype': type}
+    DEVICE = torch.device('cpu')
+DTYPE = torch.float
+ARGS = {'device': DEVICE, 'dtype': DTYPE}
 
 
 def save_grad(name):
@@ -73,7 +73,7 @@ class LifeNetwork(nn.Module):
 
     def forward(self, env_input, hidden_input):
         assert isinstance(hidden_input, torch.Tensor)
-        env_input = torch.from_numpy(env_input, **args).float().unsqueeze(0)
+        env_input = torch.from_numpy(env_input, **ARGS).float().unsqueeze(0)
 
         l0, l1 = [], []
         input = torch.cat((env_input, hidden_input), dim=1)
