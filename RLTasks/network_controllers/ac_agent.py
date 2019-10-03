@@ -16,7 +16,7 @@ type = torch.float
 args = {'device': device, 'dtype': type}
 
 
-class PPOAgent():
+class ACAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
     def __init__(self, model, env: gym.Env):
@@ -30,12 +30,14 @@ class PPOAgent():
         self.average_rewards = []
         self.log_probs = []
         self.rewards = []
+        self.value_estimates = []
         self.t = 0
         self.optimizer = getattr(torch.optim, cfg.gym.OPTIMIZER)(self.model.parameters(), lr=cfg.gym.LR)
         self.writer = SummaryWriter()
 
     def step(self, env_input):
-        action, log_prob = self.policy_net.get_action(env_input)
+        action, log_prob, value_estimate = self.policy_net.get_action(env_input)
+        self.value_estimates.append(value_estimate)
         self.log_probs.append(log_prob)
         self.t += 1
         return action

@@ -80,11 +80,11 @@ class ACNetwork(nn.Module):  # actor critic method, parameterized baseline estim
         hidden_critic = self.critic(x)
         hidden_actor = self.actor(x)
 
-        return self.critic_linear(hidden_critic), hidden_actor
+        return self.critic_linear(hidden_critic), F.softmax(hidden_actor, dim=1)
 
     def get_action(self, state):
         state = Variable(torch.from_numpy(state).float().unsqueeze(0))
-        probs = self.forward(state)
+        value, probs = self.forward(state)
         highest_prob_action = np.random.choice(self.num_actions, p=np.squeeze(probs.detach().numpy()))
         log_prob = -torch.log(probs.squeeze(0)[highest_prob_action])  # same as nlloss(log(softmax(x))
-        return highest_prob_action, log_prob
+        return highest_prob_action, log_prob, value
