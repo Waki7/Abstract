@@ -16,7 +16,7 @@ type = torch.float
 args = {'device': device, 'dtype': type}
 
 
-class ACAgent():
+class A2CAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
     def __init__(self, model, env: gym.Env):
@@ -45,18 +45,22 @@ class ACAgent():
     def update_policy(self, env_reward, episode_end):
         self.rewards.append(env_reward)
         if episode_end or (not self.is_episodic and self.t == cfg.pg.CONTINUOUS_EPISODE_LENGTH):
-            discounted_rewards = [0]
-            while self.rewards:
-                # latest reward + (future reward * gamma)
-                discounted_rewards.insert(0, self.rewards.pop() + (cfg.discount_factor * discounted_rewards[0]))
-            discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
+            advantages = [0]
 
-            discounted_rewards = torch.tensor(discounted_rewards)
-            discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / (
-                    discounted_rewards.std() + 1e-9)  # normalize discounted rewards
+            # iterating backward, popping from the end as we keep going
+            while self.rewards or self.value_estimates:
+                # current advantage = latest reward + (future advantage * gamma) - current value estimate
+                # fill advantages to the start
+                advantages.insert(0, self.rewards.pop() + (
+                            cfg.discount_factor * advantages[0]) - self.value_estimates.pop())
+            advantages.pop(-1)  # remove the extra 0 placed before the loop
+
+            advantages = torch.tensor(advantages)
+            advantages = (advantages - advantages.mean()) / (
+                    advantages.std() + 1e-9)  # normalize discounted rewards
 
             policy_gradient = []
-            for log_prob, Gt in zip(self.log_probs, discounted_rewards):
+            for log_prob, Gt in zip(self.log_probs, advantages):
                 policy_gradient.append(log_prob * Gt)
 
             self.optimizer.zero_grad()
