@@ -51,8 +51,8 @@ class A2CAgent():
             while self.rewards or self.value_estimates:
                 # current advantage = latest reward + (future advantage * gamma) - current value estimate
                 # fill advantages to the start
-                advantages.insert(0, self.rewards.pop() + (
-                            cfg.discount_factor * advantages[0]) - self.value_estimates.pop())
+                Q_val = self.rewards.pop() + (cfg.discount_factor * advantages[0])
+                advantages.insert(0, torch.Tensor(Q_val) - self.value_estimates.pop())
             advantages.pop(-1)  # remove the extra 0 placed before the loop
 
             advantages = torch.tensor(advantages)
