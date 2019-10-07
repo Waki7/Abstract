@@ -3,13 +3,16 @@ class experiment:
     MAX_EPISODES = 1000
     MAX_STEPS = 20000
     ENV = 'Life-v0' # 'CartPole-v0'
+    VARIATION = ''
     EVAL_REWARDS_WINDOW = 10
+
+class paths:
+    RESULTS = './logs/'
 
 class pg:
     CONTINUOUS_EPISODE_LENGTH = 10
 
 backprop_through_input = True
-results_path = 'logs/'
 # running continuous
 iterations = 2000
 rewards_eval_window = 10

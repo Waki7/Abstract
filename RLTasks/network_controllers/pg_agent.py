@@ -1,12 +1,11 @@
 import numpy as np
 import torch
-import RLTasks.network_controllers as ai
 import sys
 import matplotlib.pyplot as plt
 import gym
 from utils.TimeBuffer import TimeBuffer
 import RLTasks.config as cfg
-from tensorboardX import SummaryWriter
+from RLTasks.network_controllers.base_networks import *
 
 if torch.cuda.is_available():
     device = torch.device('cuda')
@@ -19,11 +18,12 @@ args = {'device': device, 'dtype': type}
 class PGAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
-    def __init__(self, model, env: gym.Env):
+    def __init__(self, env: gym.Env, model=None):
         assert isinstance(env, gym.Env)
         assert isinstance(env.action_space, gym.spaces.Discrete)
+
+        self.model = model if model else PolicyNetworkBasic(env)
         self.is_episodic = not hasattr(env, 'is_episodic') or (hasattr(env, 'is_episodic') and env.is_episodic)
-        self.model = model
         self.policy_net = model
         self.reward = 0
         self.testing_rewards = TimeBuffer(cfg.rewards_eval_window)
@@ -32,7 +32,6 @@ class PGAgent():
         self.rewards = []
         self.t = 0
         self.optimizer = getattr(torch.optim, cfg.gym.OPTIMIZER)(self.model.parameters(), lr=cfg.gym.LR)
-        self.writer = SummaryWriter()
 
     def step(self, env_input):
         action, log_prob = self.policy_net.get_action(env_input)

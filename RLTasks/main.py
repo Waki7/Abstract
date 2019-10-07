@@ -2,11 +2,8 @@ from RLTasks.network_controllers.cra_agent import *
 from RLTasks.LifeSim.life_simulation import *
 import logging
 
-from RLTasks.network_controllers.life_network import *
 from RLTasks.network_controllers.base_networks import *
-from RLTasks.network_controllers.pg_agent import PGAgent
-
-from RLTasks.openai_gym.gym_simulation import *
+from RLTasks.network_controllers import A2CAgent, PGAgent
 
 from shutil import copy as copy_file
 
@@ -64,17 +61,16 @@ def teach_agents(env: gym.Env, agent):
                 break
             step += 1
 
-    if cfg.results_path is not '':
-        plot_rewards = [np.mean(all_rewards[i:i + 50]) for i in range(0, len(all_rewards), 50)]
-        results_path = cfg.results_path + (
-            env.unwrapped.spec.id if not hasattr(env, 'envs') else env.envs[0].unwrapped.spec.id)
-        print(plot_rewards)
-        print(cfg.results_path)
-        if not os.path.exists(results_path):
-            os.makedirs(results_path)
-        plt.plot(plot_rewards)
-        print(env)
-        plt.savefig('{}/averageRewards.png'.format(results_path))
+    plot_rewards = [np.mean(all_rewards[i:i + 50]) for i in range(0, len(all_rewards), 50)]
+    env_id = (env.unwrapped.spec.id if not hasattr(env, 'envs') else env.envs[0].unwrapped.spec.id)
+    results_path = '{}{}{}/{}'.format(cfg.paths.RESULTS, agent.__class__.__name__, cfg.experiment.VARIATION, env_id)
+    print(plot_rewards)
+    print(results_path)
+    if not os.path.exists(results_path):
+        os.makedirs(results_path)
+    plt.plot(plot_rewards)
+    print(env)
+    plt.savefig('{}/averageRewards.png'.format(results_path))
 
 
 def main():
@@ -83,8 +79,8 @@ def main():
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     env = gym.make(name)
 
-    network = PolicyNetworkBasic(env)
-    agent = PGAgent(model=network, env=env)
+    network = None # default fallback
+    agent = A2CAgent(env=env, model=network)
     teach_agents(env=env, agent=agent)
 
 

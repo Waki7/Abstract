@@ -1,11 +1,11 @@
 import numpy as np
 import torch
-import RLTasks.network_controllers as ai
 import sys
 import matplotlib.pyplot as plt
 import gym
 from utils.TimeBuffer import TimeBuffer
 import RLTasks.config as cfg
+from RLTasks.network_controllers.base_networks import *
 from tensorboardX import SummaryWriter
 
 if torch.cuda.is_available():
@@ -19,12 +19,16 @@ args = {'device': device, 'dtype': type}
 class A2CAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
-    def __init__(self, model, env: gym.Env):
+    def __init__(self, env: gym.Env, model = None):
         assert isinstance(env, gym.Env)
         assert isinstance(env.action_space, gym.spaces.Discrete)
+        if model:
+            print('fas')
+        else:
+            print('asldkfj')
+
+        self.model = model if model else ACNetwork(env)
         self.is_episodic = not hasattr(env, 'is_episodic') or (hasattr(env, 'is_episodic') and env.is_episodic)
-        self.model = model
-        self.policy_net = model
         self.reward = 0
         self.testing_rewards = TimeBuffer(cfg.rewards_eval_window)
         self.average_rewards = []
@@ -36,7 +40,7 @@ class A2CAgent():
         self.writer = SummaryWriter()
 
     def step(self, env_input):
-        action, log_prob, value_estimate = self.policy_net.get_action(env_input)
+        action, log_prob, value_estimate = self.model.get_action(env_input)
         self.value_estimates.append(value_estimate)
         self.log_probs.append(log_prob)
         self.t += 1
@@ -45,27 +49,26 @@ class A2CAgent():
     def update_policy(self, env_reward, episode_end):
         self.rewards.append(env_reward)
         if episode_end or (not self.is_episodic and self.t == cfg.pg.CONTINUOUS_EPISODE_LENGTH):
-            advantages = [0]
-
-            # iterating backward, popping from the end as we keep going
+            discounted_rewards = [0]
             while self.rewards or self.value_estimates:
-                # current advantage = latest reward + (future advantage * gamma) - current value estimate
-                # fill advantages to the start
-                Q_val = self.rewards.pop() + (cfg.discount_factor * advantages[0])
-                advantages.insert(0, torch.Tensor(Q_val) - self.value_estimates.pop())
-            advantages.pop(-1)  # remove the extra 0 placed before the loop
+                # latest reward + (future reward * gamma)
+                discounted_rewards.insert(0, self.rewards.pop() + (cfg.discount_factor * discounted_rewards[0]))
+            discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
-            advantages = torch.tensor(advantages)
-            advantages = (advantages - advantages.mean()) / (
-                    advantages.std() + 1e-9)  # normalize discounted rewards
+            Q_val = torch.tensor(discounted_rewards)
+            V_val = torch.Tensor(self.value_estimates)
+            advantage = Q_val - V_val
+            log_prob = torch.stack(self.log_probs)
 
-            policy_gradient = []
-            for log_prob, Gt in zip(self.log_probs, advantages):
-                policy_gradient.append(log_prob * Gt)
+            actor_loss = (-log_prob * advantage).mean() #todo make sure this is elementwise product
+            critic_loss = .5 * advantage.pow(2).mean()
+            ac_loss = actor_loss + critic_loss
+            # policy_gradient = []
+            # for log_prob, Gt in zip(self.log_probs, discounted_rewards):
+            #     policy_gradient.append(log_prob * Gt)
 
             self.optimizer.zero_grad()
-            policy_gradient = torch.stack(policy_gradient).sum()
-            policy_gradient.backward()
+            ac_loss.backward()
             self.optimizer.step()
 
             self.t = 0

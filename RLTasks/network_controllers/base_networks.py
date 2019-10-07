@@ -36,7 +36,6 @@ class PolicyNetworkBasic(nn.Module):
         self.linear2 = nn.Linear(hidden_size, num_actions)
         self.train()
 
-
     def forward(self, state):
         x = F.relu(self.linear1(state))
         x = F.softmax(self.linear2(x), dim=1)
@@ -66,12 +65,15 @@ class ACNetwork(nn.Module):  # actor critic method, parameterized baseline estim
         hidden_size = cfg.gym.hidden_size
         self.num_actions = num_actions
 
-        self.actor = nn.Sequential(nn.Linear(num_inputs, hidden_size), nn.Tanh(), nn.Linear(hidden_size, hidden_size),
-                                   nn.Tanh())
+        self.actor = nn.Sequential(nn.Linear(num_inputs, hidden_size),
+                                   nn.Tanh(),
+                                   nn.Linear(hidden_size, num_actions))
 
-        self.critic = nn.Sequential(nn.Linear(num_inputs, hidden_size), nn.Tanh(), nn.Linear(hidden_size, hidden_size),
+        self.critic = nn.Sequential(nn.Linear(num_inputs, hidden_size),
+                                    nn.Tanh(),
+                                    nn.Linear(hidden_size, hidden_size),
                                     nn.Tanh())
-        self.critic_linear = nn.Linear(hidden_size, 1)
+        self.critic_linear = nn.Linear(in_features=hidden_size, out_features=1)
         self.train()
 
     def forward(self, inputs, masks=1):
