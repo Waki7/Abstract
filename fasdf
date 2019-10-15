@@ -1,0 +1,488 @@
+import gym
+import torch.nn as nn
+from agent_models.factory import register_model
+import torch.nn.functional as F
+from torch.autograd import Variable
+import numpy as np
+import torch
+import settings
+from utils.model_utils import calc_padding
+
+
+class BasicConv(nn.Module):
+    def __init__(self, observation, action_space, cfg, is_actor: bool, is_critic: bool, is_qn: bool):
+        '''
+
+        :param observation:
+        :param action_space:
+        :param cfg:
+        :param is_actor: boolean, should the model estimate action probabilities
+        :param is_critic: boolean, should the model estimate the value estimate
+        :param is_qn: boolean, should the model estimate the Q function
+        '''
+        super(BasicConv, self).__init__()
+        assert isinstance(observation, tuple) or isinstance(observation, np.ndarray) or isinstance(observation,
+                                                                                                   gym.spaces.Box)
+        assert isinstance(action_space, gym.spaces.Discrete)
+        model_size = cfg['model_size']
+        dilation = cfg['dilation']
+
+        self.is_actor = is_actor
+        self.is_critic = is_critic
+        self.is_qn = is_qn
+        self.cfg = cfg
+        if isinstance(observation, tuple):
+            in_shape = observation
+        else:
+            in_shape = observation.shape
+        if len(in_shape) < 3:
+            in_shape = (1, in_shape[0], in_shape[1])  # expanding dimension to indicate one channel
+        assert len(in_shape) == 3
+
+        out_shape = action_space.n
+        self.num_actions = out_shape
+        bias = True
+        channels = in_shape[0]
+
+        stride1 = 1
+        kernel1 = 3
+
+        out_channels_1 = model_size
+        self.l1 = nn.Sequential(
+            # dw
+            nn.Conv2d(in_channels=channels,
+                      out_channels=out_channels_1, kernel_size=kernel1,
+                      stride=stride1, padding=calc_padding(kernel1, dilation),
+                      dilation=dilation, bias=bias),
+            nn.BatchNorm2d(out_channels_1),
+            nn.ReLU6(inplace=True),
+            # pw-linear
+            nn.Conv2d(in_channels=out_channels_1,
+                      out_channels=out_channels_1, kernel_size=kernel1,
+                      stride=stride1, padding=calc_padding(kernel1, dilation),
+                      dilation=dilation, bias=bias),
+            nn.BatchNorm2d(out_channels_1),
+        )
+        size = out_channels_1 * in_shape[-1] * in_shape[-2]
+
+        self.action_fc = nn.Linear(size, out_shape) if is_actor else None
+        self.value_fc = nn.Linear(size, 1) if is_critic else None
+        self.q_fc = nn.Linear(size, out_shape) if is_qn else None
+
+        # load model on gpu if available, also cast type to double (whatever is in settings.py)
+        self.to(**settings.ARGS)
+
+        # use these booleans to not re run the model for the case where the model is the actor and critic
+        self.actor_called = False
+        self.critic_called = False
+
+    def forward(self, x):
+        x = self.l1(x)
+        x = x.flatten()
+        if not self.is_qn:
+            a = F.softmax(self.action_fc(x), dim=0) if self.is_actor else None
+            c = self.value_fc(x) if self.is_critic else None
+            return a, c
+        else:
+            q = self.q_fc(x)
+            return q
+
+    def get_action_probs(self, state):
+        assert not self.is_qn and self.is_actor
+        if self.critic_called:  # if the critic was called first then we don't want to recompute the whole model
+            self.critic_called = False
+            return self.action_probs
+        state = Variable(torch.from_numpy(state).to(settings.DEVICE).unsqueeze(0))
+        self.action_probs, self.value_estimate = self.forward(state)
+        self.actor_called = self.is_critic  # if this is a critic as well, set this flag
+        return self.action_probs
+
+    def get_critic_estimate(self, state):
+        assert not self.is_qn and self.is_critic
+        if self.actor_called:  # if the actor was called first then we don't want to recompute the whole model
+            self.actor_called = False
+            return self.value_estimate
+        state = Variable(torch.from_numpy(state).to(settings.DEVICE).unsqueeze(0))
+        self.action_probs, self.value_estimate = self.forward(state)
+        self.critic_called = self.is_actor  # if this is an actor as well, set this flag
+        return self.value_estimate
+
+    def get_q_estimate(self, state):
+        assert self.is_qn and not (self.is_actor or self.is_critic)
+        state = Variable(torch.from_numpy(state).to(settings.DEVICE).unsqueeze(0))
+        return self.forward(state)
+
+
+@register_model()
+class BasicConvAC(BasicConv):
+    def __init__(self, observation, action_space, cfg):
+        super(BasicConvAC, self).__init__(observation, action_space, cfg,
+                                          is_actor=True, is_critic=True, is_qn=False)
+
+    def get_action(self, state):
+        state = Variable(torch.from_numpy(state).to(settings.DEVICE).unsqueeze(0))
+        probs, value_estimate = self.forward(state)
+        highest_prob_action = np.random.choice(self.num_actions, p=np.squeeze(probs.detach().cpu().numpy()))
+        prob = probs.squeeze(0)[highest_prob_action]  # same as nlloss(log(softmax(x))
+        return highest_prob_action, prob, value_estimate
+
+
+@register_model()
+class BasicConvActor(BasicConv):  # will maintain same shape as input
+    def __init__(self, observation, action_space, cfg):
+        super(BasicConvActor, self).__init__(observation, action_space, cfg,
+                                             is_actor=True, is_critic=True, is_qn=False)
+
+
+@register_model()
+class BasicConvCritic(BasicConv):  # will maintain same shape as input
+    def __init__(self, observation, action_space, cfg):
+        super(BasicConvCritic, self).__init__(observation, action_space, cfg,
+                                              is_actor=False, is_critic=True, is_qn=False)
+
+
+@register_model()
+class BasicConvQN(BasicConv):
+    def __init__(self, observation, action_space, cfg):
+        super(BasicConvQN, self).__init__(observation, action_space, cfg,
+                                          is_actor=False, is_critic=False, is_qn=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import torch
+import settings
+from agent_algorithms.factory import register_algorithm
+import agent_algorithms.grid_agent as grid_agent
+import gym
+
+
+@register_algorithm()
+class A2CAgent(grid_agent.GridPGLearner):
+    # this agent can work with environments x, y, z (life and gym envs)
+    # try to make the encoding part separate
+    def __init__(self, observation_space: gym.spaces, action_space: gym.spaces, cfg, actor, critic):
+        super(A2CAgent, self).__init__(observation_space, action_space, cfg)
+        self.actor = actor
+        self.critic = critic
+        self.optim = getattr(torch.optim, self.cfg['optim'])(
+            list(actor.parameters()) + list(critic.parameters()), lr=self.cfg['lr'])
+
+    def step(self, env_input):
+        state = self.process_env_input(env_input)
+        probs = self.actor.get_action_probs(state)
+        value_estimate = self.critic.get_critic_estimate(state)
+        if self.training:
+            highest_prob_action = np.random.choice(self.num_actions, p=np.squeeze(probs.detach().cpu().numpy()))
+            self.value_estimates.append(value_estimate)
+            prob = probs.squeeze(0)[highest_prob_action]
+            self.probs.append(prob)
+        else:
+            highest_prob_action = np.argmax(np.squeeze(probs.detach().cpu().numpy()))
+        self.t += 1
+        return highest_prob_action
+
+    def update_policy(self, env_reward, episode_end, new_state = None):
+        if self.training:
+            self.rewards.append(env_reward)
+            if episode_end:
+                discounted_rewards = [0]
+                while self.rewards:
+                    # latest reward + (future reward * gamma)
+                    discounted_rewards.insert(0, self.rewards.pop() + (
+                                self.discount_factor * discounted_rewards[0]))
+                discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
+
+                Q_val = torch.Tensor(discounted_rewards).to(**settings.ARGS)
+                Q_val = (Q_val - Q_val.mean()) / (
+                        Q_val.std() + 1e-9)  # normalize discounted rewards
+                V_val = torch.Tensor(self.value_estimates).to(**settings.ARGS)
+                advantage = Q_val - V_val
+                log_prob = torch.log(torch.stack(self.probs))
+
+                actor_loss = (-log_prob * advantage).mean()  # todo make sure this is elementwise product
+                critic_loss = .5 * advantage.pow(2).mean()
+                ac_loss = actor_loss + critic_loss
+                # policy_gradient = []
+                # for log_prob, Gt in zip(self.log_probs, discounted_rewards):
+                #     policy_gradient.append(log_prob * Gt)
+
+                self.optim.zero_grad()
+                ac_loss.backward()
+                torch.nn.utils.clip_grad_norm_(self.actor.parameters(), 1)
+                torch.nn.utils.clip_grad_norm_(self.critic.parameters(), 1)
+                self.optim.step()
+        if episode_end:
+            self.end_episode()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from ray.rllib.policy.policy import Policy
+import gym
+import agent_models
+import torch
+import settings
+from enum import Enum
+import numpy as np
+from os.path import isfile
+import os
+from utils.storage_utils import save_object, load_object
+
+
+class FillVals(Enum):  # Filled values for grid, indicate the integer and what it represents
+    Unseen = 0
+    Seen = 1  # if self has explored/seen a point
+    Occupied = 2  # if self is currently in a point
+    OtherSeen = -1  # if another agent has explored/seen a point
+    OtherOccupied = -2  # if another agent is currently at a point
+
+
+class Transition():
+    def __init__(self, state, action, reward, new_state, episode_end):
+        self.state = state
+        self.action = action
+        self.reward = reward
+        self.new_state = new_state
+        self.episode_end = episode_end
+
+
+ACTIONS = [
+    # mostly copy of environment actions, just way to quickly fill surroundings for field of view
+    # since the grid representation is H x W, the tuple values indicate change in direction (dy, dx) or (dH, dW),
+    (0, -1),  # Left = 0
+    (-1, -1),  # UpLeft = 1
+    (-1, 0),  # Up = 2
+    (-1, 1),  # UpRight = 3
+    (0, 1),  # Right = 4
+    (1, 1),  # DownRight = 5
+    (1, 0),  # Down = 6
+    (1, -1),  # DownLeft = 7
+]
+
+
+class GridAgentInterface(Policy):
+    def __init__(self, observation_space: gym.spaces.Dict, action_space: gym.spaces, cfg):
+        Policy.__init__(self, observation_space, action_space, cfg)
+        self.cfg = cfg
+        assert isinstance(observation_space, gym.spaces.Dict)
+        assert isinstance(observation_space.spaces.get('position'), gym.spaces.Box), \
+            'grid agent_algorithms currently implemented for observed dict including a box space for key \'position\''
+        assert len(observation_space.spaces['position'].shape) > 1, \
+            'expecting n+1 coordinates, own coordinates + n_agent coordinates'
+        self.grid_shape = observation_space.spaces['position'].high[0]
+        self.grid = np.zeros(self.grid_shape)
+        self.positions = None
+        self.num_actions = action_space.n
+        self.t = 0
+        self.state = None
+        self.training = True
+        self.discount_factor = self.cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
+
+    def process_env_input(self, env_input: dict):
+        assert isinstance(env_input, dict)
+        positions = env_input['position']
+        assert isinstance(env_input['position'][0], tuple), 'expecting list of tuples for key \'position\''
+        fovs = env_input.get('fov')
+
+        if fovs is not None:
+            for view_points in fovs[1:]:
+                for view_point in view_points:
+                    self.grid[view_point] = FillVals.OtherSeen.value
+            for view_points in fovs[0]:  # for the fov points for current agent
+                for view_point in view_points:
+                    self.grid[view_point] = FillVals.Seen.value
+
+        # if we have filled in previously, we want to change the old values to seen instead of currently occupied
+        if self.positions is not None:
+            for all_old_agents in self.positions[1:]:
+                self.grid[all_old_agents] = FillVals.OtherSeen.value
+            self.grid[self.positions[0]] = FillVals.Seen.value
+
+        # the first env_input is expected to be the coordinates of the current agent
+        for all_agents in positions[1:]:
+            self.grid[all_agents] = FillVals.OtherOccupied.value
+        self.grid[positions[0]] = FillVals.Occupied.value
+
+        self.positions = positions
+        return np.expand_dims(self.grid, axis=0)
+
+    def end_episode(self):
+        self.t = 0
+        self.grid = np.zeros(self.grid_shape)
+        self.rewards = []
+        self.probs = []
+        self.value_estimates = []
+
+    def train(self):
+        self.training = True
+
+    def test(self):
+        self.training = False
+
+    def save(self, dir):
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        save_object(self, dir)
+
+
+class GridQLearner(GridAgentInterface):
+    def __init__(self, observation_space: gym.spaces.Dict, action_space: gym.spaces, cfg):
+        super(GridQLearner, self).__init__(observation_space, action_space, cfg)
+        self.epsilon_start = cfg.get('epsilon_start', settings.defaults.Q_EPSILON_START)
+        self.epsilon_end = cfg.get('epsilon_end', settings.defaults.Q_EPSILON_END)
+        self.epsilon_decay_length = cfg.get('epsilon_decay_length', settings.defaults.Q_EPSILON_DECAY_LENGTH)
+        self.batch_size = cfg.get('batch_size', settings.defaults.Q_BATCH_SIZE)
+        self.replay_capacity = cfg.get('replay_capacity', settings.defaults.Q_REPLAY_CAPACITY)
+        self.target_reset_freq = cfg.get('target_reset_freq', settings.defaults.Q_TARGET_RESET_FREQ)
+        self.replay_memory = [None] * self.replay_capacity
+
+    def sample_transitions(self):
+        transitions = np.random.choice(self.replay_memory, self.batch_size, replace=True)
+        q_targets = []
+        q_preds = []
+        for transition in transitions:
+            if transition is not None:
+                q_preds.append(self.qn.get_q_estimate(transition.state))
+                if transition.episode_end:
+                    q_targets.append(transition.reward)
+                else:
+                    q_targets.append(transition.reward + self.discount_factor * np.argmax(
+                        self.qn.get_q_estimate(transition.new_state).detach().cpu().numpy()))
+                # expanding the dimensions and converting to pytorch tensor
+                q_targets[-1] = torch.autograd.Variable(
+                    torch.Tensor([q_targets[-1]]).to(**settings.ARGS))
+        return q_preds, q_targets
+
+    def get_epsilon(self):
+        return (self.epsilon_start + ((self.epsilon_end - self.epsilon_start) / self.epsilon_decay_length) *
+                self.t) if self.t < self.epsilon_decay_length else self.epsilon_end
+
+
+class GridPGLearner(GridAgentInterface):
+    def __init__(self, observation_space: gym.spaces.Dict, action_space: gym.spaces, cfg):
+        super(GridPGLearner, self).__init__(observation_space, action_space, cfg)
+        self.probs = []
+        self.rewards = []
+        self.value_estimates = []
+
+    # def get_initial_state(self):
+    #     """Returns initial RNN state for the current policy."""
+    #     return []
+    #
+    # def compute_actions(self,
+    #                     obs_batch,
+    #                     state_batches,
+    #                     prev_action_batch=None,
+    #                     prev_reward_batch=None,
+    #                     info_batch=None,
+    #                     episodes=None,
+    #                     **kwargs):
+    #     print(state_batches)
+    #     assert (len(state_batches) == 0), 'have not implemented batch training yet '
+    #     action, prob = self.policy_net.get_action(state_batches)
+    #     self.probs.append(prob)
+    #     self.t += 1
+    #     return action
+    #     return [x for x in state_batches[0]], state_batches, {}
+    #
+    # def learn_on_batch(self, samples):
+    #     pass
+    #
+    # def get_weights(self):
+    #     pass
+    #
+    # def set_weights(self, weights):
+    #     pass
+    #
+    # def save(self, dir):
+    #     if not os.path.exists(dir):
+    #         os.makedirs(dir)
+    #     save_object(self, dir)
+    #
+
+
+
+
+
+
