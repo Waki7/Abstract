@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import gym_life.envs.life_env as life_env
 import gym
 from utils.TimeBuffer import TimeBuffer
-import RLTasks.config as cfg
+import config as cfg
 from tensorboardX import SummaryWriter
 
 if torch.cuda.is_available():

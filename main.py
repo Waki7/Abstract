@@ -1,9 +1,8 @@
-from RLTasks.network_controllers.cra_agent import *
-from RLTasks.LifeSim.life_simulation import *
+from agents.cra_agent import *
 import logging
 
-from RLTasks.network_controllers.base_networks import *
-from RLTasks.network_controllers import A2CAgent, PGAgent
+from networks.base_networks import *
+from networks import A2CAgent
 
 from shutil import copy as copy_file
 
@@ -11,7 +10,7 @@ import numpy as np
 import os
 import random
 import torch
-import RLTasks.config as cfg
+import config as cfg
 
 
 # import pybulletgym

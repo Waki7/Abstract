@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from utils.NetworkTypes import *
-import RLTasks.LifeSim.life_channels as ch
+import gym_life.envs.life_channels as ch
 import numpy as np
 
 grads = {}

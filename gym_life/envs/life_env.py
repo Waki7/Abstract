@@ -1,8 +1,8 @@
-import RLTasks.LifeSim.life_channels as ch
+import gym_life.envs.life_channels as ch
 import numpy as np
 from typing import Union
 from utils.TimeBuffer import TimeBuffer
-import RLTasks.config as cfg
+import config as cfg
 import gym
 from gym import spaces
 import logging

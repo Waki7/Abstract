@@ -2,9 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-import RLTasks.config as cfg
+import config as cfg
 import numpy as np
-from utils.NetworkTypes import *
 import gym
 
 grads = {}
