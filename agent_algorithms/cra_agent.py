@@ -76,6 +76,7 @@ class CRAgent():
         hidden_input = self.hidden_states[-1][1].detach()
         hidden_input.requires_grad = True
         output, hidden_output = self.model.forward(env_input, hidden_input)
+        action = torch.argmax(output) # WHERE THE FUCK DO WE STORE THIS WHOLE SPECIFIC TO THE ENVIRONMENT BULLSHIT
         action = self.model.get_action_vector(output)
         self.outputs.append(output)
         self.hidden_states.append((hidden_input, hidden_output))
@@ -128,8 +129,11 @@ class CRAgent():
     def get_reward_perception(self):
         return self.pred_feel_val
 
+    def get_env_pred_val(self):
+        return self.pred_val if self.pred < self.out_vector_idx[len(self.action_channels)] else None
+
     def get_action(self):
-        return self.model.get_env_pred_val()  # todo we want to implement this in the agent i think...
+        return self.get_env_pred_val()  # todo we want to implement this in the agent i think...
 
     def log_predictions(self, writer=sys.stdout):
         writer.write('\nAgent Summary at timestep ' + str(self.t) + '\n')

@@ -109,6 +109,3 @@ class LifeNetwork(nn.Module):
         else:
             Ytarg[0, preds] = 1.0
         return Ytarg
-
-    def get_env_pred_val(self):
-        return self.pred_val if self.pred < self.out_vector_idx[len(self.action_channels)] else None
