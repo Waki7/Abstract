@@ -59,7 +59,7 @@ class CRAgent():
         self.t += 1
         return action
 
-    def update_policy(self, env_reward, episode_end = True):
+    def update_policy(self, env_reward, episode_end=True):
         self.env_reward = env_reward
         if self.t > 0:
             env_reward, aux_reward = self.calc_aux_reward()
@@ -97,7 +97,8 @@ class CRAgent():
             if cfg.backprop_through_input:
                 if hidden_states[0] is None:
                     break
-                if hidden_states[0].grad is not None:  # can't clear gradient if it hasn't been back propagated once through
+                if hidden_states[
+                    0].grad is not None:  # can't clear gradient if it hasn't been back propagated once through
                     hidden_states[0].grad.data.zero_()
                 curr_grad = hidden_states[0].grad
                 torch.nn.utils.clip_grad_value_(curr_grad, cfg.clip_value)
@@ -117,6 +118,18 @@ class CRAgent():
             if cfg.self_reward_update:
                 self.aux_reward += cfg.reward_prediction_discount * cfg.adjacent_reward_list[self.pred_feel_val.value]
         return self.aux_reward
+
+    def get_aux_reward(self):
+        return self.aux_reward
+
+    def get_focus(self):
+        return self.pred_val  # need to make a difference if to self or to environment
+
+    def get_reward_perception(self):
+        return self.pred_feel_val
+
+    def get_action(self):
+        return self.model.get_env_pred_val()  # todo we want to implement this in the agent i think...
 
     def log_predictions(self, writer=sys.stdout):
         writer.write('\nAgent Summary at timestep ' + str(self.t) + '\n')

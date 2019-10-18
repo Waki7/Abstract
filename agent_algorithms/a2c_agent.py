@@ -69,23 +69,3 @@ class A2CAgent():
             self.rewards = []
             self.log_probs = []
 
-    def log_predictions(self, writer=sys.stdout):
-        writer.write('\nAgent Summary at timestep ' + str(self.t) + '\n')
-        writer.write('prediction to environment: ' + str(self.model.get_env_pred_val()) + '\n')
-        writer.write(str(self.pred_val) + ', ' + str(self.pred_feel_val))
-        writer.write('\n\n full reward is: ' + str(self.reward))
-        writer.write('\n')
-        writer.flush()
-
-    def store_results(self, reward):
-        self.testing_rewards.insert(self.t, reward)
-        if not self.t % cfg.rewards_eval_window:
-            self.average_rewards.append(np.average(self.testing_rewards.getData()))
-
-    def plot_results(self):
-        if cfg.results_path is not None:
-            print('trying')
-            print(self.average_rewards)
-            print(cfg.results_path)
-            plt.plot(self.average_rewards)
-            plt.savefig(cfg.results_path + 'averageRewards.png')
