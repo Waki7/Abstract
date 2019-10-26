@@ -24,14 +24,14 @@ class PGAgent():
         self.reward = 0
         self.testing_rewards = TimeBuffer(cfg.rewards_eval_window)
         self.average_rewards = []
-        self.log_probs = []
+        self.probs = []
         self.rewards = []
         self.t = 0
         self.optimizer = getattr(torch.optim, cfg.gym.OPTIMIZER)(self.model.parameters(), lr=cfg.gym.LR)
 
     def step(self, env_input):
-        action, log_prob = self.policy_net.get_action(env_input)
-        self.log_probs.append(log_prob)
+        action, prob = self.policy_net.get_action(env_input)
+        self.probs.append(prob)
         self.t += 1
         return action
 
@@ -49,8 +49,8 @@ class PGAgent():
                     discounted_rewards.std() + 1e-9)  # normalize discounted rewards
 
             policy_gradient = []
-            for log_prob, Gt in zip(self.log_probs, discounted_rewards):
-                policy_gradient.append(log_prob * Gt)
+            for prob, Gt in zip(self.probs, discounted_rewards):
+                policy_gradient.append(-torch.log(prob) * Gt)
 
             self.optimizer.zero_grad()
             policy_gradient = torch.stack(policy_gradient).sum()
@@ -59,7 +59,7 @@ class PGAgent():
 
             self.t = 0
             self.rewards = []
-            self.log_probs = []
+            self.probs = []
 
     def log_predictions(self, writer=sys.stdout):
         writer.write('\nAgent Summary at timestep ' + str(self.t) + '\n')

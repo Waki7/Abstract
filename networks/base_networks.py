@@ -44,8 +44,8 @@ class PolicyNetworkBasic(nn.Module):
         state = Variable(torch.from_numpy(state).float().unsqueeze(0))
         probs = self.forward(state)
         highest_prob_action = np.random.choice(self.num_actions, p=np.squeeze(probs.detach().numpy()))
-        log_prob = -torch.log(probs.squeeze(0)[highest_prob_action])  # same as nlloss(log(softmax(x))
-        return highest_prob_action, log_prob
+        prob = probs.squeeze(0)[highest_prob_action]
+        return highest_prob_action, prob
 
 
 class ACNetwork(nn.Module):  # actor critic method, parameterized baseline estimate with network

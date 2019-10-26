@@ -8,13 +8,7 @@ import gym
 from utils.TimeBuffer import TimeBuffer
 import config as cfg
 from tensorboardX import SummaryWriter
-
-if torch.cuda.is_available():
-    DEVICE = torch.device('cuda')
-else:
-    DEVICE = torch.device('cpu')
-DTYPE = torch.float
-ARGS = {'device': DEVICE, 'dtype': DTYPE}
+import settings
 
 
 def logLoss(output, target):
@@ -26,14 +20,19 @@ class CRAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate
-    def __init__(self, model, env):
+    def __init__(self, model, env, cfg, focus_schema = None, reward_schema = None):
         self.model = model
         self.env = env
 
         self.pred_val, self.pred_feel_val = None, None
         self.reward = 0
 
-        self.initial_state = torch.zeros((1, self.model.hidden_in_size), **ARGS)
+        if focus_schema is None:
+            focus_schema = None
+        if reward_schema is None:
+            reward_schema = None
+
+        self.initial_state = torch.zeros((1, self.model.hidden_in_size), **settings.ARGS)
         self.hidden_states = [(None, self.initial_state)]
         self.outputs = []
         self.rewards = []
@@ -77,7 +76,7 @@ class CRAgent():
         hidden_input.requires_grad = True
         output, hidden_output = self.model.forward(env_input, hidden_input)
         action = torch.argmax(output) # WHERE THE FUCK DO WE STORE THIS WHOLE SPECIFIC TO THE ENVIRONMENT BULLSHIT
-        action = self.model.get_action_vector(output)
+        # action = self.model.get_action_vector(output)
         self.outputs.append(output)
         self.hidden_states.append((hidden_input, hidden_output))
         return action

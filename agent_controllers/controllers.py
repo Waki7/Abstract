@@ -24,13 +24,18 @@ class BaseController():
 
 
 class SingleAgentController():
-    def __init__(self, env, agent):
+    def __init__(self, env, cfg):
+        self.cfg = cfg
         self.env = env
-        self.agent = agent
+        self.agents = self.make_agents()
+
+    def make_agents(self):
+        return self.cfg['agents']
 
     def teach_agents(self):
 
-        is_episodic = not hasattr(self.env, 'is_episodic') or (hasattr(self.env, 'is_episodic') and self.env.is_episodic)
+        is_episodic = not hasattr(self.env, 'is_episodic') or (
+                    hasattr(self.env, 'is_episodic') and self.env.is_episodic)
         update_rate = 1 if is_episodic else cfg.experiment.UPDATE_RATE
         max_episodes = cfg.experiment.MAX_EPISODES if is_episodic else 1
         all_rewards = []
@@ -46,6 +51,7 @@ class SingleAgentController():
                 state, reward, episode_end, _ = self.env.step(action)
                 rewards.append(reward)
                 self.agent.update_policy(reward, episode_end)
+
                 if (is_episodic and episode_end) or (not is_episodic and step % update_rate == 0):
                     numsteps.append(step)
                     avg_numsteps.append(np.mean(numsteps[-cfg.experiment.EVAL_REWARDS_WINDOW:]))
@@ -75,3 +81,9 @@ class SingleAgentController():
         plt.savefig('{}/averageRewards.png'.format(results_path))
 
 
+class LifeController(SingleAgentController):
+    def __init__(self, env, agent):
+        super(LifeController, self).__init__(env, agent)
+
+    def make_agents(self):
+        return

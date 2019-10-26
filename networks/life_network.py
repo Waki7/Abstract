@@ -4,26 +4,17 @@ import torch.nn.functional as F
 from utils.NetworkTypes import *
 import gym_life.envs.life_channels as ch
 import numpy as np
-
-grads = {}
-if torch.cuda.is_available():
-    DEVICE = torch.device('cuda')
-else:
-    DEVICE = torch.device('cpu')
-DTYPE = torch.float
-ARGS = {'device': DEVICE, 'dtype': DTYPE}
-
-
-def save_grad(name):
-    def hook(grad):
-        grads[name] = grad
-
-    return hook
-
+import settings
 
 class LifeNetwork(nn.Module):
     def __init__(self):
         super(LifeNetwork, self).__init__()
+        # this gets broken down into sub categories below each for life
+        default_fallback = ['env in channels', 'hidden in channels', ]
+        # trhis gets broken down into sub categories below each for life
+        default_input = ['action', 'focus', ' maybe feel> ']
+
+
 
         self.env_in_channels = ch.AGENT_STATE_CHANNELS
         self.hidden_in_channels = [ch.See, ch.Hear, ch.Speak, ch.Feel]
@@ -73,7 +64,7 @@ class LifeNetwork(nn.Module):
 
     def forward(self, env_input, hidden_input):
         assert isinstance(hidden_input, torch.Tensor)
-        env_input = torch.from_numpy(env_input, **ARGS).float().unsqueeze(0)
+        env_input = torch.from_numpy(env_input, **settings.ARGS).float().unsqueeze(0)
 
         l0, l1 = [], []
         input = torch.cat((env_input, hidden_input), dim=1)

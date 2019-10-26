@@ -1,6 +1,6 @@
 from agent_algorithms.cra_agent import *
 import logging
-
+import torch.utils.tensorboard
 from networks.base_networks import *
 import agent_algorithms
 
@@ -19,7 +19,8 @@ def main():
     # name = 'Life-v0'
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     env = gym.make(name)
-
+    stream = file('document.yaml', 'r')
+    yaml.load(stream)
     network = None # default fallback
     agent = agent_algorithms.A2CAgent(env=env, model=network)
     teach_agents(env=env, agent=agent)
