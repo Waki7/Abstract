@@ -3,14 +3,17 @@ import logging
 import torch.utils.tensorboard
 from networks.base_networks import *
 import agent_algorithms
-
+import config
 from shutil import copy as copy_file
-
+import yaml
 import numpy as np
 import os
 import random
 import torch
 import config as cfg
+
+def train():
+    env =
 
 
 
@@ -19,8 +22,8 @@ def main():
     # name = 'Life-v0'
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     env = gym.make(name)
-    stream = file('document.yaml', 'r')
-    yaml.load(stream)
+    with open('config.yaml') as f:
+        cfgs = yaml.load(f, Loader=yaml.FullLoader)
     network = None # default fallback
     agent = agent_algorithms.A2CAgent(env=env, model=network)
     teach_agents(env=env, agent=agent)

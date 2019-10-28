@@ -1,3 +1,4 @@
+from agent_controllers.factory import register_controller
 from agent_algorithms.cra_agent import *
 import logging
 
@@ -22,7 +23,7 @@ class BaseController():
         if not self.t % cfg.rewards_eval_window:
             self.average_rewards.append(np.average(self.testing_rewards.getData()))
 
-
+@register_controller
 class SingleAgentController():
     def __init__(self, env, cfg):
         self.cfg = cfg

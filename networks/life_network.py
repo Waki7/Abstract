@@ -20,7 +20,6 @@ class LifeNetwork(nn.Module):
         self.hidden_in_channels = [ch.See, ch.Hear, ch.Speak, ch.Feel]
         self.in_channels = np.concatenate((self.env_in_channels, self.hidden_in_channels))
         self.in_shapes = [len(input) for input in self.in_channels]
-        self.hidden_in_channel_index = len(self.env_in_channels)
 
         self.action_channels = ch.AGENT_ACTION_CHANNELS
         self.hidden_out_channels = [ch.See, ch.Hear, ch.Speak, ch.Feel]
@@ -100,3 +99,11 @@ class LifeNetwork(nn.Module):
         else:
             Ytarg[0, preds] = 1.0
         return Ytarg
+
+        # self.aux_reward = 0
+        # if self.is_life_env:
+        #     if self.model.get_env_pred_val() is not None:  # todo
+        #         self.aux_reward += cfg.life.EXPLOITATION_PENALTY
+        #     if cfg.self_reward_update:
+        #         self.aux_reward += cfg.reward_prediction_discount * cfg.adjacent_reward_list[self.pred_feel_val.value]
+        # return self.aux_reward

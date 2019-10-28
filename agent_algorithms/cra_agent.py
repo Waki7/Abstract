@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import gym_life.envs.life_env as life_env
 import gym
 from utils.TimeBuffer import TimeBuffer
-import config as cfg
 from tensorboardX import SummaryWriter
 import settings
 
@@ -20,17 +19,14 @@ class CRAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate
-    def __init__(self, model, env, cfg, focus_schema = None, reward_schema = None):
+    def __init__(self, model, env, cfg):
+
+
         self.model = model
         self.env = env
 
         self.pred_val, self.pred_feel_val = None, None
         self.reward = 0
-
-        if focus_schema is None:
-            focus_schema = None
-        if reward_schema is None:
-            reward_schema = None
 
         self.initial_state = torch.zeros((1, self.model.hidden_in_size), **settings.ARGS)
         self.hidden_states = [(None, self.initial_state)]
@@ -53,7 +49,7 @@ class CRAgent():
         self.writer = SummaryWriter()
 
     def step(self, env_input):
-        action = self.forward(env_input)
+        action, self.aux_reward = self.forward(env_input)
         self.actions.append(action)
         self.t += 1
         return action
@@ -111,15 +107,6 @@ class CRAgent():
         return False
 
     def calc_aux_reward(self):
-        self.aux_reward = 0
-        if self.is_life_env:
-            if self.model.get_env_pred_val() is not None:  # todo
-                self.aux_reward += cfg.life.EXPLOITATION_PENALTY
-            if cfg.self_reward_update:
-                self.aux_reward += cfg.reward_prediction_discount * cfg.adjacent_reward_list[self.pred_feel_val.value]
-        return self.aux_reward
-
-    def get_aux_reward(self):
         return self.aux_reward
 
     def get_focus(self):
