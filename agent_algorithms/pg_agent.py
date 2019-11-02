@@ -1,3 +1,4 @@
+from agent_algorithms.factory import register_algorithm
 import sys
 import matplotlib.pyplot as plt
 from utils.TimeBuffer import TimeBuffer
@@ -10,7 +11,7 @@ else:
 type = torch.float
 args = {'device': device, 'dtype': type}
 
-
+@register_algorithm
 class PGAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
@@ -18,7 +19,7 @@ class PGAgent():
         assert isinstance(env, gym.Env)
         assert isinstance(env.action_space, gym.spaces.Discrete)
 
-        self.model = model if model else PolicyNetworkBasic(env)
+        self.model = model if model else ActorFCNetwork(env)
         self.is_episodic = not hasattr(env, 'is_episodic') or (hasattr(env, 'is_episodic') and env.is_episodic)
         self.policy_net = model
         self.reward = 0

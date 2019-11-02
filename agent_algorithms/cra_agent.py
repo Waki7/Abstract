@@ -1,3 +1,4 @@
+from agent_algorithms.factory import register_algorithm
 import numpy as np
 import torch
 import torch.nn as nn
@@ -14,16 +15,14 @@ def logLoss(output, target):
     loss = torch.sum(torch.log(output))
     return loss
 
-
+@register_algorithm
 class CRAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate
-    def __init__(self, model, env, cfg):
-
-
-        self.model = model
-        self.env = env
+    def __init__(self, env, actor, critic, cfg):
+        self.actor = actor
+        self.critic = critic
 
         self.pred_val, self.pred_feel_val = None, None
         self.reward = 0
@@ -42,9 +41,6 @@ class CRAgent():
         self.criterion = nn.MSELoss()
 
         self.is_life_env = isinstance(self.env, life_env.LifeEnv)
-        if not self.is_life_env:
-            assert isinstance(self.env.action_space, gym.spaces.Discrete)
-            self.num_actions = env.action_space.n
 
         self.writer = SummaryWriter()
 

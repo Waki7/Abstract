@@ -2,23 +2,20 @@ env:
   life:
     name: 'Life-v0'
     update_rate: 1
-    max_episode: 1000
+    timeout: 1000
     max_steps: 2000
 
-  UPDATE_RATE = 1
-  MAX_EPISODES = 1000
-  MAX_STEPS = 20000
-  ENV = 'Life-v0' # 'CartPole-v0'
-  VARIATION = ''
-  EVAL_REWARDS_WINDOW = 10
+  cart:
+    name: 'CartPole-v0'
 
 agents:
   cra:
     controller_name: SingleAgentController
     agent_name: CRA
-    network:
-      name: life_network
+    ac_network: life_network
+
 
 training:
-  max_episodes: 2000 #
+  timeout: 2000 #
   max_steps: 2000 # steps in one episode before time out, unless not episodic
+  eval_rewards_window: 20

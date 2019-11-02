@@ -1,4 +1,6 @@
+from agent_algorithms.factory import register_algorithm
 import sys
+from utils.model_utils import true_with_probability
 import matplotlib.pyplot as plt
 from utils.TimeBuffer import TimeBuffer
 from networks.base_networks import *
@@ -11,17 +13,19 @@ else:
 type = torch.float
 args = {'device': device, 'dtype': type}
 
-
+@register_algorithm
 class A2CAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
-    def __init__(self, env: gym.Env, actor=None, critic=None):
-        assert isinstance(env, gym.Env)
-        assert isinstance(env.action_space, gym.spaces.Discrete)
+    def __init__(self, actor, critic, is_episodic, cfg):
+        self.actor = actor
+        self.critic = critic
 
-        self.actor = actor if actor else ACNetwork(env)
-        self.critic = critic if critic else self.actor
-        self.is_episodic = not hasattr(env, 'is_episodic') or (hasattr(env, 'is_episodic') and env.is_episodic)
+        self.is_episodic = is_episodic
+        self.n_step = cfg.get('n_step', -1)
+        self.update_threshold = cfg.get('update_threshold', -1)
+        self.random_update_prob = .1
+
         self.reward = 0
         self.testing_rewards = TimeBuffer(cfg.rewards_eval_window)
         self.average_rewards = []
@@ -43,7 +47,7 @@ class A2CAgent():
     def update_policy(self, env_reward, episode_end):
         self.rewards.append(env_reward)
 
-        if episode_end or (not self.is_episodic and self.t == self.continuous_episode_length):
+        if self.should_update(episode_end, env_reward):
             discounted_rewards = [0]
             while self.rewards:
                 # latest reward + (future reward * gamma)
@@ -69,3 +73,12 @@ class A2CAgent():
             self.rewards = []
             self.log_probs = []
 
+
+    def should_update(self, episode_end, reward):
+        if self.is_episodic:
+            return episode_end
+        if self.n_step == -1:
+            return (self.t + 1) % self.n_step == 0
+        if self.update_threshold == -1:
+            return true_with_probability(self.random_update_prob)
+        return reward >= self.update_threshold

@@ -1,3 +1,4 @@
+from networks.factory import register_network
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -16,22 +17,25 @@ def save_grad(name):
     return hook
 
 
-class PolicyNetworkBasic(nn.Module):
-    def __init__(self, env: gym.Env):
-        super(PolicyNetworkBasic, self).__init__()
-        if isinstance(env.observation_space, gym.spaces.Box):
-            num_inputs = env.observation_space.shape[0]
-        else:
-            if isinstance(env.observation_space, gym.spaces.Discrete):
-                num_inputs = env.observation_space.n
-            else:
-                raise NotImplementedError
-        num_actions = env.action_space.n
-        assert isinstance(env.action_space, gym.spaces.Discrete)
+class BaseNetwork(nn.Module):
+    def __init__(self, cfg):
+        super(BaseNetwork, self).__init__()
+        self.cfg = cfg
+        self.hidden_size = hidden_size
 
+    def create_optimizer(self):
+        pass
+        # self.optim = getattr(torch.optim, self.cfg['optim'])(
+        #     list(critic.parameters()), lr=self.cfg['lr'])
+
+
+@register_network
+class ActorFCNetwork(BaseNetwork):
+    def __init__(self, n_features, n_actions, cfg):
+        super(ActorFCNetwork, self).__init__(cfg)
         hidden_size = cfg.gym.hidden_size
         self.num_actions = num_actions
-        self.linear1 = nn.Linear(num_inputs, hidden_size)
+        self.linear1 = nn.Linear(n_features, self.hidden_size)
         self.linear2 = nn.Linear(hidden_size, num_actions)
         self.train()
 
@@ -41,39 +45,26 @@ class PolicyNetworkBasic(nn.Module):
         return x
 
     def get_action(self, state):
-        state = Variable(torch.from_numpy(state).float().unsqueeze(0))
+        state = torch.from_numpy(state).float().unsqueeze(0)
         probs = self.forward(state)
         highest_prob_action = np.random.choice(self.num_actions, p=np.squeeze(probs.detach().numpy()))
         prob = probs.squeeze(0)[highest_prob_action]
         return highest_prob_action, prob
 
-
-class ACNetwork(nn.Module):  # actor critic method, parameterized baseline estimate with network
-    def __init__(self, env: gym.Env):
-        super(ACNetwork, self).__init__()
-        if isinstance(env.observation_space, gym.spaces.Box):
-            num_inputs = env.observation_space.shape[0]
-        else:
-            if isinstance(env.observation_space, gym.spaces.Discrete):
-                num_inputs = env.observation_space.n
-            else:
-                raise NotImplementedError
-        num_actions = env.action_space.n
-        assert isinstance(env.action_space, gym.spaces.Discrete)
-
+class CriticFCNetwork():
+    def __init__(self, n_features, n_estimates, cfg):
+        super(ActorFCNetwork, self).__init__(cfg)
         hidden_size = cfg.gym.hidden_size
         self.num_actions = num_actions
-
-        self.actor = nn.Sequential(nn.Linear(num_inputs, hidden_size),
-                                   nn.Tanh(),
-                                   nn.Linear(hidden_size, num_actions))
-
-        self.critic = nn.Sequential(nn.Linear(num_inputs, hidden_size),
-                                    nn.Tanh(),
-                                    nn.Linear(hidden_size, hidden_size),
-                                    nn.Tanh())
-        self.critic_linear = nn.Linear(in_features=hidden_size, out_features=1)
+        self.linear1 = nn.Linear(n_features, self.hidden_size)
+        self.linear2 = nn.Linear(hidden_size, num_actions)
         self.train()
+
+
+@register_network
+class ACNetwork():  # actor critic method, parameterized baseline estimate with network
+    def __init__(self, n_features, n_actions, cfg):
+        return ActorFCNetwork(n_features, n_actions, cfg), CriticFCNetwork(n_features, n_estimates, cfg)
 
     def forward(self, inputs, masks=1):
         x = inputs

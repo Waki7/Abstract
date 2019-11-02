@@ -1,6 +1,7 @@
 from agent_algorithms.cra_agent import *
 import logging
 import torch.utils.tensorboard
+from agent_controllers.factory import CONTROLLER_REGISTERY
 from networks.base_networks import *
 import agent_algorithms
 import config
@@ -10,23 +11,19 @@ import numpy as np
 import os
 import random
 import torch
-import config as cfg
 
-def train():
-    env =
 
+with open('config.yaml') as f:
+    cfg = yaml.load(f, Loader=yaml.FullLoader)
+
+def train(algorithm, env_namespace):
+    env_cfg = cfg[env_namespace]
+    trainer = CONTROLLER_REGISTERY[cfg[algorithm]](env_cfg, cfg)
+    trainer.teach_agents(cfg['training'])
 
 
 def main():
-    name = 'CartPole-v0'  #
-    # name = 'Life-v0'
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-    env = gym.make(name)
-    with open('config.yaml') as f:
-        cfgs = yaml.load(f, Loader=yaml.FullLoader)
-    network = None # default fallback
-    agent = agent_algorithms.A2CAgent(env=env, model=network)
-    teach_agents(env=env, agent=agent)
+    train('a2c', 'life')
 
 
 if __name__ == "__main__":

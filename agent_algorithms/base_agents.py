@@ -54,7 +54,7 @@ ACTIONS = [
 ]
 
 
-class BaseAgent(Policy):
+class BaseAgent():
     def __init__(self, observation_space: gym.spaces.Dict, action_space: gym.spaces, cfg):
         Policy.__init__(self, observation_space, action_space, cfg)
         self.cfg = cfg
