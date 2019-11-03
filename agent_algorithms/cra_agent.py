@@ -20,7 +20,7 @@ class CRAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate
-    def __init__(self, env, actor, critic, cfg):
+    def __init__(self, actor, critic, is_episodic, cfg):
         self.actor = actor
         self.critic = critic
 

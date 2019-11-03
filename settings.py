@@ -5,6 +5,8 @@ configs = {
 
 }
 
+LOG_DIR = 'logs'
+
 grads = {}
 if torch.cuda.is_available():
     DEVICE = torch.device('cuda')

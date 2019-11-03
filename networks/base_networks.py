@@ -21,7 +21,7 @@ class BaseNetwork(nn.Module):
     def __init__(self, cfg):
         super(BaseNetwork, self).__init__()
         self.cfg = cfg
-        self.hidden_size = hidden_size
+        self.model_size = cfg['model_size']
 
     def create_optimizer(self):
         pass
@@ -62,9 +62,11 @@ class CriticFCNetwork():
 
 
 @register_network
-class ACNetwork():  # actor critic method, parameterized baseline estimate with network
-    def __init__(self, n_features, n_actions, cfg):
-        return ActorFCNetwork(n_features, n_actions, cfg), CriticFCNetwork(n_features, n_estimates, cfg)
+class ACNetwork(BaseNetwork):  # actor critic method, parameterized baseline estimate with network
+    def __init__(self, n_features, n_actions, critic_estimates, cfg):
+        super(ACNetwork, self).__init__(cfg)
+        self.shared_dense = nn.Linear(n_features, self.hi)
+        self.critic_dense = nn.Linear(self.model_size)
 
     def forward(self, inputs, masks=1):
         x = inputs

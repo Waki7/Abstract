@@ -6,11 +6,7 @@ import config as cfg
 import gym
 from gym import spaces
 import logging
-
-
-def true_with_probability(p):
-    return np.random.choice([True, False], 1, [p, 1 - p])
-
+from utils.model_utils import true_with_probability
 
 class LifeEnv(gym.Env):
     def __init__(self):

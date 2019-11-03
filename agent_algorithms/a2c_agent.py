@@ -1,5 +1,6 @@
 from agent_algorithms.factory import register_algorithm
 import sys
+import torch.nn.functional as F
 from utils.model_utils import true_with_probability
 import matplotlib.pyplot as plt
 from utils.TimeBuffer import TimeBuffer
@@ -27,9 +28,10 @@ class A2CAgent():
         self.random_update_prob = .1
 
         self.reward = 0
-        self.testing_rewards = TimeBuffer(cfg.rewards_eval_window)
         self.average_rewards = []
         self.log_probs = []
+        self.action_probs = []
+        self.probs = []
         self.rewards = []
         self.value_estimates = []
         self.t = 0
@@ -54,14 +56,14 @@ class A2CAgent():
                 discounted_rewards.insert(0, self.rewards.pop() + (cfg.discount_factor * discounted_rewards[0]))
             discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
-            Q_val = torch.Tensor(discounted_rewards).to(**args)
-            Q_val = (Q_val - Q_val.mean()) / (Q_val.std() + 1e-9)
-            V_val = torch.Tensor(self.value_estimates).to(**args)
-            advantage = Q_val - V_val
+            Q_val = torch.tensor(discounted_rewards).to(**args)
+            Q_val = (Q_val - Q_val.mean()) / (Q_val.std() + 1e-9) # normalizing the advantage
+            V_estimate = torch.tensor(self.value_estimates).to(**args)
+            advantage = Q_val - V_estimate
             log_prob = torch.stack(self.log_probs)
 
-            actor_loss = (-log_prob * advantage).mean()  # todo make sure this is elementwise product
-            critic_loss = .5 * advantage.pow(2).mean()
+            actor_loss = (-log_prob * advantage.detach()).mean()
+            critic_loss = F.smooth_l1_loss(input=V_estimate, target=Q_val)#.5 * advantage.pow(2).mean()
             ac_loss = actor_loss + critic_loss
 
             self.optimizer.zero_grad()

@@ -23,7 +23,7 @@ def train(algorithm, env_namespace):
 
 
 def main():
-    train('a2c', 'life')
+    train('a2c', 'cart')
 
 
 if __name__ == "__main__":
