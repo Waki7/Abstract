@@ -3,17 +3,10 @@ import logging
 from networks.base_networks import *
 from agent_algorithms.factory import ALGORITHM_REGISTRY
 from networks.factory import NETWORK_REGISTERY
-from shutil import copy as copy_file
-import numpy as np
-import os
-import random
-import torch
-import config as cfg
 from utils.storage_utils import ExperimentLogger
 
 
-@register_controller
-class BaseController():  # currently implemented as (i)AC
+class BaseController(object):  # currently implemented as (i)AC
     def __init__(self, env_cfg, cfg):
         self.cfg = cfg
         self.env_cfg = env_cfg
@@ -111,5 +104,5 @@ class BaseController():  # currently implemented as (i)AC
 
 @register_controller
 class IACController(BaseController):
-    def __init__(self, env, agent):
-        super(IACController, self).__init__(env, agent)
+    def __init__(self, env_cfg, cfg):
+        super().__init__(env_cfg, cfg)

@@ -12,13 +12,13 @@ import os
 import random
 import torch
 
-
 with open('config.yaml') as f:
     cfg = yaml.load(f, Loader=yaml.FullLoader)
 
+
 def train(algorithm, env_namespace):
-    env_cfg = cfg[env_namespace]
-    trainer = CONTROLLER_REGISTERY[cfg[algorithm]](env_cfg, cfg)
+    env_cfg = cfg['env'][env_namespace]
+    trainer = CONTROLLER_REGISTERY[cfg['agents'][algorithm]['controller_name']](env_cfg, cfg)
     trainer.teach_agents(cfg['training'])
 
 
