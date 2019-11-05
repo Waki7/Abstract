@@ -2,17 +2,19 @@ import gym_life.envs.life_channels as ch
 import numpy as np
 from typing import Union
 from utils.TimeBuffer import TimeBuffer
-import config as cfg
 import gym
 from gym import spaces
 import logging
 from utils.model_utils import true_with_probability
 
 class LifeEnv(gym.Env):
-    def __init__(self):
+    def __init__(self, cfg):
         '''
         This environment is a continuous task (non episodic)
         '''
+        self.cfg = cfg
+        self.aux_rewards = self.cfg.get('aux_rewards')
+
         self.is_episodic = False
         self.hunger_threshold = 15
         self.thirst_threshold = 5
@@ -122,7 +124,7 @@ class LifeEnv(gym.Env):
 
     def calc_reward(self):
         # todo vectorize a state and calculate similarity to add some reward to it
-        return sum([cfg.adjacent_reward_list[feeling.value] for feeling in self.state_map[ch.Feel]])
+        return sum([self.aux_rewards[feeling.value] for feeling in self.state_map[ch.Feel]])
 
     def feed_agent(self, giver):
         self.state_map[ch.Feel].append(ch.Feel.fed)

@@ -18,6 +18,9 @@ agents:
     controller_name: IACController
     agent_name: A2C
     ac_network: ACNetwork
+    ac:
+      lr: .01
+
 
 training:
   timeout: 2000 #
