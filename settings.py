@@ -22,3 +22,5 @@ def save_grad(name):
 
     return hook
 
+class defaults:
+    MODEL_SIZE = 32

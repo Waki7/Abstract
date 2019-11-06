@@ -1,4 +1,4 @@
-from agent_algorithms.factory import register_algorithm
+from agent_algorithms.factory import register_agent
 
 
 

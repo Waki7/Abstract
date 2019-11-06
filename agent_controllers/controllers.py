@@ -18,9 +18,8 @@ class BaseController:  # currently implemented as (i)AC
         self.ac_name = cfg.get('ac_network', None)
         self.actor_name = cfg.get('actor_network', None)
         self.critic_name = cfg.get('critic_network', None)
-        self.ac_cfg = self.cfg.get('ac', None)
-        self.actor_cfg = self.cfg.get('actor', None)
-        self.critic_cfg = self.cfg.get('critic', None)
+        self.actor_cfg = self.cfg['actor']
+        self.critic_cfg = self.cfg['critic']
         self.env = gym.make(env_cfg['name'])
         self.agent_keys = self.env.agent_keys if hasattr(self.env, 'agent_keys') else None
         self.n_agents = 1 if self.agent_keys is None else len(self.agent_keys)
@@ -50,7 +49,8 @@ class BaseController:  # currently implemented as (i)AC
                 ac_network = NETWORK_REGISTERY[self.ac_name](n_features,
                                                              n_actions,
                                                              critic_estimates,
-                                                             self.ac_cfg)
+                                                             self.actor_cfg,
+                                                             self.critic_cfg)
                 actor_network = ac_network.actor
                 critic_network = ac_network.critic
             else:
@@ -60,8 +60,7 @@ class BaseController:  # currently implemented as (i)AC
                 critic_network = NETWORK_REGISTERY[self.critic_name](n_features,
                                                                      critic_estimates,
                                                                      self.critic_cfg)
-            agent = AGENT_REGISTRY[self.agent_name](self.env,
-                                                    actor_network,
+            agent = AGENT_REGISTRY[self.agent_name](actor_network,
                                                     critic_network,
                                                     self.is_episodic,
                                                     self.cfg)
@@ -118,4 +117,4 @@ class BaseController:  # currently implemented as (i)AC
 @register_controller
 class IACController(BaseController):
     def __init__(self, env_cfg, cfg):
-        super().__init__(env_cfg, cfg)
+        super(IACController, self).__init__(env_cfg, cfg)

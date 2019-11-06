@@ -1,4 +1,4 @@
-from agent_algorithms.factory import register_algorithm
+from agent_algorithms.factory import register_agent
 import sys
 import matplotlib.pyplot as plt
 from utils.TimeBuffer import TimeBuffer
@@ -11,7 +11,7 @@ else:
 type = torch.float
 args = {'device': device, 'dtype': type}
 
-@register_algorithm
+@register_agent
 class PGAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate

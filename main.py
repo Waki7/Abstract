@@ -24,8 +24,9 @@ def train(algorithm, env_namespace):
 
 
 def main():
-    train('a2c', 'cart')
+    print(ActorFCNetwork)
 
+    train('a2c', 'cart')
 
 if __name__ == "__main__":
     main()

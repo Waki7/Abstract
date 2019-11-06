@@ -16,11 +16,14 @@ agents:
 
   a2c:
     controller_name: IACController
-    agent_name: A2C
+    agent_name: A2CAgent
     ac_network: ACNetwork
-    ac:
+    actor:
       lr: .01
-
+      model_size: 32
+    critic:
+      lr: .01
+      model_size: 32
 
 training:
   timeout: 2000 #

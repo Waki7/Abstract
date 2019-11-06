@@ -1,4 +1,6 @@
 NETWORK_REGISTERY = {}
 
-def register_network(controller):
-    NETWORK_REGISTERY[controller.__name__] = controller
+
+def register_network(network):
+    NETWORK_REGISTERY[network.__name__] = network
+    return network

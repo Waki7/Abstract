@@ -1,4 +1,4 @@
-from agent_algorithms.factory import register_algorithm
+from agent_algorithms.factory import register_agent
 import numpy as np
 import torch
 import torch.nn as nn
@@ -15,7 +15,7 @@ def logLoss(output, target):
     loss = torch.sum(torch.log(output))
     return loss
 
-@register_algorithm
+@register_agent
 class CRAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # todo move cragent controller here, and move this stuff in life network

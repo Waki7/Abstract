@@ -1,4 +1,4 @@
-from agent_algorithms.factory import register_algorithm
+from agent_algorithms.factory import register_agent
 import sys
 import torch.nn.functional as F
 from utils.model_utils import true_with_probability
@@ -14,7 +14,7 @@ else:
 type = torch.float
 args = {'device': device, 'dtype': type}
 
-@register_algorithm
+@register_agent
 class A2CAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
