@@ -24,3 +24,6 @@ def save_grad(name):
 
 class defaults:
     MODEL_SIZE = 32
+    TD_STEP = 10
+    LR = .001
+    OPTIMIZER = 'Adam'

@@ -12,11 +12,12 @@ class BaseNetwork(nn.Module):
         super(BaseNetwork, self).__init__()
         self.cfg = cfg
         self.model_size = cfg.get('model_size', settings.defaults.MODEL_SIZE)
+        self.optimizer = None # call create_optimizer at end of your implementation's init
 
     def create_optimizer(self):
-        pass
-        # self.optim = getattr(torch.optim, self.cfg['optim'])(
-        #     list(critic.parameters()), lr=self.cfg['lr'])
+        lr = self.cfg.get('lr', settings.defaults.LR)
+        optimizer = self.cfg.get('optimizer', settings.defaults.OPTIMIZER)
+        self.optimizer = getattr(torch.optim, optimizer)(self.parameters(), lr=lr)
 
 
 @register_network
@@ -24,7 +25,7 @@ class ActorFCNetwork(BaseNetwork):
     def __init__(self, n_features, n_actions, cfg):
         super().__init__(cfg)
         self.linear1 = nn.Linear(n_features, self.model_size)
-        self.linear2 = nn.Linear(hidden_size, n_actions)
+        self.linear2 = nn.Linear(self.model_size, n_actions)
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
@@ -43,9 +44,8 @@ class ActorFCNetwork(BaseNetwork):
 class CriticFCNetwork(BaseNetwork):
     def __init__(self, n_features, critic_estimates, cfg):
         super().__init__(cfg)
-        hidden_size = cfg.gym.hidden_size
         self.linear1 = nn.Linear(n_features, self.model_size)
-        self.linear2 = nn.Linear(hidden_size, critic_estimates)
+        self.linear2 = nn.Linear(self.model_size, critic_estimates)
 
     def forward(self, x):
         x = F.relu(self.linear1(x))

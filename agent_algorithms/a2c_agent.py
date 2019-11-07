@@ -14,6 +14,7 @@ else:
 type = torch.float
 args = {'device': device, 'dtype': type}
 
+
 @register_agent
 class A2CAgent():
     # this agent can work with environments x, y, z (life and gym envs)
@@ -35,9 +36,7 @@ class A2CAgent():
         self.rewards = []
         self.value_estimates = []
         self.t = 0
-        self.continuous_episode_length = cfg.pg.CONTINUOUS_EPISODE_LENGTH
-        self.optimizer = getattr(torch.optim, cfg.gym.OPTIMIZER)(self.model.parameters(), lr=cfg.gym.LR)
-        self.writer = SummaryWriter()
+        self.continuous_episode_length = cfg.get('td_step', settings.defaults.TD_STEP)
 
     def step(self, env_input):
         action, log_prob, value_estimate = self.model.get_action(env_input)
@@ -57,13 +56,13 @@ class A2CAgent():
             discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
             Q_val = torch.tensor(discounted_rewards).to(**args)
-            Q_val = (Q_val - Q_val.mean()) / (Q_val.std() + 1e-9) # normalizing the advantage
+            Q_val = (Q_val - Q_val.mean()) / (Q_val.std() + 1e-9)  # normalizing the advantage
             V_estimate = torch.tensor(self.value_estimates).to(**args)
             advantage = Q_val - V_estimate
             log_prob = torch.stack(self.log_probs)
 
             actor_loss = (-log_prob * advantage.detach()).mean()
-            critic_loss = F.smooth_l1_loss(input=V_estimate, target=Q_val)#.5 * advantage.pow(2).mean()
+            critic_loss = F.smooth_l1_loss(input=V_estimate, target=Q_val)  # .5 * advantage.pow(2).mean()
             ac_loss = actor_loss + critic_loss
 
             self.optimizer.zero_grad()
@@ -74,7 +73,6 @@ class A2CAgent():
             self.t = 0
             self.rewards = []
             self.log_probs = []
-
 
     def should_update(self, episode_end, reward):
         if self.is_episodic:

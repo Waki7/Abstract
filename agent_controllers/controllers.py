@@ -66,7 +66,7 @@ class BaseController:  # currently implemented as (i)AC
                                                     self.cfg)
             agents.append(agent)
 
-        return self.cfg['agents']
+        return agents
 
     def teach_agents(self, training_cfg, experiment_folder=''):
         training = experiment_folder == ''
