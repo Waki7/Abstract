@@ -3,39 +3,52 @@ from datetime import datetime
 from tensorboardX import SummaryWriter
 import settings
 import logging
+import os
+import re
+
+
+def clean_experiment_folders():
+    experiment_folder = settings.LOG_DIR
+    for subdir, dirs, files in os.walk(experiment_folder):
+        for dir in dirs:
+            if re.match('\d\d\d\d-\d\d', dir):
+                print(dir)
 
 
 class ExperimentLogger():
     def __init__(self):
-        self.result_path = ''
+        self.results_path = ''
         self.writer = None
         self.progress_values = {}
 
-    def create_experiment(self, agent_name, env_name, directory=''):
-        if directory == '':
+    def create_experiment(self, agent_name, env_name, training_cfg, directory=''):
+        variation = training_cfg.get('variation', '')
+        training = directory == ''
+        if not training:
             # todo add a testing directory to this
-            self.result_path = directory
-
+            self.results_path = directory
         else:
-            self.writer = SummaryWriter(self.result_path)
             time = datetime.now()
-            env_id = (
-                self.env.unwrapped.spec.id if not hasattr(self.env, 'envs') else self.env.envs[0].unwrapped.spec.id)
-            results_path = '{}/{}/{}/{}'.format(settings.LOG_DIR, agent_name, env_name, time.strftime("%Y%%m%d_%H%M"))
-
+            self.results_path = '{}/{}/{}/{}{}'.format(settings.LOG_DIR, agent_name, env_name, variation,
+                                                       time.strftime("%Y_%m%d_%H%M"))
+            logging.info(self.results_path)
+            self.writer = SummaryWriter(self.results_path)
+            # env.unwrapped.spec.id
 
     def log_progress(self, episode, step):
-        log_output = '\n'
-        log_output += "episode: {}, step: {}".format(episode, step)
+        log_output = "episode: {}, step: {}".format(episode, step)
 
         for key in self.progress_values.keys():
             log_output += 'average_{}: {}, total_{}: {}, '.format(key, np.round(np.mean(self.progress_values[key]),
                                                                                 decimals=3),
-                                                                  np.round(np.sum(self.progress_values[key]),
-                                                                           decimals=3))
+                                                                  key, np.round(np.sum(self.progress_values[key]),
+                                                                                decimals=3))
+        logging.info(log_output)
+        self.progress_values = {}  # reset progress buffer after every progress update
 
     def add_agent_scalars(self, label, val, track_locally=False):
-        val = val
+        if val is None:
+            return
         if isinstance(val, list):
             val = np.mean(val)
         if isinstance(val, dict):

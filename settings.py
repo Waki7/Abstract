@@ -27,3 +27,5 @@ class defaults:
     TD_STEP = 10
     LR = .001
     OPTIMIZER = 'Adam'
+    DISCOUNT_FACTOR = .99
+    ENTROPY_COEF = .05

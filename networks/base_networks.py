@@ -12,12 +12,17 @@ class BaseNetwork(nn.Module):
         super(BaseNetwork, self).__init__()
         self.cfg = cfg
         self.model_size = cfg.get('model_size', settings.defaults.MODEL_SIZE)
-        self.optimizer = None # call create_optimizer at end of your implementation's init
+        self.optimizer = None  # call create_optimizer at end of your implementation's init
 
     def create_optimizer(self):
         lr = self.cfg.get('lr', settings.defaults.LR)
         optimizer = self.cfg.get('optimizer', settings.defaults.OPTIMIZER)
         self.optimizer = getattr(torch.optim, optimizer)(self.parameters(), lr=lr)
+        self.to(settings.DEVICE)
+
+    def update_parameters(self):
+        self.optimizer.zero_grad()
+        self.optimizer.step()
 
 
 @register_network
@@ -54,9 +59,17 @@ class CriticFCNetwork(BaseNetwork):
 
 
 @register_network
-class ACNetwork:  # actor critic method, parameterized baseline estimate with network
-    def __init__(self, n_features, n_actions, critic_estimates, actor_cfg, critic_cfg):
-        self.actor = ActorFCNetwork(n_features, n_actions, actor_cfg)
-        self.critic = CriticFCNetwork(n_features, critic_estimates, critic_cfg)
-        self.actor = None
-        self.critic = None
+class ACNetwork(BaseNetwork):  # actor critic method, parameterized baseline estimate with network
+    def __init__(self, n_features, n_actions, critic_estimates, cfg):
+        super().__init__(cfg)
+        self.n_actions = n_actions
+        self.linear_shared = nn.Linear(n_features, self.model_size)
+        self.linear_actor = nn.Linear(self.model_size, n_actions)
+        self.linear_critic = nn.Linear(self.model_size, critic_estimates)
+        super().create_optimizer()
+
+    def forward(self, x):
+        x = self.linear_shared(x)
+        actor_estimate = F.softmax(self.linear_actor(x), dim=-1)
+        critic_estimate = self.linear_critic(x)
+        return actor_estimate, critic_estimate

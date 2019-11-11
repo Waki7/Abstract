@@ -24,8 +24,10 @@ def train(algorithm, env_namespace):
 
 
 def main():
-    print(ActorFCNetwork)
-
+    logging.basicConfig(level=
+                        logging.INFO
+                        # logging.DEBUG
+                        )
     train('a2c', 'cart')
 
 if __name__ == "__main__":

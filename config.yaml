@@ -2,8 +2,6 @@ env:
   life:
     name: 'Life-v0'
     update_rate: 1
-    timeout: 1000
-    max_steps: 2000
 
   cart:
     name: 'CartPole-v0'
@@ -18,14 +16,17 @@ agents:
     controller_name: IACController
     agent_name: A2CAgent
     ac_network: ACNetwork
+    discount_factor: .9
+    entropy_coef: .05
     actor:
-      lr: .01
+      lr: .0001
       model_size: 32
     critic:
-      lr: .01
+      lr: .0001
       model_size: 32
 
 training:
-  timeout: 2000 #
-  max_steps: 2000 # steps in one episode before time out, unless not episodic
+  variation: ''
+  n_episodes: 2000 #
+  timeout: 2000 # steps in one episode before time out, unless not episodic
   eval_rewards_window: 20

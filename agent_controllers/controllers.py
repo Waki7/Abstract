@@ -18,8 +18,9 @@ class BaseController:  # currently implemented as (i)AC
         self.ac_name = cfg.get('ac_network', None)
         self.actor_name = cfg.get('actor_network', None)
         self.critic_name = cfg.get('critic_network', None)
-        self.actor_cfg = self.cfg['actor']
-        self.critic_cfg = self.cfg['critic']
+        self.ac_cfg = cfg.get('ac', cfg['actor'])
+        self.actor_cfg = self.ac_cfg
+        self.critic_cfg = cfg.get('critic', None)
         self.env = gym.make(env_cfg['name'])
         self.agent_keys = self.env.agent_keys if hasattr(self.env, 'agent_keys') else None
         self.n_agents = 1 if self.agent_keys is None else len(self.agent_keys)
@@ -49,10 +50,10 @@ class BaseController:  # currently implemented as (i)AC
                 ac_network = NETWORK_REGISTERY[self.ac_name](n_features,
                                                              n_actions,
                                                              critic_estimates,
-                                                             self.actor_cfg,
-                                                             self.critic_cfg)
-                actor_network = ac_network.actor
-                critic_network = ac_network.critic
+                                                             self.ac_cfg)
+                agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
+                                                        self.cfg,
+                                                        ac_network)
             else:
                 actor_network = NETWORK_REGISTERY[self.actor_name](n_features,
                                                                    n_actions,
@@ -60,24 +61,26 @@ class BaseController:  # currently implemented as (i)AC
                 critic_network = NETWORK_REGISTERY[self.critic_name](n_features,
                                                                      critic_estimates,
                                                                      self.critic_cfg)
-            agent = AGENT_REGISTRY[self.agent_name](actor_network,
-                                                    critic_network,
-                                                    self.is_episodic,
-                                                    self.cfg)
+                agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
+                                                        self.cfg,
+                                                        actor_network,
+                                                        critic_network)
             agents.append(agent)
 
         return agents
 
     def teach_agents(self, training_cfg, experiment_folder=''):
         training = experiment_folder == ''
-        max_episodes = cfg.experiment.MAX_EPISODES if self.is_episodic else 1
 
-        experiment_writer = self.experiment_logger.create_experiment(self.cfg['name'],
-                                                                     self.env_cfg['name'],
-                                                                     training_cfg,
-                                                                     training)  # this is a wraapper over summarywriter()
+        n_episodes = training_cfg['n_episodes']
+        timeout = training_cfg['timeout']
 
-        for episode in range(max_episodes):
+        self.experiment_logger.create_experiment(self.agent_name,
+                                                 self.env_cfg['name'],
+                                                 training_cfg,
+                                                 experiment_folder)  # this is a wraapper over summarywriter()
+
+        for episode in range(n_episodes):
             state = self.env.reset()
             step = 0
             while True:
@@ -85,13 +88,13 @@ class BaseController:  # currently implemented as (i)AC
                 state, reward, episode_end, info = self.env.step(actions)
                 losses = self.update_agents(reward, episode_end, state)
 
-                experiment_writer.add_scalar('losses', losses)
-                experiment_writer.add_scalar('reward', reward)
+                self.experiment_logger.add_agent_scalars('losses', losses, track_locally=True)
+                self.experiment_logger.add_agent_scalars('reward', reward, track_locally=True)
 
                 if (self.is_episodic and episode_end) or (not self.is_episodic and (step + 1) % self.log_freq == 0):
-                    experiment_writer.log_progress(episode, step)
+                    self.experiment_logger.log_progress(episode, step)
 
-                if step > training_cfg['timeout'] or (self.is_episodic and episode_end):
+                if step > timeout or (self.is_episodic and episode_end):
                     break
 
                 step += 1
