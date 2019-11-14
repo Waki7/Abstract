@@ -87,7 +87,7 @@ class A2CAgent():
             action_probs = torch.stack(self.action_probs)
 
             action_log_prob = torch.log(action_probs)
-            actor_loss = (-action_log_prob * advantage.detach()).sum()
+            actor_loss = (-action_log_prob * Q_val).sum()
 
             critic_loss = F.smooth_l1_loss(input=V_estimate, target=Q_val,
                                            reduction='sum')  # .5 * advantage.pow(2).mean()
@@ -96,8 +96,8 @@ class A2CAgent():
 
             ac_loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
 
-            ac_loss.backward()
-
+            # ac_loss.backward()
+            actor_loss.backward()
             ret_loss = ac_loss.detach().cpu().item()
 
             self.update_networks()

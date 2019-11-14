@@ -88,11 +88,12 @@ class BaseController:  # currently implemented as (i)AC
                 state, reward, episode_end, info = self.env.step(actions)
                 losses = self.update_agents(reward, episode_end, state)
 
-                self.experiment_logger.add_agent_scalars('losses', losses, track_locally=True)
-                self.experiment_logger.add_agent_scalars('reward', reward, track_locally=True)
+                self.experiment_logger.add_agent_scalars('losses', losses, track_mean=True)
+                self.experiment_logger.add_agent_scalars('reward', reward, track_mean=True, track_sum=True, log=True)
 
                 if (self.is_episodic and episode_end) or (not self.is_episodic and (step + 1) % self.log_freq == 0):
                     self.experiment_logger.log_progress(episode, step)
+                    self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
 
                 if step > timeout or (self.is_episodic and episode_end):
                     break

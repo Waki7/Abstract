@@ -22,7 +22,7 @@ agents:
       lr: .0001
       model_size: 32
     critic:
-      lr: .0001
+      lr: .001
       model_size: 32
 
 training:

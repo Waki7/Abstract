@@ -21,8 +21,8 @@ class BaseNetwork(nn.Module):
         self.to(settings.DEVICE)
 
     def update_parameters(self):
-        self.optimizer.zero_grad()
         self.optimizer.step()
+        self.optimizer.zero_grad()
 
 
 @register_network
@@ -31,6 +31,7 @@ class ActorFCNetwork(BaseNetwork):
         super().__init__(cfg)
         self.linear1 = nn.Linear(n_features, self.model_size)
         self.linear2 = nn.Linear(self.model_size, n_actions)
+        self.create_optimizer()
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
