@@ -15,15 +15,16 @@ agents:
   a2c:
     controller_name: IACController
     agent_name: A2CAgent
-    ac_network: ACNetwork
-    discount_factor: .9
+    actor_network: ActorFCNetwork
+    critic_network: CriticFCNetwork
+    discount_factor: .99
     entropy_coef: .05
     actor:
       lr: .0001
-      model_size: 32
+      model_size: 16
     critic:
-      lr: .001
-      model_size: 32
+      lr: .0001
+      model_size: 16
 
 training:
   variation: ''

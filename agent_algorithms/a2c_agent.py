@@ -22,6 +22,7 @@ class A2CAgent():
     # try to make the encoding part separate
     def __init__(self, is_episodic, cfg, actor, critic=None):
         self.is_ac_shared = critic is None
+        self.ac = None
         if self.is_ac_shared:
             self.ac = actor
             self.n_actions = self.ac.n_actions
@@ -50,12 +51,12 @@ class A2CAgent():
         self.t = 0
 
     def step(self, env_input):
-        env_input = torch.from_numpy(env_input).to(settings.DEVICE).float()
+        env_input = torch.from_numpy(env_input).to(settings.DEVICE).float().unsqueeze(0)
         if self.ac is not None:
             probs, estimates = self.ac.forward(env_input)
         else:
-            probs = self.actor.forward(env_input)
-            estimates = self.critic.forward(env_input)
+            probs = self.actor.forward(env_input).squeeze(0)
+            estimates = self.critic.forward(env_input).squeeze(0)
 
         self.probs.append(probs)
         self.value_estimates.append(estimates)
@@ -87,7 +88,7 @@ class A2CAgent():
             action_probs = torch.stack(self.action_probs)
 
             action_log_prob = torch.log(action_probs)
-            actor_loss = (-action_log_prob * Q_val).sum()
+            actor_loss = (-action_log_prob * advantage.detach()).sum()
 
             critic_loss = F.smooth_l1_loss(input=V_estimate, target=Q_val,
                                            reduction='sum')  # .5 * advantage.pow(2).mean()

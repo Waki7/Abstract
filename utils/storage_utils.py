@@ -75,11 +75,12 @@ class ExperimentLogger():
         if track_sum:
             self.progress_values_sum[label] = self.progress_values_sum.get(label, [])
             self.progress_values_sum[label].append(data)
-        if step == -1:
-            self.counts[label] = self.counts.get(label, 0)
-            self.counts[label] += 1
-            step = self.counts[label]
+
         if log:
+            if step == -1:
+                self.counts[label] = self.counts.get(label, 0)
+                self.counts[label] += 1
+                step = self.counts[label]
             self.writer.add_scalar(label, data, global_step=step)
 
     def checkpoint(self):

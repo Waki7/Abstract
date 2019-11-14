@@ -29,13 +29,14 @@ class BaseNetwork(nn.Module):
 class ActorFCNetwork(BaseNetwork):
     def __init__(self, n_features, n_actions, cfg):
         super().__init__(cfg)
+        self.n_actions = n_actions
         self.linear1 = nn.Linear(n_features, self.model_size)
         self.linear2 = nn.Linear(self.model_size, n_actions)
         self.create_optimizer()
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
-        x = F.softmax(self.linear2(x), dim=1)
+        x = F.softmax(self.linear2(x), dim=-1)
         return x
 
     def get_action(self, state):
@@ -52,10 +53,11 @@ class CriticFCNetwork(BaseNetwork):
         super().__init__(cfg)
         self.linear1 = nn.Linear(n_features, self.model_size)
         self.linear2 = nn.Linear(self.model_size, critic_estimates)
+        self.create_optimizer()
 
     def forward(self, x):
         x = F.relu(self.linear1(x))
-        x = F.softmax(self.linear2(x), dim=1)
+        x = self.linear2(x)
         return x
 
 
