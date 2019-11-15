@@ -75,11 +75,11 @@ class A2CAgent():
             discounted_rewards = [0]
             while self.rewards:
                 # latest reward + (future reward * gamma)
-                discounted_rewards.insert(0, self.rewards.pop() + (self.discount_factor * discounted_rewards[0]))
+                discounted_rewards.insert(0, self.rewards.pop(-1) + (self.discount_factor * discounted_rewards[0]))
             discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
-            Q_val = torch.tensor(discounted_rewards).to(**args).unsqueeze(-1)
-            V_estimate = torch.stack(self.value_estimates)
+            Q_val = torch.tensor(discounted_rewards).to(**args)
+            V_estimate = torch.cat(self.value_estimates, dim=0)
             advantage = Q_val - V_estimate
             if len(discounted_rewards) > 1:
                 advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
@@ -97,8 +97,7 @@ class A2CAgent():
 
             ac_loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
 
-            # ac_loss.backward()
-            actor_loss.backward()
+            ac_loss.backward()
             ret_loss = ac_loss.detach().cpu().item()
 
             self.update_networks()

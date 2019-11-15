@@ -28,7 +28,9 @@ def main():
                         logging.INFO
                         # logging.DEBUG
                         )
+    train('a2c', 'life')
     train('a2c', 'cart')
+    train('pg', 'cart')
 
 if __name__ == "__main__":
     main()

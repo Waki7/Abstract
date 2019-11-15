@@ -2,6 +2,7 @@ env:
   life:
     name: 'Life-v0'
     update_rate: 1
+    n_agents: 1
 
   cart:
     name: 'CartPole-v0'
@@ -20,11 +21,20 @@ agents:
     discount_factor: .99
     entropy_coef: .05
     actor:
-      lr: .0001
-      model_size: 16
+      lr: .01
+      model_size: 64
     critic:
-      lr: .0001
-      model_size: 16
+      lr: .01
+      model_size: 64
+  pg:
+    controller_name: PGController
+    agent_name: PGAgent
+    actor_network: ActorFCNetwork
+    discount_factor: .99
+    entropy_coef: .05
+    actor:
+      lr: .01
+      model_size: 64
 
 training:
   variation: ''

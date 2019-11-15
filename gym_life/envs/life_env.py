@@ -7,13 +7,24 @@ from gym import spaces
 import logging
 from utils.model_utils import true_with_probability
 
+
 class LifeEnv(gym.Env):
     def __init__(self, cfg):
         '''
         This environment is a continuous task (non episodic)
         '''
         self.cfg = cfg
-        self.aux_rewards = self.cfg.get('aux_rewards')
+
+        # ---------------------------------------------------------------------------
+        # set parameters from config
+        # ---------------------------------------------------------------------------
+        self.aux_rewards = self.cfg.get('aux_rewards', ch.REWARDS_FEELS)
+        self.n_agents = self.cfg.get('n_agents', 1)
+
+        # ---------------------------------------------------------------------------
+        # initializing agents according to arbitrary naming scheme
+        # ---------------------------------------------------------------------------
+        self.agent_keys = ['agent_{}'.format(i) for i in range(self.n_agents)]
 
         self.is_episodic = False
         self.hunger_threshold = 15
@@ -23,6 +34,22 @@ class LifeEnv(gym.Env):
         self.agent_action_channels = ch.AGENT_ACTION_CHANNELS
         self.action_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
         self.observation_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
+
+        # ---------------------------------------------------------------------------
+        # initializations
+        # ---------------------------------------------------------------------------
+        self.room1 = None
+        self.room2 = None
+        self.outside = None
+        self.mom = None
+        self.locations = None
+        self.current_location = None
+        self.state_map = None
+        self.state = None
+        self.t = 0
+        self.hunger_level = 0
+        self.thirst_level = 0
+        self.current_reward = 0
         self.reset()
 
     def reset(self):
@@ -45,7 +72,7 @@ class LifeEnv(gym.Env):
         self.state = ch.encode_from_map(self.state_map, ch.AGENT_STATE_CHANNELS)
         return self.state
 
-    def step(self, agent_action):
+    def step(self, agent_actions):
         """
         Args:
             action (object): an action done by the agent, encoded into its channel
@@ -56,9 +83,10 @@ class LifeEnv(gym.Env):
             done (bool): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
-
+        if not isinstance(agent_actions, dict):
+            agent_actions = dict(zip(self.agent_keys, agent_actions))
         agent_feel = []
-        agent_action_map = ch.decode_to_enum(agent_action, ch.AGENT_ACTION_CHANNELS)
+        agent_action_map = ch.decode_to_enum(agent_actions, ch.AGENT_ACTION_CHANNELS)
         self.print_summary(agent_action_map)
 
         previous_feel = self.state_map[ch.Feel]  # todo... proper history tracking

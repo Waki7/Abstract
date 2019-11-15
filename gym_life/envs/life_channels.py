@@ -76,6 +76,10 @@ class Feel(Enum):  # keep nothing as 0
     discomfort = 7
 
 
+REWARDS_FEELS = [0, .1, .1, -1, -1, 2.3, 0, -1]  # adjacent to Feels
+assert len(Feel) == len(REWARDS_FEELS)
+
+
 class Movement(Enum):
     nothing = 0
     move_room1 = 1
@@ -130,6 +134,7 @@ def encode_from_map(map, channels):
         channel_vals = map[channel]
         encoded_input.append(encode(channel_vals, channel))
     return np.concatenate(encoded_input, axis=0)
+
 
 def decode_to_enum(action, channels):
     index = 0

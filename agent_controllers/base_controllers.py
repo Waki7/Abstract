@@ -15,13 +15,10 @@ class BaseController:  # currently implemented as (i)AC
         ##########################################################################################
         self.log_freq = cfg.get('log_freq', 50)
         self.agent_name = cfg['agent_name']
-        self.ac_name = cfg.get('ac_network', None)
-        self.actor_name = cfg.get('actor_network', None)
-        self.critic_name = cfg.get('critic_network', None)
-        self.ac_cfg = cfg.get('ac', cfg['actor'])
-        self.actor_cfg = self.ac_cfg
-        self.critic_cfg = cfg.get('critic', None)
-        self.env = gym.make(env_cfg['name'])
+        if len(env_cfg) > 1:
+            self.env = gym.make(env_cfg['name'], cfg=env_cfg)
+        else:
+            self.env = gym.make(env_cfg['name'])
         self.agent_keys = self.env.agent_keys if hasattr(self.env, 'agent_keys') else None
         self.n_agents = 1 if self.agent_keys is None else len(self.agent_keys)
 
@@ -121,4 +118,39 @@ class BaseController:  # currently implemented as (i)AC
 @register_controller
 class IACController(BaseController):
     def __init__(self, env_cfg, cfg):
+        self.ac_name = cfg.get('ac_network', None)
+        self.actor_name = cfg.get('actor_network', None)
+        self.critic_name = cfg.get('critic_network', None)
+        self.ac_cfg = cfg.get('ac', cfg['actor'])
+        self.actor_cfg = self.ac_cfg
+        self.critic_cfg = cfg.get('critic', None)
         super(IACController, self).__init__(env_cfg, cfg)
+
+
+@register_controller
+class PGController(BaseController):
+    def __init__(self, env_cfg, cfg):
+        self.actor_name = cfg.get('actor_network', None)
+        self.actor_cfg = cfg['actor']
+        super(PGController, self).__init__(env_cfg, cfg)
+
+    def make_agents(self):
+        if isinstance(self.env.observation_space, gym.spaces.Box):
+            n_features = self.env.observation_space.shape[0]
+        else:
+            if isinstance(self.env.observation_space, gym.spaces.Discrete):
+                n_features = self.env.observation_space.n
+            else:
+                raise NotImplementedError
+        n_actions = self.env.action_space.n
+        agents = []
+        for i in range(0, self.n_agents):
+            actor_network = NETWORK_REGISTERY[self.actor_name](n_features,
+                                                            n_actions,
+                                                            self.actor_cfg)
+            agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
+                                                    self.cfg,
+                                                    actor_network)
+            agents.append(agent)
+
+        return agents
