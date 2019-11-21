@@ -40,7 +40,8 @@ class A2CAgent():
         self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
         logging.debug(' update_threshold : ', self.update_threshold)
         logging.debug(' td_step : ', self.td_step)
-        logging.debug(' disount_factor : ', self.discount_factor, '\n')
+        logging.debug(' discount_factor : ', self.discount_factor, '\n')
+        logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
 
         self.is_episodic = is_episodic
         self.reward = 0

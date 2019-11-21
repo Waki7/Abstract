@@ -5,7 +5,7 @@ import torch.nn as nn
 import sys
 import matplotlib.pyplot as plt
 import gym_life.envs.life_env as life_env
-import gym
+import logging
 from utils.TimeBuffer import TimeBuffer
 from tensorboardX import SummaryWriter
 import settings
@@ -36,6 +36,18 @@ class CRAgent():
         self.testing_rewards = TimeBuffer(cfg.rewards_eval_window)
         self.mean_testing_rewards = []
         self.t = 0
+
+        ##########################################################################################
+        # set cfg parameters
+        ##########################################################################################
+        self.update_threshold = cfg.get('update_threshold', -1)
+        self.td_step = cfg.get('td_step', -1)
+        self.discount_factor = cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
+        self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
+        logging.debug(' update_threshold : ', self.update_threshold)
+        logging.debug(' td_step : ', self.td_step)
+        logging.debug(' discount_factor : ', self.discount_factor, '\n')
+        logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
 
         getattr(torch.optim, cfg.life.OPTIMIZER)(self.model.parameters(), lr=cfg.life.LR)
         self.criterion = nn.MSELoss()
@@ -76,7 +88,7 @@ class CRAgent():
     def back_propagate(self):
         incremental_reward = 0
         while self.rewards:  # back prop through previous time steps
-            discounted_reward = cfg.discount_factor * incremental_reward
+            discounted_reward = self.discount_factor * incremental_reward
             curr_reward = self.rewards.pop() if self.rewards else 0
             output = self.outputs.pop()
             hidden_states = self.hidden_states.pop()
@@ -86,14 +98,13 @@ class CRAgent():
             loss = self.criterion(input=output, target=action)  # (f(s_t) - a_t)
             loss *= incremental_reward
             loss.backward(retain_graph=True)
-            if cfg.backprop_through_input:
+            if self.backprop_through_input:
                 if hidden_states[0] is None:
                     break
                 if hidden_states[
                     0].grad is not None:  # can't clear gradient if it hasn't been back propagated once through
                     hidden_states[0].grad.data.zero_()
                 curr_grad = hidden_states[0].grad
-                torch.nn.utils.clip_grad_value_(curr_grad, cfg.clip_value)
                 hidden_states[1].backward(curr_grad, retain_graph=True)
         assert self.rewards == []
 

@@ -1,6 +1,6 @@
 from agent_algorithms.cra_agent import *
 import logging
-import torch.utils.tensorboard
+import tensorboard
 from agent_controllers.factory import CONTROLLER_REGISTERY
 from networks.base_networks import *
 import agent_algorithms
@@ -28,7 +28,7 @@ def main():
                         logging.INFO
                         # logging.DEBUG
                         )
-    train('a2c', 'life')
+    # train('a2c', 'life')
     train('a2c', 'cart')
     train('pg', 'cart')
 

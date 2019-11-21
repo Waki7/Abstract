@@ -29,3 +29,4 @@ class defaults:
     OPTIMIZER = 'Adam'
     DISCOUNT_FACTOR = .99
     ENTROPY_COEF = .05
+    GRADIENT_CLIP = 2.0

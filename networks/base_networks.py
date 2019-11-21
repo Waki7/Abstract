@@ -5,13 +5,21 @@ import torch.nn.functional as F
 import numpy as np
 import settings
 import gym
-
+import logging
 
 class BaseNetwork(nn.Module):
     def __init__(self, cfg):
         super(BaseNetwork, self).__init__()
         self.cfg = cfg
+
+        ##########################################################################################
+        # set cfg parameters
+        ##########################################################################################
         self.model_size = cfg.get('model_size', settings.defaults.MODEL_SIZE)
+        self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
+        logging.debug(' model_size : ', self.model_size, '\n')
+        logging.debug(' gradient_clip : ', self.gradient_clip, '\n')
+
         self.optimizer = None  # call create_optimizer at end of your implementation's init
 
     def create_optimizer(self):
@@ -21,6 +29,7 @@ class BaseNetwork(nn.Module):
         self.to(settings.DEVICE)
 
     def update_parameters(self):
+        torch.nn.utils.clip_grad_value_(self.parameters(), self.gradient_clip)
         self.optimizer.step()
         self.optimizer.zero_grad()
 

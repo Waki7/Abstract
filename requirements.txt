@@ -1,0 +1,7 @@
+tensorboard
+gym
+torchvision
+scipy
+numpy
+tensorflow
+torch
