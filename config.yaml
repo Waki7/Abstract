@@ -14,8 +14,8 @@ agents:
   cra:
     controller_name: CRAController
     agent_name: CRAAgent
-    actor_network: ACNetwork
-    td_step: 10
+    actor_network: ACNetwork # ActorFCNetwork ACNetwork
+    td_step: -1
     supervised_loss: True
     discount: True
     actor:
@@ -27,6 +27,7 @@ agents:
     agent_name: CRAAgent
     actor_network: life_network
     td_step: 10
+
   a2c:
     controller_name: ACController
     agent_name: A2CAgent
@@ -54,6 +55,6 @@ agents:
 
 training:
   variation: ''
-  n_episodes: 2000 #
+  n_episodes: 500 #
   timeout: 2000 # steps in one episode before time out, unless not episodic
   eval_rewards_window: 20

@@ -59,7 +59,7 @@ class PGAgent():
             discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
             Q_val = torch.tensor(discounted_rewards).to(**args)
-            Q_val = (Q_val - Q_val.mean()) / (Q_val.std() + 1e-9)  # normalizing the advantage
+            Q_val = (Q_val - Q_val.mean()) / (Q_val.std() + 1e-9)
 
             action_probs = torch.stack(self.action_probs)
 

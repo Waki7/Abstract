@@ -149,9 +149,9 @@ class PGController(BaseController):
         n_actions = self.env.action_space.n
         agents = []
         for i in range(0, self.n_agents):
-            actor_network = get_network(key=self.ac_name,
+            actor_network = get_network(key=self.actor_name,
                                         out_shape=n_actions,
-                                        cfg=self.ac_cfg,
+                                        cfg=self.actor_cfg,
                                         n_features=n_features)
             agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
                                                     self.cfg,
