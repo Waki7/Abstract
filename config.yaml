@@ -7,14 +7,28 @@ env:
   cart:
     name: 'CartPole-v0'
 
+  beam:
+    name: 'BeamRider-v0'
+
 agents:
   cra:
-    controller_name: SingleAgentController
-    agent_name: CRA
-    ac_network: life_network
+    controller_name: CRAController
+    agent_name: CRAAgent
+    actor_network: ACNetwork
+    td_step: 10
+    supervised_loss: True
+    discount: True
+    actor:
+      lr: .01
+      model_size: 64
+
+  cra-life:
+    controller_name: CRAController
+    agent_name: CRAAgent
+    actor_network: life_network
     td_step: 10
   a2c:
-    controller_name: IACController
+    controller_name: ACController
     agent_name: A2CAgent
     actor_network: ActorFCNetwork
     critic_network: CriticFCNetwork

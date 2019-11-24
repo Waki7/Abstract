@@ -1,7 +1,7 @@
 from agent_controllers.factory import register_controller
 from networks.base_networks import *
 from agent_algorithms.factory import AGENT_REGISTRY
-from networks.factory import NETWORK_REGISTERY
+from networks.factory import get_network
 from utils.storage_utils import ExperimentLogger
 
 
@@ -44,20 +44,24 @@ class BaseController:  # currently implemented as (i)AC
         agents = []
         for i in range(0, self.n_agents):
             if self.ac_name is not None:
-                ac_network = NETWORK_REGISTERY[self.ac_name](n_features,
-                                                             n_actions,
-                                                             critic_estimates,
-                                                             self.ac_cfg)
+
+                ac_network = get_network(key=self.ac_name,
+                                         out_shape=n_actions,
+                                         out_shape2=critic_estimates,
+                                         cfg=self.ac_cfg,
+                                         n_features=n_features)
                 agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
                                                         self.cfg,
                                                         ac_network)
             else:
-                actor_network = NETWORK_REGISTERY[self.actor_name](n_features,
-                                                                   n_actions,
-                                                                   self.actor_cfg)
-                critic_network = NETWORK_REGISTERY[self.critic_name](n_features,
-                                                                     critic_estimates,
-                                                                     self.critic_cfg)
+                actor_network = get_network(key=self.actor_name,
+                                            out_shape=n_actions,
+                                            cfg=self.actor_cfg,
+                                            n_features=n_features)
+                critic_network = get_network(key=self.critic_name,
+                                             out_shape=critic_estimates,
+                                             cfg=self.critic_cfg,
+                                             n_features=n_features)
                 agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
                                                         self.cfg,
                                                         actor_network,
@@ -116,7 +120,7 @@ class BaseController:  # currently implemented as (i)AC
 
 
 @register_controller
-class IACController(BaseController):
+class ACController(BaseController):
     def __init__(self, env_cfg, cfg):
         self.ac_name = cfg.get('ac_network', None)
         self.actor_name = cfg.get('actor_network', None)
@@ -124,7 +128,7 @@ class IACController(BaseController):
         self.ac_cfg = cfg.get('ac', cfg['actor'])
         self.actor_cfg = self.ac_cfg
         self.critic_cfg = cfg.get('critic', None)
-        super(IACController, self).__init__(env_cfg, cfg)
+        super(ACController, self).__init__(env_cfg, cfg)
 
 
 @register_controller
@@ -145,9 +149,10 @@ class PGController(BaseController):
         n_actions = self.env.action_space.n
         agents = []
         for i in range(0, self.n_agents):
-            actor_network = NETWORK_REGISTERY[self.actor_name](n_features,
-                                                            n_actions,
-                                                            self.actor_cfg)
+            actor_network = get_network(key=self.ac_name,
+                                        out_shape=n_actions,
+                                        cfg=self.ac_cfg,
+                                        n_features=n_features)
             agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
                                                     self.cfg,
                                                     actor_network)

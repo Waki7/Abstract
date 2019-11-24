@@ -106,3 +106,44 @@ class LifeNetwork(nn.Module):
         #     if cfg.self_reward_update:
         #         self.aux_reward += cfg.reward_prediction_discount * cfg.adjacent_reward_list[self.pred_feel_val.value]
         # return self.aux_reward
+
+class life_rnn():
+    def __init__(self):
+        self.initial_state = torch.zeros((1, self.model.hidden_in_size), **settings.ARGS)
+        self.hidden_states = [(None, self.initial_state)]
+        optim = getattr(torch.optim, cfg.life.OPTIMIZER)(self.model.parameters(), lr=cfg.life.LR)
+
+
+    def back_propagate(self):
+        incremental_reward = 0
+        while self.rewards:  # back prop through previous time steps
+            discounted_reward = self.discount_factor * incremental_reward
+            curr_reward = self.rewards.pop() if self.rewards else 0
+            output = self.outputs.pop()
+            hidden_states = self.hidden_states.pop()
+            action = self.actions.pop()
+
+            incremental_reward = curr_reward + discounted_reward
+            loss = self.criterion(input=output, target=action)  # (f(s_t) - a_t)
+            loss *= incremental_reward
+            loss.backward(retain_graph=True)
+            if self.backprop_through_input:
+                if hidden_states[0] is None:
+                    break
+                if hidden_states[
+                    0].grad is not None:  # can't clear gradient if it hasn't been back propagated once through
+                    hidden_states[0].grad.data.zero_()
+                curr_grad = hidden_states[0].grad
+                hidden_states[1].backward(curr_grad, retain_graph=True)
+        assert self.rewards == []
+
+    def forward(self, env_input):
+        hidden_input = self.hidden_states[-1][1].detach()
+        hidden_input.requires_grad = True
+        output, hidden_output = self.model.forward(env_input, hidden_input)
+        action = torch.argmax(output)  # WHERE THE FUCK DO WE STORE THIS WHOLE SPECIFIC TO THE ENVIRONMENT BULLSHIT
+        # action = self.model.get_action_vector(output)
+        self.outputs.append(output)
+        self.hidden_states.append((hidden_input, hidden_output))
+        return action
+

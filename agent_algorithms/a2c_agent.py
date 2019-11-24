@@ -52,6 +52,7 @@ class A2CAgent():
         self.t = 0
 
     def step(self, env_input):
+
         env_input = torch.from_numpy(env_input).to(settings.DEVICE).float().unsqueeze(0)
         if self.ac is not None:
             probs, estimates = self.ac.forward(env_input)

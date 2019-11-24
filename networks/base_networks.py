@@ -36,11 +36,11 @@ class BaseNetwork(nn.Module):
 
 @register_network
 class ActorFCNetwork(BaseNetwork):
-    def __init__(self, n_features, n_actions, cfg):
+    def __init__(self, out_shape, cfg, n_features = 0, **kwargs):
         super().__init__(cfg)
-        self.n_actions = n_actions
+        self.n_actions = out_shape
         self.linear1 = nn.Linear(n_features, self.model_size)
-        self.linear2 = nn.Linear(self.model_size, n_actions)
+        self.linear2 = nn.Linear(self.model_size, out_shape)
         self.create_optimizer()
 
     def forward(self, x):
@@ -58,10 +58,10 @@ class ActorFCNetwork(BaseNetwork):
 
 @register_network
 class CriticFCNetwork(BaseNetwork):
-    def __init__(self, n_features, critic_estimates, cfg):
+    def __init__(self, out_shape, cfg, n_features, **kwargs):
         super().__init__(cfg)
         self.linear1 = nn.Linear(n_features, self.model_size)
-        self.linear2 = nn.Linear(self.model_size, critic_estimates)
+        self.linear2 = nn.Linear(self.model_size, out_shape)
         self.create_optimizer()
 
     def forward(self, x):
@@ -69,11 +69,12 @@ class CriticFCNetwork(BaseNetwork):
         x = self.linear2(x)
         return x
 
-
 @register_network
 class ACNetwork(BaseNetwork):  # actor critic method, parameterized baseline estimate with network
-    def __init__(self, n_features, n_actions, critic_estimates, cfg):
+    def __init__(self, n_features, out_shape, out_shape2, cfg, **kwargs):
         super().__init__(cfg)
+        n_actions = out_shape
+        critic_estimates = out_shape2
         self.n_actions = n_actions
         self.linear_shared = nn.Linear(n_features, self.model_size)
         self.linear_actor = nn.Linear(self.model_size, n_actions)
@@ -85,3 +86,5 @@ class ACNetwork(BaseNetwork):  # actor critic method, parameterized baseline est
         actor_estimate = F.softmax(self.linear_actor(x), dim=-1)
         critic_estimate = self.linear_critic(x)
         return actor_estimate, critic_estimate
+
+

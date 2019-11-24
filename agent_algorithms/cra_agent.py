@@ -3,11 +3,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 import sys
-import matplotlib.pyplot as plt
-import gym_life.envs.life_env as life_env
+import utils.model_utils as model_utils
 import logging
-from utils.TimeBuffer import TimeBuffer
-from tensorboardX import SummaryWriter
 import settings
 
 
@@ -15,26 +12,23 @@ def logLoss(output, target):
     loss = torch.sum(torch.log(output))
     return loss
 
+
 @register_agent
-class CRAgent():
+class CRAAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate
-    def __init__(self, actor, critic, is_episodic, cfg):
+    def __init__(self, is_episodic, actor, cfg):
         self.actor = actor
-        self.critic = critic
 
         self.pred_val, self.pred_feel_val = None, None
         self.reward = 0
 
-        self.initial_state = torch.zeros((1, self.model.hidden_in_size), **settings.ARGS)
-        self.hidden_states = [(None, self.initial_state)]
         self.outputs = []
         self.rewards = []
-        self.actions = []
+        self.aux_rewards = []
+        self.action_probs = []
 
-        self.testing_rewards = TimeBuffer(cfg.rewards_eval_window)
-        self.mean_testing_rewards = []
         self.t = 0
 
         ##########################################################################################
@@ -44,77 +38,59 @@ class CRAgent():
         self.td_step = cfg.get('td_step', -1)
         self.discount_factor = cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
         self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
+        self.reward_update_min = cfg.get('reward_update_min', 0.0)
         logging.debug(' update_threshold : ', self.update_threshold)
         logging.debug(' td_step : ', self.td_step)
         logging.debug(' discount_factor : ', self.discount_factor, '\n')
         logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
+        logging.debug(' reward_update_min : ', self.reward_update_min, '\n')
 
-        getattr(torch.optim, cfg.life.OPTIMIZER)(self.model.parameters(), lr=cfg.life.LR)
         self.criterion = nn.MSELoss()
 
-        self.is_life_env = isinstance(self.env, life_env.LifeEnv)
-
-        self.writer = SummaryWriter()
-
     def step(self, env_input):
-        action, self.aux_reward = self.forward(env_input)
-        self.actions.append(action)
+        env_input = model_utils.convert_env_input(env_input)
+        action, aux_reward = self.actor.forward(env_input)
+        self.action_probs.append(action)
+        self.aux_rewards.append(aux_reward)
+        action_taken = torch.argmax(action, dim=-1)
         self.t += 1
-        return action
+        return action_taken.item()
 
-    def update_policy(self, env_reward, episode_end=True):
-        self.env_reward = env_reward
-        if self.t > 0:
-            env_reward, aux_reward = self.calc_aux_reward()
-            reward = env_reward + aux_reward
-            self.store_results(env_reward)
-            self.rewards.append(reward)
-            if self.should_update_weights(reward, episode_end):
-                self.back_propagate()
-                self.model.opt.step()
-                self.model.opt.zero_grad()
-                self.t = 0
+    def update_policy(self, env_reward, episode_end=True, new_state=None):
+        self.rewards.append(env_reward)
+        latest_reward = env_reward + self.aux_rewards[-1]
+        should_update = self.should_update_weights(latest_reward, episode_end)
+        if should_update:
+            discounted_rewards = [0]
+            while self.rewards:
+                # latest reward + (future reward * gamma)
+                reward = self.rewards.pop(-1) + self.aux_rewards.pop(-1)
+                discounted_rewards.insert(0, reward + (self.discount_factor * discounted_rewards[0]))
+            discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
-    def forward(self, env_input):
-        hidden_input = self.hidden_states[-1][1].detach()
-        hidden_input.requires_grad = True
-        output, hidden_output = self.model.forward(env_input, hidden_input)
-        action = torch.argmax(output) # WHERE THE FUCK DO WE STORE THIS WHOLE SPECIFIC TO THE ENVIRONMENT BULLSHIT
-        # action = self.model.get_action_vector(output)
-        self.outputs.append(output)
-        self.hidden_states.append((hidden_input, hidden_output))
-        return action
+            reward_vector = torch.tensor(discounted_rewards).to(settings.DEVICE)
 
-    def back_propagate(self):
-        incremental_reward = 0
-        while self.rewards:  # back prop through previous time steps
-            discounted_reward = self.discount_factor * incremental_reward
-            curr_reward = self.rewards.pop() if self.rewards else 0
-            output = self.outputs.pop()
-            hidden_states = self.hidden_states.pop()
-            action = self.actions.pop()
+            action_prob_vector = torch.stack(self.action_probs)
+            one_hot = model_utils.one_hot(action_prob_vector)
 
-            incremental_reward = curr_reward + discounted_reward
-            loss = self.criterion(input=output, target=action)  # (f(s_t) - a_t)
-            loss *= incremental_reward
-            loss.backward(retain_graph=True)
-            if self.backprop_through_input:
-                if hidden_states[0] is None:
-                    break
-                if hidden_states[
-                    0].grad is not None:  # can't clear gradient if it hasn't been back propagated once through
-                    hidden_states[0].grad.data.zero_()
-                curr_grad = hidden_states[0].grad
-                hidden_states[1].backward(curr_grad, retain_graph=True)
-        assert self.rewards == []
+
+            loss = self.criterion(input=action_prob_vector, target=one_hot)
+            loss = reward_vector * loss
+            loss.backward()
+
+            self.actor.update_parameters()
+            self.reset_buffers()
 
     def should_update_weights(self, reward, is_episode_done):
-        if np.abs(reward) > cfg.reward_update_min and is_episode_done:
+        if torch.abs(reward) > self.reward_update_min or is_episode_done:
             return True
         return False
 
-    def calc_aux_reward(self):
-        return self.aux_reward
+    def reset_buffers(self):
+        self.outputs = []
+        self.rewards = []
+        self.aux_rewards = []
+        self.action_probs = []
 
     def get_focus(self):
         return self.pred_val  # need to make a difference if to self or to environment
@@ -135,15 +111,3 @@ class CRAgent():
         writer.write('\n\n full reward is: ' + str(self.reward))
         writer.write('\n')
         writer.flush()
-
-    def store_results(self, reward):
-        self.testing_rewards.insert(self.t, reward)
-        if not self.t % cfg.rewards_eval_window:
-            self.mean_testing_rewards.append(np.average(self.testing_rewards.getData()))
-
-    def plot_results(self):
-        if cfg.results_path is not None:
-            print(self.mean_testing_rewards)
-            print(cfg.results_path)
-            plt.plot(self.mean_testing_rewards)
-            plt.savefig(cfg.results_path + 'averageRewards.png')
