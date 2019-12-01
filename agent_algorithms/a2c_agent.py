@@ -1,12 +1,6 @@
-import logging
+import utils.model_utils as model_utils
 from agent_algorithms.factory import register_agent
-import sys
-import torch.nn.functional as F
-from utils.model_utils import true_with_probability
-import matplotlib.pyplot as plt
-from utils.TimeBuffer import TimeBuffer
 from networks.base_networks import *
-from tensorboardX import SummaryWriter
 
 if torch.cuda.is_available():
     device = torch.device('cuda')
@@ -52,8 +46,7 @@ class A2CAgent():
         self.t = 0
 
     def step(self, env_input):
-
-        env_input = torch.from_numpy(env_input).to(settings.DEVICE).float().unsqueeze(0)
+        env_input = model_utils.convert_env_input(env_input)
         if self.ac is not None:
             probs, estimates = self.ac.forward(env_input)
         else:
@@ -103,9 +96,8 @@ class A2CAgent():
             ret_loss = ac_loss.detach().cpu().item()
 
             self.update_networks()
-
-        if should_update:
             self.reset_buffers()
+
         return ret_loss
 
     def update_networks(self):

@@ -1,15 +1,19 @@
-from agent_controllers.factory import register_controller
-from networks.base_networks import *
+import gym
+
 from agent_algorithms.factory import AGENT_REGISTRY
-from networks.factory import get_network
 from agent_controllers.base_controllers import BaseController
+from agent_controllers.factory import register_controller
+from networks.factory import get_network
 
 
 @register_controller
 class CRAController(BaseController):
     def __init__(self, env_cfg, cfg):
         self.actor_name = cfg.get('actor_network')
-        self.actor_cfg = cfg.get('actor')
+        self.actor_cfg = cfg.get('actor_cfg')
+        self.critic_name = cfg.get('critic_network')
+        self.critic_cfg = cfg.get('critic_cfg', self.actor_cfg)
+        self.share_parameters = self.critic_name == None
         super(CRAController, self).__init__(env_cfg, cfg)
 
     def make_agents(self):
@@ -22,16 +26,38 @@ class CRAController(BaseController):
                 raise NotImplementedError
         n_actions = self.env.action_space.n
         critic_estimates = 1
+        aux_estimates = 1
         agents = []
         for i in range(0, self.n_agents):
-            ac_network = get_network(key=self.actor_name,
-                                     out_shape=n_actions,
-                                     out_shape2=critic_estimates,
-                                     cfg=self.actor_cfg,
-                                     n_features=n_features)
+            if self.share_parameters:
+                ac_network = get_network(key=self.actor_name,
+                                         out_shape=n_actions,
+                                         out_shape2=critic_estimates,
+                                         out_shape3=aux_estimates,
+                                         cfg=self.actor_cfg,
+                                         n_features=n_features)
 
-            agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
-                                                    ac_network, self.cfg)
+                agent = AGENT_REGISTRY[self.agent_name](is_episodic=self.is_episodic,
+                                                        actor=ac_network,
+                                                        cfg=self.cfg)
+            else:
+
+                actor_network = get_network(key=self.actor_name,
+                                            out_shape=n_actions,
+                                            cfg=self.actor_cfg,
+                                            n_features=n_features)
+
+                critic_network = get_network(key=self.critic_name,
+                                             out_shape=critic_estimates,
+                                             out_shape2=aux_estimates,
+                                             cfg=self.critic_cfg,
+                                             n_features=n_features)
+
+                agent = AGENT_REGISTRY[self.agent_name](is_episodic=
+                                                        self.is_episodic,
+                                                        actor=actor_network,
+                                                        critic=critic_network,
+                                                        cfg=self.cfg)
             agents.append(agent)
 
         return agents

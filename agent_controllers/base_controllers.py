@@ -3,7 +3,7 @@ from networks.base_networks import *
 from agent_algorithms.factory import AGENT_REGISTRY
 from networks.factory import get_network
 from utils.storage_utils import ExperimentLogger
-
+import gym
 
 class BaseController:  # currently implemented as (i)AC
     def __init__(self, env_cfg, cfg):

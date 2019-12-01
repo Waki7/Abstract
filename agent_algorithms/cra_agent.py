@@ -1,12 +1,13 @@
-from agent_algorithms.factory import register_agent
+import logging
+import sys
+
 import numpy as np
 import torch
 import torch.nn.functional as F
-import torch.nn as nn
-import sys
-import utils.model_utils as model_utils
-import logging
+
 import settings
+import utils.model_utils as model_utils
+from agent_algorithms.factory import register_agent
 
 
 def logLoss(output, target):
@@ -19,18 +20,25 @@ class CRAAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate
-    def __init__(self, is_episodic, actor, cfg):
-        self.actor = actor
-        self.n_actions = self.actor.n_actions
+    def __init__(self, is_episodic, cfg, actor, critic=None):
+        self.is_ac_shared = critic is None
+        self.ac = None
+        if self.is_ac_shared:
+            self.ac = actor
+            self.n_actions = self.ac.n_actions
+        else:
+            self.actor = actor
+            self.n_actions = self.actor.n_actions
+            self.critic = critic
 
         self.pred_val, self.pred_feel_val = None, None
         self.reward = 0
 
         self.outputs = []
         self.rewards = []
-        self.aux_rewards = []
+        self.value_estimates = []
+        self.aux_estimates = []
         self.action_probs = []
-        self.actions_taken = []
         self.action_taken_probs = []
 
         self.t = 0
@@ -42,63 +50,79 @@ class CRAAgent():
         self.td_step = cfg.get('td_step', -1)
         self.discount_factor = cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
         self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
-        self.supervised_loss = cfg.get('supervised_loss', False)
+        self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
+
         logging.debug(' update_threshold : ', self.update_threshold)
         logging.debug(' td_step : ', self.td_step)
         logging.debug(' discount_factor : ', self.discount_factor, '\n')
         logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
-        logging.debug(' supervised_loss : ', self.supervised_loss, '\n')
 
     def step(self, env_input):
         env_input = model_utils.convert_env_input(env_input)
-        action_probs, aux_reward = self.actor.forward(env_input)
-        action_probs = action_probs.squeeze(0)
-        # aux_reward = aux_reward.squeeze(0)
-        # self.aux_rewards.append(aux_reward)
-        action = np.random.choice(self.n_actions, p=action_probs.detach().cpu().numpy())
-        self.action_probs.append(action_probs)
-        self.actions_taken.append(action)
-        self.action_taken_probs.append(action_probs[action])
+        if self.ac is not None:
+            action_probs, critic_estimates, aux_estimates = self.ac.forward(env_input)
+        else:
+            action_probs = self.actor.forward(env_input)
+            critic_estimates, aux_estimates = self.critic.forward(env_input)
+
+        self.action_probs.append(action_probs.squeeze(0))
+        self.value_estimates.append(critic_estimates.squeeze(0))
+        self.aux_estimates.append(aux_estimates.squeeze(0))
+
+        action = np.random.choice(self.n_actions, p=self.action_probs[-1].detach().cpu().numpy())
+        self.action_taken_probs.append(self.action_probs[-1][action])
+
         self.t += 1
         return action
 
     def update_policy(self, env_reward, episode_end=True, new_state=None):
+        ret_loss = 0
         self.rewards.append(env_reward)
-        latest_reward = env_reward #+ self.aux_rewards[-1]
+        latest_reward = env_reward  # + self.aux_rewards[-1]
         should_update = self.should_update(episode_end, latest_reward)
         if should_update:
-            discounted_rewards = [0]
+            V_target = [0]
             # rewards = torch.tensor(self.rewards).to(settings.DEVICE)
             # aux_rewards = torch.tensor(self.aux_rewards).to(settings.DEVICE)
-
             while self.rewards:
                 # latest reward + (future reward * gamma)
-                reward = self.rewards.pop(-1) #+ self.aux_rewards.pop(-1)
-                discounted_rewards.insert(0, reward + (self.discount_factor * discounted_rewards[0]))
+                reward = self.rewards.pop(-1)  # + self.aux_rewards.pop(-1)
+                V_target.insert(0, reward + (self.discount_factor * V_target[0]))
                 # discounted_rewards.insert(0, reward)
-            discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
+            V_target.pop(-1)  # remove the extra 0 placed before the loop
 
-            discounted_rewards = torch.tensor(discounted_rewards).to(settings.DEVICE)
-            discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / (discounted_rewards.std() + 1e-9)
+            V_target = torch.tensor(V_target).to(settings.DEVICE)
+            V_estimate = torch.cat(self.value_estimates, dim=0)
 
-            if self.supervised_loss:
-                action_prob_vector = torch.stack(self.action_probs)
-                idx_vector = torch.tensor(self.actions_taken).to(settings.DEVICE).unsqueeze(-1)
-                one_hot = model_utils.one_hot(action_prob_vector,
-                                              idx=idx_vector)
-                # loss = F.smooth_l1_loss(input=action_prob_vector, target=one_hot)
-                loss = (action_prob_vector - one_hot).pow(2).sum(dim=-1)
-                loss = (discounted_rewards * loss).sum()
-                # loss += F.smooth_l1_loss(input=aux_rewards, target=discounted_rewards)
-            else:
-                taken_action_prob_vector = torch.stack(self.action_taken_probs)
-                action_log_prob = torch.log(taken_action_prob_vector)
-                loss = (-action_log_prob * discounted_rewards).sum()
+            advantage = V_target - V_estimate
+            if V_target.shape[0] > 1:
+                advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
 
+            action_prob_vector = torch.stack(self.action_probs)
+            taken_action_probs_vector = torch.stack(self.action_taken_probs)
+
+            action_log_prob = torch.log(taken_action_probs_vector)
+            actor_loss = (-action_log_prob * advantage.detach()).sum()
+            entropy_loss = (torch.log(action_prob_vector) * action_prob_vector).sum()
+
+            critic_loss = F.smooth_l1_loss(input=V_estimate, target=V_target,
+                                           reduction='sum')  # .5 * advantage.pow(2).mean()
+            print(actor_loss)
+            print(critic_loss)
+            loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
             loss.backward()
-
-            self.actor.update_parameters()
+            ret_loss = loss.detach().cpu().item()
+            self.update_networks()
             self.reset_buffers()
+        return ret_loss
+
+    def update_networks(self):
+        if self.is_ac_shared:
+            self.ac.update_parameters()
+        else:
+            self.actor.update_parameters()
+            self.critic.update_parameters()
+
 
     def should_update(self, episode_end, reward):
         steps_since_update = len(self.rewards) + 1
@@ -110,9 +134,9 @@ class CRAAgent():
     def reset_buffers(self):
         self.outputs = []
         self.rewards = []
-        self.aux_rewards = []
+        self.value_estimates = []
+        self.aux_estimates = []
         self.action_probs = []
-        self.actions_taken = []
         self.action_taken_probs = []
 
     def get_focus(self):

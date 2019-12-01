@@ -1,3 +1,5 @@
+import random
+import numpy as np
 import torch
 
 configs = {
@@ -14,6 +16,12 @@ else:
     DEVICE = torch.device('cpu')
 DTYPE = torch.float
 ARGS = {'device': DEVICE, 'dtype': DTYPE}
+
+SEED = 1
+torch.manual_seed(SEED)
+np.random.seed(SEED)
+random.seed(SEED)
+
 
 
 def save_grad(name):
