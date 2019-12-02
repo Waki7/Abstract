@@ -106,11 +106,15 @@ class CRAAgent():
 
             action_log_prob = torch.log(taken_action_probs_vector)
 
-            actor_loss = torch.exp(self.learnable_variance[0]) * (-action_log_prob * advantage.detach()).sum() + self.learnable_variance[0]
+            actor_loss = (.5 / (1e-5+self.learnable_variance[0] ** 2.)) * (-action_log_prob * advantage.detach()).sum() + \
+                         torch.log(self.learnable_variance[0] + 1e-5)
+
             entropy_loss = (torch.log(action_prob_vector) * action_prob_vector).sum()
 
-            critic_loss = torch.exp(self.learnable_variance[1]) * F.smooth_l1_loss(input=V_estimate, target=V_target,
-                                            reduction='sum') + self.learnable_variance[1]  # .5 * advantage.pow(2).mean()
+            critic_loss = (1. / (1e-5+self.learnable_variance[1] ** 2.)) * F.smooth_l1_loss(input=V_estimate,
+                                                                                       target=V_target,
+                                                                                       reduction='sum') + \
+                          torch.log(self.learnable_variance[1] + 1e-5)  # .5 * advantage.pow(2).mean()
 
             loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
             loss.backward()
