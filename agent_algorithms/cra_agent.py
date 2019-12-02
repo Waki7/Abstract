@@ -21,11 +21,14 @@ class CRAAgent():
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate
     def __init__(self, is_episodic, cfg, actor, critic=None):
-        self.is_ac_shared = critic is None
+        self.shared_parameters = critic is None
         self.ac = None
-        if self.is_ac_shared:
+        self.cfg = cfg
+        if self.shared_parameters:
             self.ac = actor
             self.n_actions = self.ac.n_actions
+            self.learnable_variance = [torch.nn.Parameter(torch.randn(1)), torch.nn.Parameter(torch.randn(1))]
+            self.ac.add_parameters(self.learnable_variance)
         else:
             self.actor = actor
             self.n_actions = self.actor.n_actions
@@ -102,13 +105,13 @@ class CRAAgent():
             taken_action_probs_vector = torch.stack(self.action_taken_probs)
 
             action_log_prob = torch.log(taken_action_probs_vector)
-            actor_loss = (-action_log_prob * advantage.detach()).sum()
+
+            actor_loss = torch.exp(self.learnable_variance[0]) * (-action_log_prob * advantage.detach()).sum() + self.learnable_variance[0]
             entropy_loss = (torch.log(action_prob_vector) * action_prob_vector).sum()
 
-            critic_loss = F.smooth_l1_loss(input=V_estimate, target=V_target,
-                                           reduction='sum')  # .5 * advantage.pow(2).mean()
-            print(actor_loss)
-            print(critic_loss)
+            critic_loss = torch.exp(self.learnable_variance[1]) * F.smooth_l1_loss(input=V_estimate, target=V_target,
+                                            reduction='sum') + self.learnable_variance[1]  # .5 * advantage.pow(2).mean()
+
             loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
             loss.backward()
             ret_loss = loss.detach().cpu().item()
@@ -117,12 +120,11 @@ class CRAAgent():
         return ret_loss
 
     def update_networks(self):
-        if self.is_ac_shared:
+        if self.shared_parameters:
             self.ac.update_parameters()
         else:
             self.actor.update_parameters()
             self.critic.update_parameters()
-
 
     def should_update(self, episode_end, reward):
         steps_since_update = len(self.rewards) + 1

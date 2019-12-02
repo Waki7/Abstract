@@ -13,6 +13,7 @@ class BaseNetwork(nn.Module):
     def __init__(self, cfg):
         super(BaseNetwork, self).__init__()
         self.cfg = cfg
+        self.extra_parameters = nn.ParameterList()
 
         ##########################################################################################
         # set cfg parameters
@@ -29,6 +30,10 @@ class BaseNetwork(nn.Module):
         optimizer = self.cfg.get('optimizer', settings.defaults.OPTIMIZER)
         self.optimizer = getattr(torch.optim, optimizer)(self.parameters(), lr=lr)
         self.to(settings.DEVICE)
+
+    def add_parameters(self, parameters):
+        self.extra_parameters.extend(parameters)
+        self.create_optimizer() # recreate optimizer due to neew parameters
 
     def update_parameters(self):
         torch.nn.utils.clip_grad_value_(self.parameters(), self.gradient_clip)
@@ -99,7 +104,7 @@ class ACENetwork(BaseNetwork):
         aux_estimates = out_shape3
         self.n_actions = n_actions
 
-        split_size = self.model_size // 1
+        split_size = self.model_size // 2
 
         self.shared_1 = nn.Linear(n_features, split_size)
         self.actor_1 = nn.Linear(n_features, split_size)
@@ -112,14 +117,14 @@ class ACENetwork(BaseNetwork):
         self.create_optimizer()
 
     def forward(self, x):
-        # x_shared = F.relu(self.shared_1(x))
-        x_actor = F.relu(self.actor_1(x))
-        x_critic = F.relu(self.critic_1(x))
-        x_aux = F.relu(self.aux_1(x))
+        x_shared = F.tanh(self.shared_1(x))
+        x_actor = F.tanh(self.actor_1(x))
+        x_critic = F.tanh(self.critic_1(x))
+        x_aux = F.tanh(self.aux_1(x))
 
-        # x_actor = torch.cat([x_shared, x_actor], dim=-1)
-        # x_critic = torch.cat([x_shared, x_critic], dim=-1)
-        # x_aux = torch.cat([x_shared, x_aux], dim=-1)
+        x_actor = torch.cat([x_shared, x_actor], dim=-1)
+        x_critic = torch.cat([x_shared, x_critic], dim=-1)
+        x_aux = torch.cat([x_shared, x_aux], dim=-1)
 
         actor_estimate = F.softmax(self.actor_out(x_actor), dim=-1)
         critic_estimate = self.critic_out(x_critic)
