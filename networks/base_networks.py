@@ -33,7 +33,7 @@ class BaseNetwork(nn.Module):
 
     def add_parameters(self, parameters):
         self.extra_parameters.extend(parameters)
-        self.create_optimizer() # recreate optimizer due to neew parameters
+        self.create_optimizer()  # recreate optimizer due to neew parameters
 
     def update_parameters(self):
         torch.nn.utils.clip_grad_value_(self.parameters(), self.gradient_clip)
@@ -117,10 +117,10 @@ class ACENetwork(BaseNetwork):
         self.create_optimizer()
 
     def forward(self, x):
-        x_shared = F.tanh(self.shared_1(x))
-        x_actor = F.tanh(self.actor_1(x))
-        x_critic = F.tanh(self.critic_1(x))
-        x_aux = F.tanh(self.aux_1(x))
+        x_shared = torch.tanh(self.shared_1(x))
+        x_actor = F.relu(self.actor_1(x))
+        x_critic = F.relu(self.critic_1(x))
+        x_aux = F.relu(self.aux_1(x))
 
         x_actor = torch.cat([x_shared, x_actor], dim=-1)
         x_critic = torch.cat([x_shared, x_critic], dim=-1)
@@ -129,41 +129,7 @@ class ACENetwork(BaseNetwork):
         actor_estimate = F.softmax(self.actor_out(x_actor), dim=-1)
         critic_estimate = self.critic_out(x_critic)
         aux_estimates = self.aux_out(x_aux)
-        return actor_estimate, critic_estimate, aux_estimates
-
-
-@register_network
-class CRANetwork(BaseNetwork):
-    def __init__(self, n_features, out_shape, out_shape2, out_shape3, cfg, **kwargs):
-        super().__init__(cfg)
-        self.n_actions = out_shape
-        self.n_critic_estimates = out_shape2
-        self.n_aux_estimates = out_shape3
-        self.linear_shared = nn.Linear(n_features + self.n_actions + self.n_critic_estimates + self.n_aux_estimates,
-                                       self.model_size)
-        self.linear_actor = nn.Linear(self.model_size, self.n_actions)
-        self.linear_critic = nn.Linear(self.model_size, self.n_critic_estimates)
-        self.linear_estimator = nn.Linear(self.model_size, self.n_aux_estimates)
-
-        self.actor_estimate = torch.zeros(self.n_actions).to(settings.DEVICE).unsqueeze(0)
-        self.critic_estimate = torch.zeros(self.n_critic_estimates).to(settings.DEVICE).unsqueeze(0)
-        self.aux_estimates = torch.zeros(self.n_aux_estimates).to(settings.DEVICE).unsqueeze(0)
-
-        self.create_optimizer()
-
-    def forward(self, x):
-        x = torch.cat([x, self.actor_estimate, self.critic_estimate, self.aux_estimates], dim=-1)
-        x = F.relu(self.linear_shared(x))
-        self.actor_estimate = F.softmax(self.linear_actor(x), dim=-1)
-        self.critic_estimate = self.linear_critic(x)
-        self.aux_estimates = self.linear_estimator(x)
-        return self.actor_estimate, self.critic_estimate, self.aux_estimates
-
-    def update_parameters(self):
-        super().update_parameters()
-        self.actor_estimate = torch.zeros(self.n_actions).to(settings.DEVICE).unsqueeze(0)
-        self.critic_estimate = torch.zeros(self.n_critic_estimates).to(settings.DEVICE).unsqueeze(0)
-        self.aux_estimates = torch.zeros(self.n_aux_estimates).to(settings.DEVICE).unsqueeze(0)
+        return actor_estimate, (critic_estimate, aux_estimates)
 
 
 @register_network

@@ -17,7 +17,7 @@ class ChannelNetwork(nn.Module):
         self.in_shapes = [in_shape, out_shape, reward_embedding_size] \
             if in_shapes is None else in_shapes
 
-        self.out_channels = ['action', 'focus', ' maybe feel'] \
+        self.out_channels = ['action', 'focus', ' maybefeel'] \
             if out_channels is None else out_channels
         self.out_shapes = [out_shape, out_shape + in_shape, reward_embedding_size] \
             if out_shapes is None else out_shapes
@@ -31,7 +31,7 @@ class ChannelNetwork(nn.Module):
         self.env_in_size = in_shape
         self.hidden_in_size = sum(self.in_shapes[1:])
 
-        self.env_out_size = out_shape
+        self.env_actions = out_shape
         self.hidden_out_size = sum(self.out_shapes[1:])
 
         self.model_size = cfg.get('model_size', 32)

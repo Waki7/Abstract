@@ -23,17 +23,14 @@ class CRAAgent():
     # try to make the encoding part separate
     def __init__(self, is_episodic, cfg, actor, critic=None):
         self.shared_parameters = critic is None
+        self.use_channels = isinstance(actor, ChannelNetwork)
         self.ac = None
         self.cfg = cfg
-        if self.shared_parameters:
-            self.ac = actor
-            self.n_actions = self.ac.n_actions
-            self.learnable_variance = [torch.nn.Parameter(torch.randn(1)), torch.nn.Parameter(torch.randn(1))]
-            self.ac.add_parameters(self.learnable_variance)
-        else:
-            self.actor = actor
-            self.n_actions = self.actor.n_actions
-            self.critic = critic
+
+        self.actor = actor
+        self.n_actions = self.actor.env_actions
+        self.all_actions = self.n_actions + self.actor.hidden_out_size
+        self.critic = critic
 
         self.pred_val, self.pred_feel_val = None, None
         self.reward = 0
@@ -63,25 +60,27 @@ class CRAAgent():
         logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
 
     def step(self, env_input):
-        action = None
+        env_action = None
+        estimates = None
         env_input = model_utils.convert_env_input(env_input)
-        if self.shared_parameters:
-            action_probs, estimates = self.ac.forward(env_input)
-        else:
-            action_probs = self.actor.forward(env_input)
-            estimates = self.critic.forward(env_input)
-        if isinstance(estimates, (list, tuple)):
-            critic_estimates = estimates[0]
-            aux_estimates = estimates[1]
-            self.aux_estimates.append(aux_estimates.squeeze(0))
-        else:
-            critic_estimates = estimates
+        while env_action is None:
+            if self.shared_parameters:
+                probs, estimates = self.ac.forward(env_input)
+            else:
+                probs = self.actor.forward(env_input)
+                estimates = self.critic.forward(env_input)
 
-        self.action_probs.append(action_probs.squeeze(0))
-        self.value_estimates.append(critic_estimates.squeeze(0))
 
-        action = np.random.choice(self.n_actions, p=self.action_probs[-1].detach().cpu().numpy())
-        self.action_taken_probs.append(self.action_probs[-1][action])
+            full_probs = torch.cat(probs, dim=-1)
+            action = np.random.choice(self.n_actions , p=full_probs.detach().cpu().numpy())
+            if action < self.n_actions:
+                env_action = action
+
+        action_probs = probs[0]
+        self.action_probs.append(env_action.squeeze(0))
+        self.value_estimates.append(estimates.squeeze(0))
+
+        self.action_taken_probs.append(self.action_probs[-1][env_action])
 
         self.t += 1
         return action
