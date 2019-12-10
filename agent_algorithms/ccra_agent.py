@@ -7,8 +7,8 @@ import torch.nn.functional as F
 
 import settings
 import utils.model_utils as model_utils
-from networks.channels_network import ChannelNetwork
 from agent_algorithms.factory import register_agent
+from networks.channels_network import ChannelNetwork
 
 
 def logLoss(output, target):
@@ -69,21 +69,18 @@ class CRAAgent():
             else:
                 probs = self.actor.forward(env_input)
                 estimates = self.critic.forward(env_input)
-
-
             full_probs = torch.cat(probs, dim=-1)
-            action = np.random.choice(self.n_actions , p=full_probs.detach().cpu().numpy())
+            action = np.random.choice(self.n_actions, p=full_probs.detach().cpu().numpy())
             if action < self.n_actions:
                 env_action = action
 
-        action_probs = probs[0]
         self.action_probs.append(env_action.squeeze(0))
         self.value_estimates.append(estimates.squeeze(0))
 
         self.action_taken_probs.append(self.action_probs[-1][env_action])
 
         self.t += 1
-        return action
+        return env_action
 
     def update_policy(self, env_reward, episode_end=True, new_state=None):
         ret_loss = 0
