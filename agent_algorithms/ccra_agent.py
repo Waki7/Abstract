@@ -69,7 +69,7 @@ class CRAAgent():
                 env_action = action
         self.actor.prune()
         estimates = self.critic.forward(env_input)
-
+        print(probs[0])
         self.action_probs.append(probs[0].squeeze(0))
         self.value_estimates.append(estimates.squeeze(0))
 
