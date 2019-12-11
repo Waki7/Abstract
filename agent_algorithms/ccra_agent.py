@@ -22,14 +22,13 @@ class CRAAgent():
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate
     def __init__(self, is_episodic, cfg, actor, critic=None):
-        self.shared_parameters = critic is None
         self.use_channels = isinstance(actor, ChannelNetwork)
         self.ac = None
         self.cfg = cfg
 
         self.actor = actor
-        self.n_actions = self.actor.env_actions
-        self.all_actions = self.n_actions + self.actor.hidden_out_size
+        self.n_actions = self.actor.n_actions
+        self.n_all_actions = self.n_actions + self.actor.hidden_n_actions
         self.critic = critic
 
         self.pred_val, self.pred_feel_val = None, None
@@ -40,7 +39,6 @@ class CRAAgent():
         self.value_estimates = []
         self.aux_estimates = []
         self.action_probs = []
-        self.aux_action
         self.action_taken_probs = []
 
         self.t = 0
@@ -61,20 +59,18 @@ class CRAAgent():
 
     def step(self, env_input):
         env_action = None
-        estimates = None
+        probs = None
         env_input = model_utils.convert_env_input(env_input)
         while env_action is None:
-            if self.shared_parameters:
-                probs, estimates = self.ac.forward(env_input)
-            else:
-                probs = self.actor.forward(env_input)
-                estimates = self.critic.forward(env_input)
-            full_probs = torch.cat(probs, dim=-1)
-            action = np.random.choice(self.n_actions, p=full_probs.detach().cpu().numpy())
+            probs = self.actor.forward(env_input)
+            joined_probs = torch.cat(probs, dim=-1).squeeze(0)
+            action = np.random.choice(self.n_all_actions, p=joined_probs.detach().cpu().numpy())
             if action < self.n_actions:
                 env_action = action
+        self.actor.prune()
+        estimates = self.critic.forward(env_input)
 
-        self.action_probs.append(env_action.squeeze(0))
+        self.action_probs.append(probs[0].squeeze(0))
         self.value_estimates.append(estimates.squeeze(0))
 
         self.action_taken_probs.append(self.action_probs[-1][env_action])
@@ -102,7 +98,7 @@ class CRAAgent():
             V_estimate = torch.cat(self.value_estimates, dim=0)
 
             advantage = V_target - V_estimate
-            print(torch.sign(advantage))
+            # print(torch.sign(advantage))
             if V_target.shape[0] > 1:
                 advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
             action_prob_vector = torch.stack(self.action_probs)
@@ -116,15 +112,7 @@ class CRAAgent():
             # critic_loss = torch.exp(self.learnable_variance[1])
             critic_loss = F.smooth_l1_loss(input=V_estimate, target=V_target,
                                            reduction='sum')  # + self.learnable_variance[1]  # .5 * advantage.pow(2).mean()
-            if self.shared_parameters:
-                # actor_loss_magnitude = torch.floor(torch.abs(torch.log10(torch.abs(actor_loss.detach()))))
-                # critic_loss_magnitude = torch.floor(torch.abs(torch.log10(torch.abs(critic_loss.detach()))))
-                # actor_ratio = .1 ** (.5*(actor_loss_magnitude - critic_loss_magnitude))
-                # critic_ratio = .1 ** (.5*(critic_loss_magnitude - actor_loss_magnitude))
-                actor_ratio = 10.0
-                critic_ratio = .01
-                actor_loss = actor_ratio * actor_loss
-                critic_loss = critic_ratio * critic_loss
+
 
             loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
             # print(actor_loss, ' ', critic_loss)
@@ -135,11 +123,8 @@ class CRAAgent():
         return ret_loss
 
     def update_networks(self):
-        if self.shared_parameters:
-            self.ac.update_parameters()
-        else:
-            self.actor.update_parameters()
-            self.critic.update_parameters()
+        self.actor.update_parameters()
+        self.critic.update_parameters()
 
     def should_update(self, episode_end, reward):
         steps_since_update = len(self.rewards) + 1

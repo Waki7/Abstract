@@ -28,14 +28,15 @@ agents:
     controller_name: CRAController
     agent_name: CRAAgent
     actor_network: ChannelNetwork # CRANetwork ActorFCNetwork ACNetwork ACENetwork ChannelNetwork
-    critic_network: CriticFCNetworks # CriticFCNetworks CENetwork
-    td_step: -1
+    critic_network: CriticFCNetwork # CriticFCNetwork CENetwork
+    td_step: 1
     supervised_loss: False
     entropy_coef: .005
     discount: True
     actor_cfg:
       lr: .01
       model_size: 64
+      gradient_clip: 1.0
 
   cra-life:
     controller_name: CRAController
