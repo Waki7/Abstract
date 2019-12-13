@@ -28,7 +28,7 @@ def main():
                         logging.INFO
                         # logging.DEBUG
                         )
-    # train('a2c', 'cart')
+    train('a2c', 'cart')
     train('ccra', 'cart')
     # train('cra', 'cart')
     # train('a2c', 'life')

@@ -7,6 +7,28 @@ import settings
 from networks.base_networks import BaseNetwork
 from networks.factory import register_network
 
+def attention():
+    attention_heads = 5
+    attention_inputs = torch.tensor(list(range(attention_heads)))
+    inputs = [1,2,3,4,5]
+    attention_layer = nn.Linear(2, 1)
+    attention_output = []
+    for attention_input in attention_inputs:
+        attention_attributes = []
+        for input in inputs:
+            full_input = torch.cat(attention_input, input)
+            attention_attributes.append(attention_layer(full_input))
+        attention_output.append(inputs * F.softmax(attention_attributes, dim=-1))
+
+
+def attention2():
+    attention_heads = 5
+    inputs = [1,2,3,4,5]
+    attention_layer = nn.Linear(2, 5)
+    attention_output = []
+    for input in inputs:
+        attention_out = F.softmax(attention_layer(input), dim=-1)
+        attention_output.append(inputs * F.softmax(attention_out, dim=-1))
 
 @register_network
 class ChannelNetwork(BaseNetwork):

@@ -51,6 +51,7 @@ agents:
     critic_network: CriticFCNetwork
     discount_factor: .99
     entropy_coef: .05
+    supervised_loss: True
     actor:
       lr: .01
       model_size: 64

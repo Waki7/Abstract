@@ -32,14 +32,17 @@ class A2CAgent():
         self.td_step = cfg.get('td_step', -1)
         self.discount_factor = cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
         self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
+        self.supervised_loss = cfg.get('supervised_loss', False)
         logging.debug(' update_threshold : ', self.update_threshold)
         logging.debug(' td_step : ', self.td_step)
         logging.debug(' discount_factor : ', self.discount_factor, '\n')
         logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
+        logging.debug(' supervised_loss : ', self.supervised_loss, '\n')
 
         self.is_episodic = is_episodic
         self.reward = 0
         self.action_probs = []
+        self.actions = []
         self.probs = []
         self.rewards = []
         self.value_estimates = []
@@ -58,7 +61,7 @@ class A2CAgent():
 
         action = np.random.choice(self.n_actions, p=probs.detach().cpu().numpy())
         self.action_probs.append(probs[action])
-
+        self.actions.append(action)
         self.t += 1
         return action
 
@@ -83,14 +86,19 @@ class A2CAgent():
             action_probs = torch.stack(self.action_probs)
 
             action_log_prob = torch.log(action_probs)
-            actor_loss = (-action_log_prob * advantage.detach()).sum()
+            if self.supervised_loss:
+                target_actions = model_utils.get_target_action(self.n_actions, self.actions, advantage)
+                target_actions = torch.abs(advantage.detach()) * target_actions
+                actor_loss =F.smooth_l1_loss(input=probs, target=target_actions, reduction='mean')
+            else:
+                actor_loss = (-action_log_prob * advantage.detach()).sum()
 
             critic_loss = F.smooth_l1_loss(input=V_estimate, target=Q_val,
-                                           reduction='sum')  # .5 * advantage.pow(2).mean()
+                                           reduction='mean')  # .5 * advantage.pow(2).mean()
 
-            entropy_loss = (torch.log(probs) * probs).sum()
+            # entropy_loss = (torch.log(probs) * probs).mean()
 
-            ac_loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
+            ac_loss = actor_loss + critic_loss# + (self.entropy_coef * entropy_loss)
 
             ac_loss.backward()
             ret_loss = ac_loss.detach().cpu().item()
@@ -111,6 +119,7 @@ class A2CAgent():
         self.rewards = []
         self.probs = []
         self.action_probs = []
+        self.actions = []
         self.value_estimates = []
 
     def should_update(self, episode_end, reward):
