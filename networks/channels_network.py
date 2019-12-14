@@ -40,6 +40,7 @@ class Attention(BaseNetwork):
 
     def forward(self, inputs):
         attention_inputs = torch.tensor(list(range(inputs.shape[-1]))).to(settings.DEVICE).float()
+        attention_inputs = attention_inputs/inputs.shape[-1]
 
         attention_attributes = []
         for input, attention_input in zip(inputs, attention_inputs):
