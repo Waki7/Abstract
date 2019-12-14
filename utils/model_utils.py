@@ -15,6 +15,7 @@ def get_target_action(n_actions, actions_taken, advantage):
     actions_taken = torch.tensor(actions_taken).to(settings.DEVICE).unsqueeze(-1)
     target_action.scatter_(dim=1, index=actions_taken, value=1)
     signs = signs.unsqueeze(-1).repeat(1, n_actions)
+    # scaling = torch.abs(advantage.unsqueeze(-1).repeat(1, n_actions))
     target_action = torch.abs(target_action + signs)
 
     return target_action

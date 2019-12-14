@@ -11,10 +11,10 @@ args = {'device': device, 'dtype': type}
 
 
 @register_agent
-class A2CAgent():
+class ExpAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
-    def __init__(self, is_episodic, cfg, actor, critic=None):
+    def __init__(self, is_episodic, cfg, actor, critic=None, attention=None):
         self.is_ac_shared = critic is None
         self.ac = None
         if self.is_ac_shared:
@@ -24,6 +24,7 @@ class A2CAgent():
             self.actor = actor
             self.n_actions = self.actor.n_actions
             self.critic = critic
+            self.attention = attention
 
         ##########################################################################################
         # set cfg parameters
@@ -33,10 +34,13 @@ class A2CAgent():
         self.discount_factor = cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
         self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
         self.supervised_loss = cfg.get('supervised_loss', False)
+        self.attention_reward = cfg.get('attention_reward', False)
         logging.debug(' update_threshold : ', self.update_threshold)
         logging.debug(' td_step : ', self.td_step)
         logging.debug(' discount_factor : ', self.discount_factor, '\n')
         logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
+        logging.debug(' supervised_loss : ', self.supervised_loss, '\n')
+        logging.debug(' attention_reward : ', self.attention_reward, '\n')
 
         self.is_episodic = is_episodic
         self.reward = 0
@@ -69,27 +73,47 @@ class A2CAgent():
         self.rewards.append(env_reward)
         should_update = self.should_update(episode_end, env_reward)
         if should_update:
-            discounted_rewards = [0]
-            while self.rewards:
-                # latest reward + (future reward * gamma)
-                discounted_rewards.insert(0, self.rewards.pop(-1) + (self.discount_factor * discounted_rewards[0]))
-            discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
-            Q_val = torch.tensor(discounted_rewards).to(**args)
             V_estimate = torch.cat(self.value_estimates, dim=0)
-            advantage = Q_val - V_estimate
-            if len(discounted_rewards) > 1:
-                advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
+
+            if self.attention_reward:
+                discounted_rewards = []
+                for i in range(0, len(self.rewards)):
+                    rewards = self.rewards if i == 0 else self.rewards[:-i]
+                    attention_input = torch.tensor(rewards).to(settings.DEVICE)
+                    weighted_reward = self.attention(attention_input).sum()
+                    discounted_rewards.insert(0, weighted_reward)
+                discounted_rewards = torch.tensor(discounted_rewards).to(**args)
+                # if len(discounted_rewards) > 1:
+                #     discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / \
+                #                          (discounted_rewards.std() + 1e-9)  # normalizing the advantage
+                advantage = discounted_rewards
+
+            else:
+                discounted_rewards = [0]
+                while self.rewards:
+                    # latest reward + (future reward * gamma)
+                    discounted_rewards.insert(0, self.rewards.pop(-1) + (self.discount_factor * discounted_rewards[0]))
+                discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
+                discounted_rewards = torch.tensor(discounted_rewards).to(**args)
+                if len(discounted_rewards) > 1:
+                    discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / \
+                                         (discounted_rewards.std() + 1e-9)  # normalizing the advantage
+                advantage = discounted_rewards - V_estimate
 
             probs = torch.stack(self.probs)
             action_probs = torch.stack(self.action_probs)
 
             action_log_prob = torch.log(action_probs)
-            actor_loss = (-action_log_prob * advantage.detach()).sum()
+            if self.supervised_loss:
+                target_actions = model_utils.get_target_action(self.n_actions, self.actions, advantage)
+                actor_loss = nn.MSELoss()(input=probs, target=target_actions)
+                actor_loss *= advantage.detach().sum()
+            else:
+                actor_loss = (-action_log_prob * advantage).sum()
 
-            critic_loss = F.smooth_l1_loss(input=V_estimate, target=Q_val,
+            critic_loss = F.smooth_l1_loss(input=V_estimate, target=discounted_rewards,
                                            reduction='mean')  # .5 * advantage.pow(2).mean()
-
             entropy_loss = (torch.log(probs) * probs).mean()
 
             ac_loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)

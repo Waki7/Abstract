@@ -17,7 +17,7 @@ else:
 DTYPE = torch.float
 ARGS = {'device': DEVICE, 'dtype': DTYPE}
 
-SEED = 1
+SEED = 11
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 random.seed(SEED)

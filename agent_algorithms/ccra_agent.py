@@ -64,7 +64,12 @@ class CRAAgent():
         while env_action is None:
             probs = self.actor.forward(env_input)
             joined_probs = torch.cat(probs, dim=-1).squeeze(0)
+            print(joined_probs.shape)
+            print(joined_probs)
+            print(self.n_all_actions)
             action = np.random.choice(self.n_all_actions, p=joined_probs.detach().cpu().numpy())
+            print(action)
+            print('-----------------------------')
             if action < self.n_actions:
                 env_action = action
         self.actor.prune()
@@ -74,7 +79,7 @@ class CRAAgent():
         self.value_estimates.append(estimates.squeeze(0))
 
         self.action_taken_probs.append(self.action_probs[-1][env_action])
-
+        print(env_action)
         self.t += 1
         return env_action
 

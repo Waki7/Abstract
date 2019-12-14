@@ -31,6 +31,31 @@ def attention2():
         attention_output.append(inputs * F.softmax(attention_out, dim=-1))
 
 @register_network
+class Attention(BaseNetwork):
+    def __init__(self, n_features, out_shape, cfg={},
+                 in_channels=None, in_shapes=None, out_channels=None, out_shapes=None, **kwargs):
+        super(Attention, self).__init__(cfg)
+        self.attenion_head = nn.Linear(n_features, out_shape)
+        self.create_optimizer()
+
+    def forward(self, inputs):
+        attention_inputs = torch.tensor(list(range(inputs.shape[-1]))).to(settings.DEVICE).float()
+
+        attention_attributes = []
+        for input, attention_input in zip(inputs, attention_inputs):
+            full_input = torch.stack([attention_input, input])
+            attention_attributes.append(self.attenion_head(full_input))
+        attention_attributes = torch.cat(attention_attributes)
+        weighted_attention = inputs * F.softmax(attention_attributes, dim=-1)
+        # print(inputs)
+        # print()
+        # print(weighted_attention)
+        # print(exit(9))
+        return weighted_attention
+
+
+
+@register_network
 class ChannelNetwork(BaseNetwork):
     def __init__(self, n_features, out_shape, cfg,
                  in_channels=None, in_shapes=None, out_channels=None, out_shapes=None, **kwargs):
