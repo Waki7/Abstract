@@ -28,7 +28,8 @@ class CRAAgent():
 
         self.actor = actor
         self.n_actions = self.actor.n_actions
-        self.n_all_actions = self.n_actions + self.actor.hidden_n_actions
+        self.n_all_actions = self.n_actions + \
+                             (self.actor.hidden_n_actions if hasattr(self.actor, 'hidden_n_actions') else 0)
         self.critic = critic
 
         self.pred_val, self.pred_feel_val = None, None
@@ -63,23 +64,21 @@ class CRAAgent():
         env_input = model_utils.convert_env_input(env_input)
         while env_action is None:
             probs = self.actor.forward(env_input)
-            joined_probs = torch.cat(probs, dim=-1).squeeze(0)
-            print(joined_probs.shape)
-            print(joined_probs)
-            print(self.n_all_actions)
-            action = np.random.choice(self.n_all_actions, p=joined_probs.detach().cpu().numpy())
-            print(action)
-            print('-----------------------------')
+            # joined_probs = torch.cat(probs, dim=-1).squeeze(0)
+            # print(joined_probs.shape)
+            # print(joined_probs)
+            # print(self.n_all_actions)
+            action = np.random.choice(self.n_actions, p=probs[0].squeeze(0).detach().cpu().numpy())
+            # print(action)
+            # print('-----------------------------')
             if action < self.n_actions:
                 env_action = action
         self.actor.prune()
         estimates = self.critic.forward(env_input)
-        print(probs[0])
         self.action_probs.append(probs[0].squeeze(0))
         self.value_estimates.append(estimates.squeeze(0))
 
         self.action_taken_probs.append(self.action_probs[-1][env_action])
-        print(env_action)
         self.t += 1
         return env_action
 
@@ -102,22 +101,22 @@ class CRAAgent():
             V_target = torch.tensor(V_target).to(settings.DEVICE)
             V_estimate = torch.cat(self.value_estimates, dim=0)
 
-            advantage = V_target - V_estimate
             # print(torch.sign(advantage))
             if V_target.shape[0] > 1:
-                advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
+                V_target = (V_target - V_target.mean()) / (V_target.std() + 1e-9)  # normalizing the advantage
+            advantage = V_target - V_estimate
+
             action_prob_vector = torch.stack(self.action_probs)
             taken_action_probs_vector = torch.stack(self.action_taken_probs)
 
             action_log_prob = torch.log(taken_action_probs_vector)
             # actor_loss = torch.exp(self.learnable_variance[0])
             actor_loss = (-action_log_prob * advantage.detach()).sum()  # + self.learnable_variance[0]
-            entropy_loss = (torch.log(action_prob_vector) * action_prob_vector).sum()
+            entropy_loss = (torch.log(action_prob_vector) * action_prob_vector).mean()
 
             # critic_loss = torch.exp(self.learnable_variance[1])
             critic_loss = F.smooth_l1_loss(input=V_estimate, target=V_target,
-                                           reduction='sum')  # + self.learnable_variance[1]  # .5 * advantage.pow(2).mean()
-
+                                           reduction='mean')  # + self.learnable_variance[1]  # .5 * advantage.pow(2).mean()
 
             loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
             # print(actor_loss, ' ', critic_loss)

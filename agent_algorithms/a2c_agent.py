@@ -78,7 +78,7 @@ class A2CAgent():
             Q_val = torch.tensor(discounted_rewards).to(**args)
             V_estimate = torch.cat(self.value_estimates, dim=0)
             advantage = Q_val - V_estimate
-            if len(discounted_rewards) > 1:
+            if advantage.shape[0] > 1:
                 advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
 
             probs = torch.stack(self.probs)

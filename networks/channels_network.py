@@ -55,6 +55,37 @@ class Attention(BaseNetwork):
         return weighted_attention
 
 
+@register_network
+class ChannelNetworkBasic(BaseNetwork):
+    def __init__(self, n_features, out_shape, cfg,
+                 in_channels=None, in_shapes=None, out_channels=None, out_shapes=None, **kwargs):
+        super(ChannelNetworkBasic, self).__init__(cfg)
+        ##########################################################################################
+        # set cfg parameters
+        ##########################################################################################
+        reward_embedding_size = cfg.get('reward_embedding_size', 1)
+        self.model_size = cfg.get('model_size', 32)
+        self.bias = cfg.get('bias', True)
+
+        ##########################################################################################
+        # define channels
+        ##########################################################################################
+        super().__init__(cfg)
+        self.n_actions = out_shape
+        self.linear1 = nn.Linear(n_features, self.model_size)
+        self.linear2 = nn.Linear(self.model_size, out_shape)
+        self.create_optimizer()
+
+
+    def forward(self, env_input, **kwargs):
+        x = env_input
+        x = F.relu(self.linear1(x))
+        x = F.softmax(self.linear2(x), dim=-1)
+        return x, None
+
+    def prune(self):
+        pass
+
 
 @register_network
 class ChannelNetwork(BaseNetwork):
@@ -123,6 +154,7 @@ class ChannelNetwork(BaseNetwork):
         if hidden_input is None:
             hidden_input = self.hidden_input
         channel_inputs, layer1 = [], []
+        # input = torch.cat((env_input, hidden_input), dim=-1)
         input = torch.cat((env_input, hidden_input), dim=-1)
         for channel_idx in range(0, len(self.in_channels)):
             fc1 = self.fc1s[channel_idx]
@@ -138,13 +170,16 @@ class ChannelNetwork(BaseNetwork):
             outNeuron = neuron(l2)
             ly.append(outNeuron)
             # ly[outputChannel] = F.softmax(outNeuron, dim=1)
-
-        ly_cmbn = torch.cat(ly, dim=1)
-        output = F.softmax(ly_cmbn, dim=1)
         hiddenStartIndex = self.n_actions
-        hidden = output[:,
-                 hiddenStartIndex:]  # todo try to experiment with having all of the output part of hidden state.
-        output = output[:, :hiddenStartIndex]
+
+        output = torch.cat(ly, dim=1)
+        # output = F.softmax(ly_cmbn, dim=1)
+        # hidden = output[:,
+        #          hiddenStartIndex:]  # todo try to experiment with having all of the output part of hidden state.
+        # output = output[:, :hiddenStartIndex]
+        hidden = F.softmax(output[:,
+                 hiddenStartIndex:], dim=-1)  # todo try to experiment with having all of the output part of hidden state.
+        output = F.softmax(output[:, :hiddenStartIndex], dim=-1)
         return output, hidden
 
     def prune(self):

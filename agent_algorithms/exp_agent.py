@@ -96,13 +96,13 @@ class ExpAgent():
                     discounted_rewards.insert(0, self.rewards.pop(-1) + (self.discount_factor * discounted_rewards[0]))
                 discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
                 discounted_rewards = torch.tensor(discounted_rewards).to(**args)
-                # if discounted_rewards.shape[0] > 1:
-                #     discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / \
-                #                          (discounted_rewards.std() + 1e-9)  # normalizing the advantage
+                if discounted_rewards.shape[0] > 1:
+                    discounted_rewards = (discounted_rewards - discounted_rewards.mean()) / \
+                                         (discounted_rewards.std() + 1e-9)  # normalizing the advantage
                 advantage = discounted_rewards - V_estimate
-                attention_advantage = self.attention(advantage.detach())
-                print(advantage)
-                print(attention_advantage)
+                advantage = advantage#self.attention(advantage.detach())
+                # print(advantage)
+                # print(attention_advantage)
             probs = torch.stack(self.probs)
             action_probs = torch.stack(self.action_probs)
 
@@ -112,7 +112,7 @@ class ExpAgent():
                 actor_loss = nn.MSELoss()(input=probs, target=target_actions)
                 actor_loss *= advantage.detach().sum()
             else:
-                actor_loss = (-action_log_prob * attention_advantage).sum()
+                actor_loss = (-action_log_prob * advantage.detach()).sum()
 
             critic_loss = F.smooth_l1_loss(input=V_estimate, target=discounted_rewards,
                                            reduction='mean')  # .5 * advantage.pow(2).mean()

@@ -27,9 +27,9 @@ agents:
   ccra:
     controller_name: CRAController
     agent_name: CRAAgent
-    actor_network: ChannelNetwork # CRANetwork ActorFCNetwork ACNetwork ACENetwork ChannelNetwork
+    actor_network: ChannelNetworkBasic # ChannelNetwork ChannelNetworkBasic CRANetwork ActorFCNetwork ACNetwork ACENetwork ChannelNetwork
     critic_network: CriticFCNetwork # CriticFCNetwork CENetwork
-    td_step: 1
+    td_step: -1
     supervised_loss: False
     entropy_coef: .005
     discount: True
@@ -53,14 +53,14 @@ agents:
     discount_factor: .99
     entropy_coef: .05
     supervised_loss: False
-    attention_reward: False
+    attention_reward: True
     td_step: -1
     actor_cfg:
-      lr: .01
+      lr: .001
       model_size: 64
       gradient_clip: 1.5
     critic_cfg:
-      lr: .01
+      lr: .001
       model_size: 64
       gradient_clip: 1.5
 
