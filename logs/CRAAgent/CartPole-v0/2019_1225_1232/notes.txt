@@ -1,3 +1,6 @@
+disregard, seems lik w'ere pruning every forward step
+control, basic channel network not up to detached hidden state passing, so just looking at the action distribution
+
 
 @register_network
 class ChannelNetworkBasic(BaseNetwork):

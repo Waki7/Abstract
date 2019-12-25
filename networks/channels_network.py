@@ -81,7 +81,7 @@ class ChannelNetworkBasic(BaseNetwork):
         self.create_optimizer()
 
     def forward(self, env_input, **kwargs):
-        x = torch.cat([env_input, self.hidden_state.detach()], dim=-1)
+        x = torch.cat([env_input, self.hidden_state], dim=-1)
         x = F.leaky_relu(self.linear1(x))
         x = F.softmax(self.linear2(x), dim=-1)
         self.hidden_state = x
