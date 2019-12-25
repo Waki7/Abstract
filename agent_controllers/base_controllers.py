@@ -1,9 +1,10 @@
-from agent_controllers.factory import register_controller
-from networks.base_networks import *
+import gym
+
 from agent_algorithms.factory import AGENT_REGISTRY
+from agent_controllers.factory import register_controller
 from networks.factory import get_network
 from utils.storage_utils import ExperimentLogger
-import gym
+
 
 class BaseController:  # currently implemented as (i)AC
     def __init__(self, env_cfg, cfg):
@@ -79,7 +80,10 @@ class BaseController:  # currently implemented as (i)AC
         self.experiment_logger.create_experiment(self.agent_name,
                                                  self.env_cfg['name'],
                                                  training_cfg,
-                                                 experiment_folder)  # this is a wraapper over summarywriter()
+                                                 experiment_folder,
+                                                 env_cfg=self.env_cfg,
+                                                 agent_cfg=self.cfg,
+                                                 )  # this is a wraapper over summarywriter()
 
         for episode in range(n_episodes):
             state = self.env.reset()

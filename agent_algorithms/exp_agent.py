@@ -112,7 +112,7 @@ class ExpAgent():
                 actor_loss = nn.MSELoss()(input=probs, target=target_actions)
                 actor_loss *= advantage.detach().sum()
             else:
-                actor_loss = (-action_log_prob * advantage.detach()).sum()
+                actor_loss = (-action_log_prob * advantages.detach()).sum()
 
             critic_loss = F.smooth_l1_loss(input=V_estimate, target=discounted_rewards,
                                            reduction='mean')  # .5 * advantage.pow(2).mean()

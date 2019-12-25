@@ -7,6 +7,9 @@ env:
   cart:
     name: 'CartPole-v0'
 
+  mountain:
+    name: 'MountainCar-v0'
+
   beam:
     name: 'BeamRider-v0'
 
@@ -31,12 +34,12 @@ agents:
     critic_network: CriticFCNetwork # CriticFCNetwork CENetwork
     td_step: -1
     supervised_loss: False
-    entropy_coef: .005
+    entropy_coef: 0.01
     discount: True
     actor_cfg:
       lr: .01
-      model_size: 64
-      gradient_clip: 1.0
+      model_size: 32
+      gradient_clip: 2.0
 
   cra-life:
     controller_name: CRAController

@@ -1,0 +1,12 @@
+controller_name: CRAController
+agent_name: CRAAgent
+actor_network: ChannelNetwork # ChannelNetwork ChannelNetworkBasic CRANetwork ActorFCNetwork ACNetwork ACENetwork ChannelNetwork
+critic_network: CriticFCNetwork # CriticFCNetwork CENetwork
+td_step: -1
+supervised_loss: False
+entropy_coef: 0.01
+discount: True
+actor_cfg:
+  lr: .01
+  model_size: 32
+  gradient_clip: 1.0

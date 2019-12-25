@@ -1,10 +1,13 @@
-import numpy as np
-from datetime import datetime
-from tensorboardX import SummaryWriter
-import settings
 import logging
 import os
 import re
+from datetime import datetime
+
+import numpy as np
+import yaml
+from tensorboardX import SummaryWriter
+
+import settings
 
 
 def clean_experiment_folders():
@@ -30,7 +33,7 @@ class ExperimentLogger():
         if reset_count:
             self.counts = {}
 
-    def create_experiment(self, agent_name, env_name, training_cfg, directory=''):
+    def create_experiment(self, agent_name, env_name, training_cfg, directory='', agent_cfg=None, env_cfg=None):
         variation = training_cfg.get('variation', '')
         training = directory == ''
         if not training:
@@ -43,6 +46,23 @@ class ExperimentLogger():
             logging.info(self.results_path)
             self.writer = SummaryWriter(self.results_path)
             # env.unwrapped.spec.id
+
+        # ----------------------------------------------------------------
+        # create empty notes file
+        # ----------------------------------------------------------------
+        notes_file = '{}/notes.txt'.format(self.results_path)
+        open(notes_file, 'a').close()
+
+        # ----------------------------------------------------------------
+        # store any passed in configs
+        # ----------------------------------------------------------------
+        if agent_cfg is not None:
+            with open('{}/agent.yaml'.format(self.results_path), 'w') as file:
+                yaml.dump(agent_cfg, file)
+        if env_cfg is not None:
+            with open('{}/env.yaml'.format(self.results_path), 'w') as file:
+                yaml.dump(env_cfg, file)
+
         self.reset_buffers(True)
 
     def log_progress(self, episode, step):
