@@ -1,0 +1,3 @@
+worked reasonably well, this is with reward prediction in the actor being fed into the input, still same
+forwar d step detach, and end of episode reset don't have the code for this, about to try to
+predict the next step, for future, encode the difference

@@ -37,10 +37,12 @@ class CRAAgent():
 
         self.outputs = []
         self.rewards = []
+        self.inputs = []
         self.value_estimates = []
-        self.aux_estimates = []
         self.action_probs = []
         self.action_taken_probs = []
+        self.time_penalty = []
+        self.act_value_estimates = []
 
         self.t = 0
 
@@ -61,20 +63,26 @@ class CRAAgent():
     def step(self, env_input):
         env_action = None
         probs = None
+        action = None
         env_input = model_utils.convert_env_input(env_input)
+        estimates = self.critic.forward(env_input)
+
+        new_time_penalties = []
         while env_action is None:
-            probs = self.actor.forward(env_input)
-            # joined_probs = torch.cat(probs, dim=-1).squeeze(0)
-            # print(joined_probs.shape)
-            # print(joined_probs)
-            # print(self.n_all_actions)
-            action = np.random.choice(self.n_actions, p=probs[0].squeeze(0).detach().cpu().numpy())
+            probs = self.actor.forward(env_input, reward=estimates, action=action)
+            if hasattr(self.actor, 'out_channels'):
+                joined_probs = torch.cat(probs, dim=-1).squeeze(0)
+                action = np.random.choice(self.n_all_actions, p=joined_probs.squeeze(0).detach().cpu().numpy())
+            else:
+                action = np.random.choice(self.n_actions, p=probs[0].squeeze(0).detach().cpu().numpy())
+
             # print(action)
             # print('-----------------------------')
             if action < self.n_actions:
                 env_action = action
+            else:
+                new_time_penalties.append(.001)
         self.actor.prune()
-        estimates = self.critic.forward(env_input)
         self.action_probs.append(probs[0].squeeze(0))
         self.value_estimates.append(estimates.squeeze(0))
 
@@ -129,6 +137,7 @@ class CRAAgent():
     def update_networks(self):
         self.actor.update_parameters()
         self.critic.update_parameters()
+        self.actor.reset_state()
 
     def should_update(self, episode_end, reward):
         steps_since_update = len(self.rewards) + 1
@@ -142,6 +151,7 @@ class CRAAgent():
         self.rewards = []
         self.value_estimates = []
         self.aux_estimates = []
+        self.aux_prediction = []
         self.action_probs = []
         self.action_taken_probs = []
 

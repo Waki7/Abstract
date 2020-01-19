@@ -1,0 +1,12 @@
+actor_cfg:
+  gradient_clip: 2.0
+  lr: 0.001
+  model_size: 32
+actor_network: ChannelNetworkBasic
+agent_name: CRAAgent
+controller_name: CRAController
+critic_network: CriticFCNetwork
+discount: true
+entropy_coef: 0.01
+supervised_loss: false
+td_step: -1
