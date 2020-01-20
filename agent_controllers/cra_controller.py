@@ -13,6 +13,7 @@ class CRAController(BaseController):
         self.actor_cfg = cfg.get('actor_cfg')
         self.critic_name = cfg.get('critic_network')
         self.critic_cfg = cfg.get('critic_cfg', self.actor_cfg)
+        self.condition_on_action = cfg.get('condition_on_action', True)
         self.share_parameters = self.critic_name == None
         super(CRAController, self).__init__(env_cfg, cfg)
 
@@ -25,6 +26,9 @@ class CRAController(BaseController):
             else:
                 raise NotImplementedError
         n_actions = self.env.action_space.n
+        if self.condition_on_action:
+            n_features += n_actions
+
         critic_estimates = 1
         aux_estimates = 1
         agents = []

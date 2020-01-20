@@ -9,7 +9,7 @@ def true_with_probability(p):
 
 
 def get_target_action(n_actions, actions_taken, advantage):
-    signs = (torch.sign(advantage)-1) / 2
+    signs = (torch.sign(advantage) - 1) / 2
 
     target_action = torch.zeros(len(actions_taken), n_actions).to(settings.DEVICE)
     actions_taken = torch.tensor(actions_taken).to(settings.DEVICE).unsqueeze(-1)
@@ -21,8 +21,11 @@ def get_target_action(n_actions, actions_taken, advantage):
     return target_action
 
 
-def convert_env_input(env_input):
-    return torch.from_numpy(env_input).to(settings.DEVICE).float().unsqueeze(0)
+def convert_env_input(env_input, action=None):
+    env_input = torch.from_numpy(env_input).to(settings.DEVICE).float().unsqueeze(0)
+    if action is not None:
+        return torch.cat([env_input, action], dim=-1)
+    return env_input
 
 
 def one_hot(logits, idx=None):

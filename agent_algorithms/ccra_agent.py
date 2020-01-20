@@ -35,15 +35,17 @@ class CRAAgent():
         self.pred_val, self.pred_feel_val = None, None
         self.reward = 0
 
+        ##########################################################################################
+        # episodic initializations
+        ##########################################################################################
         self.outputs = []
         self.rewards = []
-        self.inputs = []
         self.value_estimates = []
         self.action_probs = []
         self.action_taken_probs = []
-        self.time_penalty = []
-        self.act_value_estimates = []
 
+        self.action = torch.zeros((1, self.n_actions)).to(settings.DEVICE)
+        self.inputs = []
         self.t = 0
 
         ##########################################################################################
@@ -64,10 +66,11 @@ class CRAAgent():
         env_action = None
         probs = None
         action = None
-        env_input = model_utils.convert_env_input(env_input)
-        estimates = self.critic.forward(env_input)
+        env_input = model_utils.convert_env_input(env_input, self.action)
+        estimates, _ = self.critic.forward(env_input)
 
-        new_time_penalties = []
+        internal_esimates = []
+        internal_actions_taken = []
         while env_action is None:
             probs = self.actor.forward(env_input, reward=estimates, action=action)
             if hasattr(self.actor, 'out_channels'):
@@ -76,12 +79,19 @@ class CRAAgent():
             else:
                 action = np.random.choice(self.n_actions, p=probs[0].squeeze(0).detach().cpu().numpy())
 
-            # print(action)
-            # print('-----------------------------')
             if action < self.n_actions:
                 env_action = action
+                if len(internal_esimates) > 0:
+                    V_estimate = torch.cat(internal_esimates, dim=0)
+                    taken_action_probs_vector = torch.stack(internal_actions_taken)
+                    action_log_prob = torch.log(taken_action_probs_vector)
+                    internal_loss = (-action_log_prob * V_estimate).mean()  # + self.learnable_variance[0]
+                    internal_loss.backward(retain_graph=True)
             else:
-                new_time_penalties.append(.001)
+                internal_esimates.append(self.critic.forward_prob(probs[-1]) - .001)
+                internal_action_taken = joined_probs[action]
+                internal_actions_taken.append(internal_action_taken)
+
         self.actor.prune()
         self.action_probs.append(probs[0].squeeze(0))
         self.value_estimates.append(estimates.squeeze(0))
@@ -150,8 +160,6 @@ class CRAAgent():
         self.outputs = []
         self.rewards = []
         self.value_estimates = []
-        self.aux_estimates = []
-        self.aux_prediction = []
         self.action_probs = []
         self.action_taken_probs = []
 

@@ -31,14 +31,16 @@ agents:
     controller_name: CRAController
     agent_name: CRAAgent
     actor_network: ChannelNetworkSwitch # ChannelNetworkSwitch ChannelNetwork ChannelNetworkBasic CRANetwork ActorFCNetwork ACNetwork ACENetwork ChannelNetwork
-    critic_network: CriticFCNetwork # CriticFCNetwork CENetwork
+    critic_network: CriticChannels # CriticFCNetwork CENetwork CriticChannels
+    condition_on_action: True
 
     td_step: -1
     supervised_loss: False
     entropy_coef: 0.01
     discount: True
     actor_cfg:
-      lr: .0001
+      state_embedding_size: 10
+      lr: .001
       model_size: 32
       gradient_clip: 2.0
 
