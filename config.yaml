@@ -14,6 +14,18 @@ env:
     name: 'BeamRider-v0'
 
 agents:
+  social:
+    controller_name: SocialCRAController
+    agent_name: SocialCRAAgent
+    ac_network: ConceptNetwork
+    n_concepts: 20
+    td_step: -1
+    entropy_coef: .01
+    ac_cfg:
+      n_concepts: 20
+      lr: .01
+      model_size: 32
+
   cra:
     controller_name: CRAController
     agent_name: CRAAgent
@@ -99,6 +111,6 @@ agents:
 
 training:
   variation: ''
-  n_episodes: 500 #
+  n_episodes: 2000 #
   timeout: 2000 # steps in one episode before time out, unless not episodic
   eval_rewards_window: 20
