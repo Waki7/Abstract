@@ -31,17 +31,22 @@ class ConceptNetwork(BaseNetwork):
         self.fc3 = nn.Linear(in_features=self.model_size, out_features=self.concept_embedding_size)
 
         # self.fc4_actor = nn.Linear(in_features=self.concept_embedding_size, out_features=self.concept_embedding_size)
-        self.fc4_critic = nn.Linear(in_features=self.concept_embedding_size + self.model_size, out_features=reward_size)
+        self.fc4_critic = nn.Linear(in_features=self.concept_embedding_size, out_features=reward_size)
+        self.fc4_encoder = nn.Linear(in_features=self.concept_embedding_size,
+                                     out_features=n_features)
 
         self.concept_state = torch.zeros((1, self.concept_embedding_size)).to(settings.DEVICE)  # 1 for batch size
 
         self.empty_concept = torch.zeros((1, self.concept_embedding_size)).to(settings.DEVICE)
+        self.empty_input = torch.zeros((1, n_features)).to(settings.DEVICE)
 
         self.create_optimizer()
 
-    def forward(self, input, concept_state
+    def forward(self, input=None, concept_state=None
                 # ,action
                 ):
+        if input is None:
+            input = self.empty_input.detach().clone()
         if concept_state is None:
             concept_state = self.concept_state
         # if action is not None:
@@ -56,13 +61,16 @@ class ConceptNetwork(BaseNetwork):
 
         pre_concept = self.fc3(x)
         concept_probs = F.softmax(pre_concept, dim=-1)
-        action_probs = F.softmax(pre_concept[:,:self.n_actions],dim=-1)
 
-        critic_x = torch.cat([concept_probs, x], dim=-1)
-        reward = self.fc4_critic(critic_x)
+        # action_probs = concept_probs
+        action_probs = F.softmax(pre_concept[:, :self.n_actions], dim=-1)
+
+        encoder_estimate = self.fc4_encoder(concept_probs)
+
+        reward = self.fc4_critic(concept_probs)
         self.concept_state = concept_probs
 
-        return action_probs, reward
+        return action_probs, reward, concept_probs, encoder_estimate,  # one_step estimate, current concept state has not bounds to a distribution, like it doesn't have ot look like a distirbution
 
     def prune(self):
         self.concept_state = self.concept_state.detach()
