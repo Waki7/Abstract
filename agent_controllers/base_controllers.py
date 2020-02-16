@@ -84,26 +84,33 @@ class BaseController:  # currently implemented as (i)AC
                                                  env_cfg=self.env_cfg,
                                                  agent_cfg=self.cfg,
                                                  )  # this is a wraapper over summarywriter()
-
+        step = 0
+        state = self.env.reset()
         for episode in range(n_episodes):
-            state = self.env.reset()
-            step = 0
             while True:
                 actions = self.step_agents(state)
                 state, reward, episode_end, info = self.env.step(actions)
                 losses = self.update_agents(reward, episode_end, state)
+                assert isinstance(losses, dict), 'expect losses to be returned as a dictionary'
+                updated = len(losses) != 0
 
-                self.experiment_logger.add_agent_scalars('losses', losses, track_mean=True)
+                self.experiment_logger.add_scalar_dict('losses', losses, log=True)
                 self.experiment_logger.add_agent_scalars('reward', reward, track_mean=True, track_sum=True, log=True)
 
-                if (self.is_episodic and episode_end) or (not self.is_episodic and (step + 1) % self.log_freq == 0):
+                if (self.is_episodic and episode_end) or (not self.is_episodic and updated):
                     self.experiment_logger.log_progress(episode, step)
-                    self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
+                    if self.is_episodic:
+                        self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
 
-                if step > timeout or (self.is_episodic and episode_end):
+                if step > timeout or (self.is_episodic and episode_end) or (not self.is_episodic and updated):
                     break
 
                 step += 1
+
+            # only reset the step if the environment is episodic
+            if self.is_episodic:
+                step = 0
+                state = self.env.reset()
 
     def step_agents(self, state):
         if self.n_agents == 1:
@@ -115,9 +122,9 @@ class BaseController:  # currently implemented as (i)AC
         if self.n_agents == 1:
             loss = self.agents[0].update_policy(reward, episode_end, new_state)
         else:
-            loss = []
+            loss = {}
             for key in self.agent_keys:
-                loss.append(self.agents[key].update_policy(
+                loss[key] = (self.agents[key].update_policy(
                     reward[key], episode_end[key], new_state[key]
                 ))
         return loss

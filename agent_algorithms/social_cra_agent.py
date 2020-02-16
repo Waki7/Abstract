@@ -53,51 +53,13 @@ class SocialCRAAgent():
         self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
         self.n_concepts = cfg.get("n_concepts", 32)
 
-        logging.debug(' update_threshold : ', self.update_threshold)
-        logging.debug(' td_step : ', self.td_step)
-        logging.debug(' discount_factor : ', self.discount_factor, '\n')
-        logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
+        logging.debug(' update_threshold : {}'.format(self.update_threshold))
+        logging.debug(' td_step : {}'.format(self.td_step))
+        logging.debug(' discount_factor : {}'.format(self.discount_factor))
+        logging.debug(' entropy_coef : {}'.format(self.entropy_coef))
 
         ######################################
         self.n_all_actions = self.n_actions + self.n_concepts
-
-    def think(self, steps):
-        env_action = None
-        probs = None
-        while env_action is None:
-
-            probs, estimates, concept_probs, encoder_esimate = self.ac.forward(concept_state=probs)
-
-            action_probs = probs.squeeze(0)
-            self.concept_probs.append(concept_probs.squeeze(0))
-            # action = np.random.choice(self.n_all_actions, p=action_probs.squeeze(0).detach().cpu().numpy())
-            action = np.random.choice(self.n_actions, p=action_probs.squeeze(0).detach().cpu().numpy())
-
-            if action < self.n_actions:
-                self.encoder_estimates.append(encoder_esimate.squeeze(0))
-                env_action = action
-            else:
-                self.internal_estimates.append(estimates.squeeze(0) - self.imagination_decay)
-                internal_action_taken = action_probs[action]
-                self.imagine_taken_probs.append(internal_action_taken)
-        if len(self.internal_estimates) > 0:
-            print(len(self.internal_estimates))
-            internal_estimates = torch.cat(self.internal_estimates, dim=0)
-            reward_tensor = torch.tensor([env_reward]).to(settings.DEVICE).repeat(1, len(self.internal_estimates))
-
-            V_estimate = .1 * internal_estimates + .9 * reward_tensor
-
-            imagine_taken_probs_vector = torch.stack(self.imagine_taken_probs)
-            action_log_prob = torch.log(imagine_taken_probs_vector)
-            internal_loss = (-action_log_prob * V_estimate).mean()  # + self.learnable_variance[0]
-            internal_loss.backward(retain_graph=True)
-
-        loss.backward(retain_graph=True)
-        ret_loss = loss.detach().cpu().item()
-        self.update_networks()
-        self.reset_buffers()
-        self.ac.prune()
-        return env_action
 
     def step(self, env_input):
         env_action = None
@@ -121,62 +83,73 @@ class SocialCRAAgent():
                 internal_action_taken = action_probs[action]
                 self.imagine_taken_probs.append(internal_action_taken)
 
-        self.ac.prune()
+        # self.ac.prune()
         self.action_probs.append(action_probs)
         self.value_estimates.append(estimates.squeeze(0))
         self.action_taken_probs.append(action_probs[env_action])
         self.t += 1
         return env_action
 
-    def update_policy(self, env_reward, episode_end=True, new_state=None):
-        ret_loss = 0
+    def update_policy(self, env_reward, episode_end=True, new_state =None, learn_policy = True, learn_encoding = False):
+        ret_loss = {}
         self.rewards.append(env_reward)
         latest_reward = env_reward  # + self.aux_rewards[-1]
         should_update = self.should_update(episode_end, latest_reward)
         if should_update:
-            V_target = [0]
-            # rewards = torch.tensor(self.rewards).to(settings.DEVICE)
-            # aux_rewards = torch.tensor(self.aux_rewards).to(settings.DEVICE)
-            while self.rewards:
-                # latest reward + (future reward * gamma)
-                reward = self.rewards.pop(-1)  # + self.aux_rewards.pop(-1)
-                V_target.insert(0, reward + (self.discount_factor * V_target[0]))
-                # discounted_rewards.insert(0, reward)
-            V_target.pop(-1)  # remove the extra 0 placed before the loop
+            loss = 0
+            if learn_policy:
+                V_target = [0]
+                # rewards = torch.tensor(self.rewards).to(settings.DEVICE)
+                # aux_rewards = torch.tensor(self.aux_rewards).to(settings.DEVICE)
+                while self.rewards:
+                    # latest reward + (future reward * gamma)
+                    reward = self.rewards.pop(-1)  # + self.aux_rewards.pop(-1)
+                    V_target.insert(0, reward + (self.discount_factor * V_target[0]))
+                    # discounted_rewards.insert(0, reward)
+                V_target.pop(-1)  # remove the extra 0 placed before the loop
 
-            V_target = torch.tensor(V_target).to(settings.DEVICE)
-            V_estimate = torch.cat(self.value_estimates, dim=0)
+                V_target = torch.tensor(V_target).to(settings.DEVICE)
+                V_estimate = torch.cat(self.value_estimates, dim=0)
 
-            # print(torch.sign(advantage))
-            if V_target.shape[0] > 1:
-                V_target = (V_target - V_target.mean()) / (V_target.std() + 1e-9)  # normalizing the advantage
-            advantage = V_target - V_estimate
+                # print(torch.sign(advantage))
+                if V_target.shape[0] > 1:
+                    V_target = (V_target - V_target.mean()) / (V_target.std() + 1e-9)  # normalizing return
+                advantage = V_target - V_estimate
 
-            action_prob_vector = torch.stack(self.action_probs)
-            taken_action_probs_vector = torch.stack(self.action_taken_probs)
+                action_prob_vector = torch.stack(self.action_probs)
+                taken_action_probs_vector = torch.stack(self.action_taken_probs)
 
-            ## NON AC STUFF
-            concept_prob_vector = torch.stack(self.concept_probs)
-            inputs_vector = torch.stack(self.inputs)
-            encoder_esimates = torch.stack(self.encoder_estimates)
-            action_log_prob = torch.log(taken_action_probs_vector)
-            # actor_loss = torch.exp(self.learnable_variance[0])
-            actor_loss = (-action_log_prob * advantage.detach()).sum()  # + self.learnable_variance[0]
-            entropy_loss = (torch.log(action_prob_vector) * action_prob_vector).mean()
-            concept_entropy_loss = (torch.log(concept_prob_vector) * concept_prob_vector).mean()
+                ## NON AC STUFF
 
-            encoder_loss = F.smooth_l1_loss(input=encoder_esimates, target=inputs_vector,
-                                            reduction='mean')
+                action_log_prob = torch.log(taken_action_probs_vector)
+                actor_loss = (-action_log_prob * advantage.detach()).sum()
+                entropy_loss = (torch.log(action_prob_vector) * action_prob_vector).mean()
 
-            # critic_loss = torch.exp(self.learnable_variance[1])
-            critic_loss = F.smooth_l1_loss(input=V_estimate, target=V_target,
-                                           reduction='mean')  # + self.learnable_variance[1]  # .5 * advantage.pow(2).mean()
+                critic_loss = F.smooth_l1_loss(input=V_estimate, target=V_target,
+                                               reduction='mean')
 
-            loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss) + (
-                    self.entropy_coef * concept_entropy_loss) + encoder_loss
-            # print(actor_loss, ' ', critic_loss)
+                # concept_prob_vector = torch.stack(self.concept_probs)
+                # concept_entropy_loss = (torch.log(concept_prob_vector) * concept_prob_vector).mean()
+
+                ret_loss['actor_loss'] = actor_loss.detach().cpu().numpy()
+                ret_loss['entropy_loss'] = entropy_loss.detach().cpu().numpy()
+                ret_loss['critic_loss'] = critic_loss.detach().cpu().numpy()
+                # ret_loss['concept_entropy_loss'] = concept_entropy_loss.detach().cpu().numpy()
+
+                # loss += (self.entropy_coef * concept_entropy_loss)
+                loss += actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
+                # print(actor_loss, ' ', critic_loss)
+            if learn_encoding:
+                inputs_vector = torch.stack(self.inputs)
+                encoder_esimates = torch.stack(self.encoder_estimates)
+
+                encoder_loss = F.smooth_l1_loss(input=encoder_esimates, target=inputs_vector,
+                                                reduction='mean')
+                ret_loss['encoder_loss'] = encoder_loss.detach().cpu().numpy()
+                # loss += encoder_loss
 
             if len(self.internal_estimates) > 0:
+                print(exit(9))
                 print(len(self.internal_estimates))
                 internal_estimates = torch.cat(self.internal_estimates, dim=0)
                 reward_tensor = torch.tensor([env_reward]).to(settings.DEVICE).repeat(1, len(self.internal_estimates))
@@ -189,21 +162,21 @@ class SocialCRAAgent():
                 internal_loss.backward(retain_graph=True)
 
             loss.backward(retain_graph=True)
-            ret_loss = loss.detach().cpu().item()
             self.update_networks()
             self.reset_buffers()
         return ret_loss
 
     def update_networks(self):
         self.ac.update_parameters()
-        self.ac.reset_state()
+        # self.ac.reset_state()
 
     def should_update(self, episode_end, reward):
         steps_since_update = len(self.rewards) + 1
         td_update = self.td_step != -1 and steps_since_update % self.td_step == 0
         if self.update_threshold == -1:  # not trying the threshold updater
             return episode_end or td_update
-        return episode_end or reward >= self.update_threshold
+        update = episode_end or np.abs(reward) >= self.update_threshold
+        return update
 
     def reset_buffers(self):
         self.inputs = []

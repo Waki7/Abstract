@@ -17,6 +17,7 @@ agents:
   social:
     controller_name: SocialCRAController
     agent_name: SocialCRAAgent
+    update_threshold: 1
     ac_network: ConceptNetwork
     n_concepts: 20
     td_step: -1
@@ -55,12 +56,6 @@ agents:
       lr: .001
       model_size: 32
       gradient_clip: 2.0
-
-  cra-life:
-    controller_name: CRAController
-    agent_name: CRAAgent
-    actor_network: life_network
-    td_step: 10
 
   exp:
     controller_name: EXPController

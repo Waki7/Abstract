@@ -20,8 +20,8 @@ class BaseNetwork(nn.Module):
         ##########################################################################################
         self.model_size = cfg.get('model_size', settings.defaults.MODEL_SIZE)
         self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
-        logging.debug(' model_size : ', self.model_size, '\n')
-        logging.debug(' gradient_clip : ', self.gradient_clip, '\n')
+        logging.debug(' model_size : {}'.format(self.model_size))
+        logging.debug(' gradient_clip : {}'.format(self.gradient_clip))
 
         self.optimizer = None  # call create_optimizer at end of your implementation's init
 

@@ -82,13 +82,25 @@ class ExperimentLogger():
         logging.info(log_output)
         self.reset_buffers(False)
 
+    def add_scalar_dict(self, label, data, step=-1, track_mean=False, track_sum=False, log=False):
+        if len(data) == 0:
+            return
+        keys = list(data.keys())
+        if 'agent' in keys[0]:
+            # average over the agents
+            raise NotImplementedError('have the controller combine agent losses')
+            pass
+        for key in keys:
+            self.add_agent_scalars(label='{}/{}'.format(label, key), data=data[key], step=step,
+                                   track_mean=track_mean, track_sum=track_sum,
+                                   log=log)
+
     def add_agent_scalars(self, label, data, step=-1, track_mean=False, track_sum=False, log=False):
         if data is None:
             return
         if isinstance(data, list):
             data = np.mean(data)
-        if isinstance(data, dict):
-            data = np.mean(list(data.values()))
+
         if track_mean:
             self.progress_values_mean[label] = self.progress_values_mean.get(label, [])
             self.progress_values_mean[label].append(data)

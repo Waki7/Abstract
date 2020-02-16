@@ -25,11 +25,12 @@ def train(algorithm, env_namespace):
 
 def main():
     logging.basicConfig(level=
-                        logging.INFO
-                        # logging.DEBUG
+                        # logging.INFO
+                        logging.DEBUG
                         )
     # train('a2c', 'cart')
-    train('social', 'cart')
+    # train('social', 'cart')
+    train('social', 'life')
     # train('exp', 'cart')
     # train('ccra', 'cart')
     # train('cra', 'cart')

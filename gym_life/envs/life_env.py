@@ -1,10 +1,12 @@
-import gym_life.envs.life_channels as ch
-import numpy as np
-from typing import Union
-from utils.TimeBuffer import TimeBuffer
-import gym
-from gym import spaces
 import logging
+from typing import Union
+
+import gym
+import numpy as np
+from gym import spaces
+
+import gym_life.envs.life_channels as ch
+from utils.TimeBuffer import TimeBuffer
 from utils.model_utils import true_with_probability
 
 
@@ -24,7 +26,7 @@ class LifeEnv(gym.Env):
         # ---------------------------------------------------------------------------
         # initializing agents according to arbitrary naming scheme
         # ---------------------------------------------------------------------------
-        self.agent_keys = ['agent_{}'.format(i) for i in range(self.n_agents)]
+        # self.agent_keys = ['agent_{}'.format(i) for i in range(self.n_agents)]
 
         self.is_episodic = False
         self.hunger_threshold = 15
@@ -34,6 +36,8 @@ class LifeEnv(gym.Env):
         self.agent_action_channels = ch.AGENT_ACTION_CHANNELS
         self.action_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
         self.observation_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
+        logging.info('total of {} actions available'.format(self.action_space.n))
+        logging.info('total of {} observable discrete observations'.format(self.observation_space.n))
 
         # ---------------------------------------------------------------------------
         # initializations
@@ -72,6 +76,9 @@ class LifeEnv(gym.Env):
         self.state = ch.encode_from_map(self.state_map, ch.AGENT_STATE_CHANNELS)
         return self.state
 
+    def add_agent(self):
+        pass
+
     def step(self, agent_actions):
         """
         Args:
@@ -83,8 +90,6 @@ class LifeEnv(gym.Env):
             done (bool): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
-        if not isinstance(agent_actions, dict):
-            agent_actions = dict(zip(self.agent_keys, agent_actions))
         agent_feel = []
         agent_action_map = ch.decode_to_enum(agent_actions, ch.AGENT_ACTION_CHANNELS)
         self.print_summary(agent_action_map)
@@ -175,15 +180,17 @@ class LifeEnv(gym.Env):
         return self.state
 
     def print_summary(self, agent_action_map):
+        logging.debug('\n___________start step {}_______________'.format(self.t))
         logging.debug('agent prediction : ' + str(agent_action_map))
-        logging.debug('Env State for agent at timestep ' + str(self.t) + '\n')
+        logging.debug('Env State for agent at timestep ' + str(self.t))
 
         for channel in self.state_map:
             val = self.state_map[channel]
             if len(val) > 0:
-                logging.debug(str(self.state_map[channel]) + ', ')
+                logging.debug('channel {}: {}, '.format(channel, str(self.state_map[channel])))
         # agent.log_predictions()
-        logging.debug('env reward is : ' + str(self.current_reward) + '\n')
+        logging.debug('env reward is : ' + str(self.current_reward))
+        logging.debug('___________end step {}_______________\n'.format(self.t))
 
 
 class Seeable():
