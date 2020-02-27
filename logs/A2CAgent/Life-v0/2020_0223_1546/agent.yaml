@@ -1,0 +1,16 @@
+actor:
+  gradient_clip: 1.5
+  lr: 0.01
+  model_size: 64
+actor_network: ActorFCNetwork
+agent_name: A2CAgent
+controller_name: ACController
+critic:
+  gradient_clip: 1.5
+  lr: 0.01
+  model_size: 64
+critic_network: CriticFCNetwork
+discount_factor: 0.99
+entropy_coef: 0.05
+supervised_loss: false
+td_step: -1

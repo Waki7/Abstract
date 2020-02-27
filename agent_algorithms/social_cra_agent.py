@@ -139,6 +139,7 @@ class SocialCRAAgent():
                 # loss += (self.entropy_coef * concept_entropy_loss)
                 loss += actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
                 # print(actor_loss, ' ', critic_loss)
+
             if learn_encoding:
                 inputs_vector = torch.stack(self.inputs)
                 encoder_esimates = torch.stack(self.encoder_estimates)

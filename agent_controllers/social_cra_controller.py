@@ -12,6 +12,8 @@ class SocialCRAController(BaseController):
         self.ac_name = cfg.get('ac_network')
         self.ac_cfg = cfg.get('ac_cfg')
         self.concepts = cfg.get('n_concepts')
+        self.learn_encodings = cfg.get('learn_encodings', False)
+        self.learn_policy = cfg.get('learn_policy', True)
         super(SocialCRAController, self).__init__(env_cfg, cfg)
 
     def make_agents(self):
@@ -62,8 +64,8 @@ class SocialCRAController(BaseController):
 
     def update_agents(self, reward, episode_end, new_state):
         if self.n_agents == 1:
-            loss = self.agents[0].update_policy(reward, episode_end, new_state=new_state, learn_policy=True,
-                                                learn_encoding=True)
+            loss = self.agents[0].update_policy(reward, episode_end, new_state=new_state, learn_policy=self.learn_policy,
+                                                learn_encoding=self.learn_encodings)
         else:
             loss = []
             for key in self.agent_keys:

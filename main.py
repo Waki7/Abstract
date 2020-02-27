@@ -30,7 +30,7 @@ def main():
                         )
     # train('a2c', 'cart')
     # train('social', 'cart')
-    train('social', 'life')
+    train('a2c', 'life')
     # train('exp', 'cart')
     # train('ccra', 'cart')
     # train('cra', 'cart')

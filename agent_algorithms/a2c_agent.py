@@ -65,7 +65,7 @@ class A2CAgent():
         return action
 
     def update_policy(self, env_reward, episode_end, new_state=None):
-        ret_loss = 0
+        ret_loss = {}
         self.rewards.append(env_reward)
         should_update = self.should_update(episode_end, env_reward)
         if should_update:
@@ -95,7 +95,8 @@ class A2CAgent():
             ac_loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
 
             ac_loss.backward()
-            ret_loss = ac_loss.detach().cpu().item()
+            ret_loss['actor_loss'] = actor_loss.detach().cpu().item()
+            ret_loss['critic_loss'] = critic_loss.detach().cpu().item()
 
             self.update_networks()
             self.reset_buffers()
@@ -121,4 +122,6 @@ class A2CAgent():
         td_update = self.td_step != -1 and steps_since_update % self.td_step == 0
         if self.update_threshold == -1:  # not trying the threshold updater
             return episode_end or td_update
-        return episode_end or reward >= self.update_threshold
+        update = episode_end or np.abs(reward) >= self.update_threshold
+        return update
+

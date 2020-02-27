@@ -17,10 +17,11 @@ agents:
   social:
     controller_name: SocialCRAController
     agent_name: SocialCRAAgent
-    update_threshold: 1
+#    update_threshold: 1
     ac_network: ConceptNetwork
     n_concepts: 20
-    td_step: -1
+
+    td_step: 10
     entropy_coef: .01
     ac_cfg:
       n_concepts: 20
