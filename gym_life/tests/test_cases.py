@@ -1,3 +1,7 @@
+import gym
+import yaml
+import gym_life
+import logging
 
 class ManualAgent():
     # this agent can work with environments x, y, z (life and gym envs)
@@ -6,31 +10,25 @@ class ManualAgent():
         pass
 
     def step(self, env_input):
-        pass
-
-    def reset_buffers(self):
-        self.rewards = []
-        self.probs = []
-        self.action_probs = []
-        self.actions = []
-        self.value_estimates = []
-
-    def should_update(self, episode_end, reward):
-        steps_since_update = len(self.rewards) + 1
-        td_update = self.td_step != -1 and steps_since_update % self.td_step == 0
-        if self.update_threshold == -1:  # not trying the threshold updater
-            return episode_end or td_update
-        update = episode_end or np.abs(reward) >= self.update_threshold
-        return update
-
+        print(env_input)
 
 def case_1():
-    pass
+    with open('config.yaml') as f:
+        cfg = yaml.load(f, Loader=yaml.FullLoader)
+    life_env = gym.make(cfg['env']['life']['name'], cfg=cfg)
+    state = life_env.reset()
+    life_env.log_summary()
+    print(state)
+    print(exit(9))
 
 def interactive():
     pass
 
 def main():
+    logging.basicConfig(level=
+                        # logging.INFO
+                        logging.DEBUG
+                        )
     case_1()
     interactive()
 
