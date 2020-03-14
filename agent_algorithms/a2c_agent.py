@@ -33,10 +33,10 @@ class A2CAgent():
         self.discount_factor = cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
         self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
         self.supervised_loss = cfg.get('supervised_loss', False)
-        logging.debug(' update_threshold : ', self.update_threshold)
-        logging.debug(' td_step : ', self.td_step)
-        logging.debug(' discount_factor : ', self.discount_factor, '\n')
-        logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
+        logging.debug(' update_threshold : {}'.format(self.update_threshold))
+        logging.debug(' td_step : {}'.format(self.td_step))
+        logging.debug(' discount_factor : {}'.format(self.discount_factor))
+        logging.debug(' entropy_coef : {}'.format(self.entropy_coef))
 
         self.is_episodic = is_episodic
         self.reward = 0
@@ -124,4 +124,3 @@ class A2CAgent():
             return episode_end or td_update
         update = episode_end or np.abs(reward) >= self.update_threshold
         return update
-

@@ -86,7 +86,7 @@ agents:
     discount_factor: .99
     entropy_coef: .05
     supervised_loss: False
-    td_step: -1
+    td_step: 10
     actor:
       lr: .01
       model_size: 64

@@ -90,6 +90,7 @@ class BaseController:  # currently implemented as (i)AC
             while True:
                 actions = self.step_agents(state)
                 state, reward, episode_end, info = self.env.step(actions)
+                self.env.log_summary()
                 losses = self.update_agents(reward, episode_end, state)
                 assert isinstance(losses, dict), 'expect losses to be returned as a dictionary'
                 updated = len(losses) != 0

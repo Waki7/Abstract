@@ -1,4 +1,5 @@
 import logging
+from enum import Enum
 from typing import Union
 
 import gym
@@ -34,7 +35,7 @@ class LifeEnv(gym.Env):
         self.agent_history = TimeBuffer(5)  # this is arbitrary for the maximum history tracking length
         self.agent_state_channels = ch.AGENT_STATE_CHANNELS
         self.agent_action_channels = ch.AGENT_ACTION_CHANNELS
-        self.action_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
+        self.action_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_action_channels]))
         self.observation_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
         logging.info('total of {} actions available'.format(self.action_space.n))
         logging.info('total of {} observable discrete observations'.format(self.observation_space.n))
@@ -92,23 +93,10 @@ class LifeEnv(gym.Env):
     def add_agent(self):
         pass
 
-    def step(self, agent_actions):
-        """
-        Args:
-            action (object): an action done by the agent, encoded into its channel
-
-        Returns:
-            observation (object): agent's observation of the current environment
-            reward (float) : amount of reward returned after previous action
-            done (bool): whether the episode has ended, in which case further step() calls will return undefined results
-            info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
-        """
+    def step_enum(self, agent_action_map: Enum):  # this will not be an enum for long i think
         agent_feel = []
-        agent_action_map = ch.decode_to_enum(agent_actions, ch.AGENT_ACTION_CHANNELS)
         self.agent_action_map = agent_action_map
-
-        self.log_summary(agent_action_map)
-
+        # self.log_summary(agent_action_map)
         previous_feel = self.state_map[ch.Feel]  # todo... proper history tracking
         if ch.Feel.fed in previous_feel and self.hunger_level > self.hunger_threshold:
             agent_feel = [ch.Feel.happy, ch.Feel.content]
@@ -157,6 +145,20 @@ class LifeEnv(gym.Env):
         self.state = ch.encode_from_map(self.state_map, ch.AGENT_STATE_CHANNELS)
         return self.state, self.current_reward, False, {}
 
+    def step(self, agent_actions):
+        """
+        Args:
+            action (object): an action done by the agent, encoded into its channel
+
+        Returns:
+            observation (object): agent's observation of the current environment
+            reward (float) : amount of reward returned after previous action
+            done (bool): whether the episode has ended, in which case further step() calls will return undefined results
+            info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
+        """
+        agent_action_map = ch.decode_to_enum(agent_actions, ch.AGENT_ACTION_CHANNELS)
+        return self.step_enum(agent_action_map)
+
     def update_state(self, agent_prediction: Union[ch.Movement, ch.Speak]):
         self.current_location.update_state(agent_prediction)
         self.add_setting_to_state()
@@ -200,12 +202,12 @@ class LifeEnv(gym.Env):
         if self.agent_action_map:
             logging.debug('agent\' latest prediction : ' + str(self.agent_action_map))
         logging.debug('Env State for agent at timestep ' + str(self.t))
-        for object_id in self.objects.keys():
-            self.objects[object_id].log_summary()
         for channel in self.state_map:
             val = self.state_map[channel]
             if len(val) > 0:
                 logging.debug('channel {}: {}, '.format(channel, str(self.state_map[channel])))
         # agent.log_predictions()
         logging.debug('env reward is : ' + str(self.current_reward))
+        for object_id in self.objects.keys():
+            self.objects[object_id].log_summary()
         logging.debug('___________end step {}_______________\n'.format(self.t))

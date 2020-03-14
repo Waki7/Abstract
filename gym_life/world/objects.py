@@ -14,6 +14,11 @@ class Seeable():
         self.see_value = see_value
         self.id = id
 
+    def __str__(self):
+        return '{} {}'.format(self.id, self.__class__)
+
+    def __repr__(self):
+        return '{} {}'.format(self.id, self.__class__)
 
 class Object(Seeable):
     def __init__(self, id: str, see_value: ch.See, see_close_value: ch.See):
