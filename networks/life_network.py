@@ -41,7 +41,6 @@ class LifeNetwork(nn.Module):
         self.in_size = self.in_vector_idx[-1]
         self.out_size = self.out_vector_idx[-1]
 
-        self.networkType = NetworkTypes.Torch
 
         numS = 16
         bias = False
