@@ -4,6 +4,13 @@ env:
     update_rate: 1
     n_agents: 1
 
+  grid:
+    name: 'Grid-v0'
+    update_rate: 1
+    n_agents: 1
+    height: 10
+    width: 10
+
   cart:
     name: 'CartPole-v0'
 

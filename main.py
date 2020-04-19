@@ -2,6 +2,7 @@ from agent_controllers.factory import CONTROLLER_REGISTERY
 from networks.base_networks import *
 import yaml
 import gym_life
+import gym_grid
 
 with open('config.yaml') as f:
     cfg = yaml.load(f, Loader=yaml.FullLoader)
@@ -21,7 +22,7 @@ def main():
                         )
     # train('a2c', 'cart')
     # train('social', 'cart')
-    train('a2c', 'life')
+    train('a2c', 'grid')
     # train('exp', 'cart')
     # train('ccra', 'cart')
     # train('cra', 'cart')
