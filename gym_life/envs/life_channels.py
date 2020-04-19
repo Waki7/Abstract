@@ -1,5 +1,7 @@
 from enum import Enum
+
 import numpy as np
+import torch
 
 channel_names = {
     0: "see",
@@ -106,13 +108,21 @@ AGENT_STATE_CHANNELS = [See, Hear, Feel, Movement]
 AGENT_ACTION_CHANNELS = [Speak, Movement]
 
 
+def agent_action_vector(action_enum):
+    channels = AGENT_ACTION_CHANNELS
+    return encode_from_list(action_enum, channels)
+
 def encode(msg, channel):
     import numpy as np
     encoded = np.zeros(len(channel))
+    if msg is None:
+        return encoded
     if isinstance(msg, list):
         for i in msg:
+            assert isinstance(i, channel), 'message is not the same type as the channel'
             encoded[i.value] = 1.0
     else:
+        assert isinstance(msg, channel), 'message is not the same type as the channel'
         encoded[msg.value] = 1.0
     return encoded
 
@@ -128,7 +138,9 @@ def getNeuronChannel(neuron):
     return channel
 
 
-def encode_from_map(map, channels):
+def encode_from_map(map, channels=None):
+    if channels is None:
+        channels = map.keys()
     encoded_input = []
     for channel in channels:
         channel_vals = map[channel]
@@ -136,9 +148,21 @@ def encode_from_map(map, channels):
     return np.concatenate(encoded_input, axis=0)
 
 
+def encode_from_list(action_enum_list, channels):
+    encoded_input = []
+    for channel in channels:
+        encoded_input.append(encode([action for action in action_enum_list if isinstance(action, channel)], channel))
+    return np.concatenate(encoded_input, axis=0)
+
+
 def decode_to_enum(action, channels):
     index = 0
-    max = action if isinstance(action, int) else np.argmax(action)
+    if isinstance(action, int):
+        max = action
+    else:
+        assert isinstance(action, np.ndarray) or isinstance(action, torch.Tensor) or isinstance(action, list)
+        assert np.sum(action == 1.) <= 1, 'only accepting one action atm'
+        max = np.argmax(action)
     for c in channels:
         if max < index + len(c):
             return c(max - index)

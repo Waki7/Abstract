@@ -108,22 +108,27 @@ class ChannelNetworkSwitch(BaseNetwork):
         self.reward_embedding_size = cfg.get('reward_embedding_size', 1)
         self.model_size = cfg.get('model_size', 32)
         self.bias = cfg.get('bias', True)
+        self.state_embedding_size = cfg.get('state_embedding_size', -1)
+        hidden_features = n_features + out_shape
+        if self.state_embedding_size > 0:
+            hidden_features = self.state_embedding_size
 
         ##########################################################################################
         # define channels
         ##########################################################################################
-        self.in_channels = ['env in channels', 'reward', 'hidden in channels'] \
+        self.in_channels = ['env in channels', 'reward', 'hidden_state'] \
             if in_channels is None else in_channels
         self.n_in_channels = len(self.in_channels)
-        self.in_shapes = [n_features, self.reward_embedding_size, out_shape + n_features] \
+        self.in_shapes = [n_features, self.reward_embedding_size, hidden_features] \
             if in_shapes is None else in_shapes
         self.in_shape = n_features + self.reward_embedding_size
-        self.hidden_in_shape = self.in_shapes[-1]
+        self.hidden_in_shape = sum(
+            [shape for shape, channel in zip(self.in_shapes, self.in_channels) if 'hidden' in channel])
 
-        self.out_channels = ['action', 'focus', 'future'] \
+        self.out_channels = ['action', 'focus/future'] \
             if out_channels is None else out_channels
         self.n_out_channels = len(self.out_channels)
-        self.out_shapes = [out_shape, out_shape, n_features] \
+        self.out_shapes = [out_shape, hidden_features] \
             if out_shapes is None else out_shapes
         self.n_actions = out_shape
         self.hidden_n_actions = sum(self.out_shapes[1:])
@@ -193,13 +198,12 @@ class ChannelNetworkSwitch(BaseNetwork):
         prob_output = F.softmax(output,
                                 dim=-1)  # todo try to experiment with having all of the output part of hidden state.
 
-        self.hidden_state = prob_output[:, -self.hidden_n_actions:]
-
         action = prob_output[:, :self.out_vector_idx[1]]
-        hidden_think = prob_output[:, self.out_vector_idx[1]:self.out_vector_idx[2]]
-        hidden_pred = prob_output[:, self.out_vector_idx[2]:self.out_vector_idx[3]]
+        hidden_concepts = prob_output[:, self.out_vector_idx[1]:self.out_vector_idx[2]]
 
-        return action, hidden_think, hidden_pred
+        self.hidden_state = hidden_concepts
+
+        return action, hidden_concepts
 
     def prune(self):
         self.hidden_state = self.hidden_state.detach()
@@ -327,3 +331,38 @@ class ChannelNetwork(BaseNetwork):
         self.hidden_state = torch.zeros((1, self.hidden_in_shape)).to(settings.DEVICE)
     # def update_paramters(self):
     #     pass
+
+
+@register_network
+class CriticChannels(BaseNetwork):
+    def __init__(self, out_shape, cfg, n_features, **kwargs):
+        super().__init__(cfg)
+
+        ##########################################################################################
+        # set cfg parameters
+        ##########################################################################################
+        self.state_embedding_size = cfg.get('state_embedding_size', -1)
+        hidden_features = n_features
+        if self.state_embedding_size > 0:
+            hidden_features = self.state_embedding_size
+
+        ##########################################################################################
+        # create layers
+        ##########################################################################################
+        self.linear_pre_prob = nn.Linear(n_features, hidden_features)
+        # soft max will be applied to the above output
+        self.linear1 = nn.Linear(hidden_features, self.model_size)
+        self.linear2 = nn.Linear(self.model_size, out_shape)
+        self.create_optimizer()
+
+    def forward(self, x):
+        x = F.leaky_relu(self.linear_pre_prob(x))
+        probs = F.softmax(x, dim=-1)
+        x = F.leaky_relu(self.linear1(probs))
+        x = F.leaky_relu(self.linear2(x))
+        return x, probs
+
+    def forward_prob(self, x):
+        x = F.leaky_relu(self.linear1(x))
+        x = F.leaky_relu(self.linear2(x))
+        return x

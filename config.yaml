@@ -14,6 +14,20 @@ env:
     name: 'BeamRider-v0'
 
 agents:
+  social:
+    controller_name: SocialCRAController
+    agent_name: SocialCRAAgent
+#    update_threshold: 1
+    ac_network: ConceptNetwork
+    n_concepts: 20
+
+    td_step: 10
+    entropy_coef: .01
+    ac_cfg:
+      n_concepts: 20
+      lr: .01
+      model_size: 32
+
   cra:
     controller_name: CRAController
     agent_name: CRAAgent
@@ -31,22 +45,18 @@ agents:
     controller_name: CRAController
     agent_name: CRAAgent
     actor_network: ChannelNetworkSwitch # ChannelNetworkSwitch ChannelNetwork ChannelNetworkBasic CRANetwork ActorFCNetwork ACNetwork ACENetwork ChannelNetwork
-    critic_network: CriticFCNetwork # CriticFCNetwork CENetwork
+    critic_network: CriticChannels # CriticFCNetwork CENetwork CriticChannels
+    condition_on_action: True
 
     td_step: -1
     supervised_loss: False
     entropy_coef: 0.01
     discount: True
     actor_cfg:
-      lr: .0001
+      state_embedding_size: 10
+      lr: .001
       model_size: 32
       gradient_clip: 2.0
-
-  cra-life:
-    controller_name: CRAController
-    agent_name: CRAAgent
-    actor_network: life_network
-    td_step: 10
 
   exp:
     controller_name: EXPController
@@ -76,7 +86,7 @@ agents:
     discount_factor: .99
     entropy_coef: .05
     supervised_loss: False
-    td_step: -1
+    td_step: 10
     actor:
       lr: .01
       model_size: 64
@@ -97,6 +107,6 @@ agents:
 
 training:
   variation: ''
-  n_episodes: 500 #
+  n_episodes: 2000 #
   timeout: 2000 # steps in one episode before time out, unless not episodic
   eval_rewards_window: 20

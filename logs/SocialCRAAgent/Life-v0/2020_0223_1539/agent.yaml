@@ -1,0 +1,10 @@
+ac_cfg:
+  lr: 0.01
+  model_size: 32
+  n_concepts: 20
+ac_network: ConceptNetwork
+agent_name: SocialCRAAgent
+controller_name: SocialCRAController
+entropy_coef: 0.01
+n_concepts: 20
+td_step: 10

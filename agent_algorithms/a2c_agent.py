@@ -33,10 +33,10 @@ class A2CAgent():
         self.discount_factor = cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
         self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
         self.supervised_loss = cfg.get('supervised_loss', False)
-        logging.debug(' update_threshold : ', self.update_threshold)
-        logging.debug(' td_step : ', self.td_step)
-        logging.debug(' discount_factor : ', self.discount_factor, '\n')
-        logging.debug(' entropy_coef : ', self.entropy_coef, '\n')
+        logging.debug(' update_threshold : {}'.format(self.update_threshold))
+        logging.debug(' td_step : {}'.format(self.td_step))
+        logging.debug(' discount_factor : {}'.format(self.discount_factor))
+        logging.debug(' entropy_coef : {}'.format(self.entropy_coef))
 
         self.is_episodic = is_episodic
         self.reward = 0
@@ -65,7 +65,7 @@ class A2CAgent():
         return action
 
     def update_policy(self, env_reward, episode_end, new_state=None):
-        ret_loss = 0
+        ret_loss = {}
         self.rewards.append(env_reward)
         should_update = self.should_update(episode_end, env_reward)
         if should_update:
@@ -95,7 +95,8 @@ class A2CAgent():
             ac_loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
 
             ac_loss.backward()
-            ret_loss = ac_loss.detach().cpu().item()
+            ret_loss['actor_loss'] = actor_loss.detach().cpu().item()
+            ret_loss['critic_loss'] = critic_loss.detach().cpu().item()
 
             self.update_networks()
             self.reset_buffers()
@@ -121,4 +122,5 @@ class A2CAgent():
         td_update = self.td_step != -1 and steps_since_update % self.td_step == 0
         if self.update_threshold == -1:  # not trying the threshold updater
             return episode_end or td_update
-        return episode_end or reward >= self.update_threshold
+        update = episode_end or np.abs(reward) >= self.update_threshold
+        return update

@@ -1,16 +1,7 @@
-from agent_algorithms.cra_agent import *
-import logging
-import torch.utils.tensorboard
 from agent_controllers.factory import CONTROLLER_REGISTERY
 from networks.base_networks import *
-import agent_algorithms
-import config
-from shutil import copy as copy_file
 import yaml
-import numpy as np
-import os
-import random
-import torch
+import gym_life
 
 with open('config.yaml') as f:
     cfg = yaml.load(f, Loader=yaml.FullLoader)
@@ -25,12 +16,14 @@ def train(algorithm, env_namespace):
 
 def main():
     logging.basicConfig(level=
-                        logging.INFO
-                        # logging.DEBUG
+                        # logging.INFO
+                        logging.DEBUG
                         )
     # train('a2c', 'cart')
+    # train('social', 'cart')
+    train('a2c', 'life')
     # train('exp', 'cart')
-    train('ccra', 'cart')
+    # train('ccra', 'cart')
     # train('cra', 'cart')
     # train('a2c', 'life')
     # train('a2c', 'beam')

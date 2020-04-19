@@ -1,11 +1,14 @@
-import gym_life.envs.life_channels as ch
-import numpy as np
+import logging
+from enum import Enum
 from typing import Union
-from utils.TimeBuffer import TimeBuffer
+
 import gym
 from gym import spaces
-import logging
-from utils.model_utils import true_with_probability
+
+import gym_life.envs.life_channels as ch
+import gym_life.world.objects as objects
+import utils.model_utils as model_utils
+from utils.TimeBuffer import TimeBuffer
 
 
 class LifeEnv(gym.Env):
@@ -24,7 +27,7 @@ class LifeEnv(gym.Env):
         # ---------------------------------------------------------------------------
         # initializing agents according to arbitrary naming scheme
         # ---------------------------------------------------------------------------
-        self.agent_keys = ['agent_{}'.format(i) for i in range(self.n_agents)]
+        # self.agent_keys = ['agent_{}'.format(i) for i in range(self.n_agents)]
 
         self.is_episodic = False
         self.hunger_threshold = 15
@@ -32,8 +35,10 @@ class LifeEnv(gym.Env):
         self.agent_history = TimeBuffer(5)  # this is arbitrary for the maximum history tracking length
         self.agent_state_channels = ch.AGENT_STATE_CHANNELS
         self.agent_action_channels = ch.AGENT_ACTION_CHANNELS
-        self.action_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
+        self.action_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_action_channels]))
         self.observation_space = spaces.Discrete(sum([len(list(channel)) for channel in self.agent_state_channels]))
+        logging.info('total of {} actions available'.format(self.action_space.n))
+        logging.info('total of {} observable discrete observations'.format(self.observation_space.n))
 
         # ---------------------------------------------------------------------------
         # initializations
@@ -46,6 +51,11 @@ class LifeEnv(gym.Env):
         self.current_location = None
         self.state_map = None
         self.state = None
+
+        # ---------------------------------------------------------------------------
+        # episodic initializations
+        # ---------------------------------------------------------------------------
+        self.agent_action_map = None
         self.t = 0
         self.hunger_level = 0
         self.thirst_level = 0
@@ -53,10 +63,16 @@ class LifeEnv(gym.Env):
         self.reset()
 
     def reset(self):
-        self.room1 = Location(self, ch.See.room1)
-        self.room2 = Location(self, ch.See.room2)
-        self.outside = Location(self, ch.See.outisde)
-        self.mom = Mom(self)
+        self.room1 = objects.Location(id='room1', world=self, see_value=ch.See.room1)
+        self.room2 = objects.Location(id='room2', world=self, see_value=ch.See.room2)
+        self.outside = objects.Location(id='outside', world=self, see_value=ch.See.outisde)
+        self.mom = objects.Mom(id='mom', world=self)
+        self.objects = {
+            self.room1.id: self.room1,
+            self.room2.id: self.room2,
+            self.outside.id: self.outside,
+            self.mom.id: self.mom,
+        }
         # self.sibling = Sibling(self)
         # self.food = Object(ch.See.food, ch.See.food_close)
         self.locations = [self.room1, self.room2, self.outside]
@@ -66,29 +82,21 @@ class LifeEnv(gym.Env):
         self.current_reward = 0
         self.current_location = self.room1
         self.mom.go_to_room(self.room1)
+
         # self.sibling.go_to_room(self.room2)
         # self.food.put_in_room(self.room2)
         self.state_map = self.initialize_empty_map()
         self.state = ch.encode_from_map(self.state_map, ch.AGENT_STATE_CHANNELS)
+
         return self.state
 
-    def step(self, agent_actions):
-        """
-        Args:
-            action (object): an action done by the agent, encoded into its channel
+    def add_agent(self):
+        pass
 
-        Returns:
-            observation (object): agent's observation of the current environment
-            reward (float) : amount of reward returned after previous action
-            done (bool): whether the episode has ended, in which case further step() calls will return undefined results
-            info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
-        """
-        if not isinstance(agent_actions, dict):
-            agent_actions = dict(zip(self.agent_keys, agent_actions))
+    def step_enum(self, agent_action_map: Enum):  # this will not be an enum for long i think
         agent_feel = []
-        agent_action_map = ch.decode_to_enum(agent_actions, ch.AGENT_ACTION_CHANNELS)
-        self.print_summary(agent_action_map)
-
+        self.agent_action_map = agent_action_map
+        # self.log_summary(agent_action_map)
         previous_feel = self.state_map[ch.Feel]  # todo... proper history tracking
         if ch.Feel.fed in previous_feel and self.hunger_level > self.hunger_threshold:
             agent_feel = [ch.Feel.happy, ch.Feel.content]
@@ -137,6 +145,20 @@ class LifeEnv(gym.Env):
         self.state = ch.encode_from_map(self.state_map, ch.AGENT_STATE_CHANNELS)
         return self.state, self.current_reward, False, {}
 
+    def step(self, agent_actions):
+        """
+        Args:
+            action (object): an action done by the agent, encoded into its channel
+
+        Returns:
+            observation (object): agent's observation of the current environment
+            reward (float) : amount of reward returned after previous action
+            done (bool): whether the episode has ended, in which case further step() calls will return undefined results
+            info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
+        """
+        agent_action_map = ch.decode_to_enum(agent_actions, ch.AGENT_ACTION_CHANNELS)
+        return self.step_enum(agent_action_map)
+
     def update_state(self, agent_prediction: Union[ch.Movement, ch.Speak]):
         self.current_location.update_state(agent_prediction)
         self.add_setting_to_state()
@@ -156,16 +178,16 @@ class LifeEnv(gym.Env):
 
     def feed_agent(self, giver):
         self.state_map[ch.Feel].append(ch.Feel.fed)
-        self.state_map[ch.See].append(giver.close_see_value)
+        self.state_map[ch.See].append(giver.see_close_value)
         self.state_map[ch.See].append(ch.See.food_close)
-        if true_with_probability(.5):
+        if model_utils.true_with_probability(.5):
             self.state_map[ch.Hear].append(ch.Hear.food)
 
     def give_water_agent(self, giver):
         self.state_map[ch.Feel].append(ch.Feel.drank)
-        self.state_map[ch.See].append(giver.close_see_value)
+        self.state_map[ch.See].append(giver.see_close_value)
         self.state_map[ch.See].append(ch.See.water_close)
-        if true_with_probability(.5):
+        if model_utils.true_with_probability(.5):
             self.state_map[ch.Hear].append(ch.Hear.water)
 
     def initialize_empty_map(self):
@@ -174,109 +196,18 @@ class LifeEnv(gym.Env):
     def get_current_state(self):
         return self.state
 
-    def print_summary(self, agent_action_map):
-        logging.debug('agent prediction : ' + str(agent_action_map))
-        logging.debug('Env State for agent at timestep ' + str(self.t) + '\n')
+    def log_summary(self):
+        logging.debug('\n___________start step {}_______________'.format(self.t))
 
+        if self.agent_action_map:
+            logging.debug('agent\' latest prediction : ' + str(self.agent_action_map))
+        logging.debug('Env State for agent at timestep ' + str(self.t))
         for channel in self.state_map:
             val = self.state_map[channel]
             if len(val) > 0:
-                logging.debug(str(self.state_map[channel]) + ', ')
+                logging.debug('channel {}: {}, '.format(channel, str(self.state_map[channel])))
         # agent.log_predictions()
-        logging.debug('env reward is : ' + str(self.current_reward) + '\n')
-
-
-class Seeable():
-    def __init__(self, see_value):
-        self.see_value = see_value
-
-
-class Object(Seeable):
-    def __init__(self, see_value: ch.See, close_see_value: ch.See):
-        super(Object, self).__init__(see_value)
-        self.close_see_value = close_see_value
-
-    def put_in_room(self, room):
-        room.add_object(self)
-
-
-class Person(Seeable):
-    def __init__(self, world: LifeEnv, see_value: ch.See, close_see_value: ch.See):
-        super(Person, self).__init__(see_value)
-        self.location = None
-        self.world = world
-        self.close_see_value = close_see_value
-
-    def randomly_switch_rooms(self):
-        n_locations = self.world.locations
-        self.go_to_room(np.random.choice([self.world.locations], 1, [1.0 / n_locations] * n_locations)[0])
-
-    def go_to_room(self, location):
-        if self.location is not None:
-            self.location.remove_person(self)
-        location.add_person(self)
-        self.location = location
-
-    def say(self):
-        raise NotImplementedError
-
-    def feed(self):
-        self.world.feed_agent(self)
-
-    def give_water(self):
-        self.world.give_water_agent(self)
-
-    def update_state(self, update_map):
-        raise NotImplementedError
-
-
-class Location(Seeable):
-    def __init__(self, world: LifeEnv, see_value: ch.See):
-        super(Location, self).__init__(see_value)
-        self.noises = []
-        self.people = []
-        self.objects = []
-        self.world = world
-
-    def add_person(self, person: Person):
-        self.people.append(person)
-
-    def remove_person(self, person: Person):
-        self.people.remove(person)
-
-    def add_object(self, object: Object):
-        self.objects.append(object)
-
-    def remove_object(self, object: Object):
-        self.objects.remove(object)
-
-    def update_state(self, agent_prediction):
-        [p.update_state(agent_prediction) for p in self.people]
-
-
-class Mom(Person):
-    def __init__(self, world: LifeEnv):
-        super(Mom, self).__init__(world, ch.See.mom, ch.See.mom_close)
-
-    def update_state(self, agent_prediction):
-        if agent_prediction:
-            if agent_prediction == ch.Speak.food:
-                self.feed()
-            if agent_prediction == ch.Speak.water:
-                self.give_water()
-        old_location = self.location
-        if agent_prediction and agent_prediction == ch.Feel.content and true_with_probability(.1):
-            self.randomly_switch_rooms()
-        if old_location is not self.location and self.world.current_room is old_location:
-            self.world.food.put_in_room(old_location)
-
-
-class Sibling(Person):
-    def __init__(self, world: LifeEnv):
-        super(Sibling, self).__init__(world, ch.See.sibling, ch.See.sibling_close)
-
-    def update_state(self, agent_prediction):
-        if agent_prediction and agent_prediction == ch.Speak.food:
-            self.feed()
-        if agent_prediction and agent_prediction == ch.Feel.content and true_with_probability(.2):
-            self.randomly_switch_rooms()
+        logging.debug('env reward is : ' + str(self.current_reward))
+        for object_id in self.objects.keys():
+            self.objects[object_id].log_summary()
+        logging.debug('___________end step {}_______________\n'.format(self.t))
