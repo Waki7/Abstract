@@ -1,13 +1,12 @@
 import logging
 from enum import Enum
-from typing import Union
 
 import gym
+import numpy as np
 import torch
 from gym import spaces
-import numpy as np
+
 import gym_grid.envs.grid_objects as objects
-import utils.model_utils as model_utils
 
 
 class GridEnv(gym.Env):
@@ -20,9 +19,11 @@ class GridEnv(gym.Env):
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
-        self.height = self.cfg['height']
-        self.width = self.cfg['width']
-        self.n_agents = self.cfg.get('n_agents', 1)
+        self.height = cfg['height']
+        self.width = cfg['width']
+        self.n_agents = cfg.get('n_agents', 1)
+        self.n_landmarks = cfg.get('n_landmarks', 10)
+        self.n_foreign_agents = cfg.get('n_foreign_agents', 10)
 
         # ---------------------------------------------------------------------------
         # initializing agents according to arbitrary naming scheme
@@ -54,11 +55,13 @@ class GridEnv(gym.Env):
 
     def reset(self):
 
-        for i in range(0, 10):
+        for i in range(0, self.n_landmarks):
             y = torch.randint(high=self.height, size=(1,)).item()
             x = torch.randint(high=self.width, size=(1,)).item()
             point = (y, x)
-            self.object_coordinates = []
+            self.object_coordinates.append(point)
+
+
         print(exit(9))
 
         self.room1 = objects.Location(id='room1', world=self, see_value=ch.See.room1)
@@ -95,7 +98,6 @@ class GridEnv(gym.Env):
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
         return self.step_enum(None)
-
 
     def initialize_empty_map(self):
         return dict(zip(self.agent_state_channels, [[], [], [], []]))

@@ -1,52 +1,9 @@
-from __future__ import annotations
-
-import logging
-
-import numpy as np
-
-import gym_life.envs.life_channels as ch
-import gym_life.envs.life_env as life_env
-import utils.model_utils as model_utils
-
-ACTIONS = \
-    [
-        (-1, 0),  # Up
-        (-1, 1),  # Up Right
-        (0, 1),  # Right
-        (1, 1),  # Down Right
-        (1, 0),  # Down
-        (1, -1),  # Down Left
-        (0, -1),  # Left
-        (-1, -1),  # Up Left
-        (0, 0),  # Stay
-    ]
+from gym_grid.env_objects.core_env_objects import *
 
 
-class Seeable():
-    def __init__(self, id: str, see_value):
-        self.see_value = see_value
-        self.id = id
-
-    def __str__(self):
-        return '{} {}'.format(self.id, self.__class__)
-
-    def __repr__(self):
-        return '{} {}'.format(self.id, self.__class__)
-
-
-class Object(Seeable):
-    def __init__(self, id: str, see_value: ch.See, location=None):
-        super(Object, self).__init__(id=id, see_value=see_value)
-        self.id = id
-        self.location = location
-
-    def place(self, location):
-        self.location = location
-
-
-class Person(Seeable):
+class ForeignAgent(Seeable):
     def __init__(self, id: str, world: life_env.LifeEnv, see_value, see_close_value: ch.See):
-        super(Person, self).__init__(id=id, see_value=see_value)
+        super(ForeignAgent, self).__init__(id=id, see_value=see_value)
         self.location = None
         self.world = world
         self.see_close_value = see_close_value
