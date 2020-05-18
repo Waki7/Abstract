@@ -27,15 +27,20 @@ ACTIONS = \
 
 
 class Seeable():
-    def __init__(self, id: str, see_value):
+    def __init__(self, id: str, see_value, location=None, world=None):
         self.see_value = see_value
         self.id = id
+        self.location = location
+        self.world = world
 
     def __str__(self):
         return '{} {}'.format(self.id, self.__class__)
 
     def __repr__(self):
         return '{} {}'.format(self.id, self.__class__)
+
+    def place(self, location):
+        self.location = location
 
 
 class Movable():
@@ -46,3 +51,9 @@ class Movable():
 
     def place(self, location):
         self.location = location
+
+    def random_move(self):
+        pass
+
+    def move_towards(self, destination):
+        pass

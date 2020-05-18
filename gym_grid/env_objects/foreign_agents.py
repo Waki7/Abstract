@@ -2,14 +2,14 @@ from gym_grid.env_objects.core_env_objects import *
 
 
 class ForeignAgent(Seeable):
-    def __init__(self, id: str, world: life_env.LifeEnv, see_value, see_close_value: ch.See):
+    def __init__(self, id: str, world: life_env.LifeEnv, see_value):
         super(ForeignAgent, self).__init__(id=id, see_value=see_value)
         self.location = None
         self.world = world
-        self.see_close_value = see_close_value
 
     def randomly_switch_rooms(self):
         n_locations = self.world.locations
+
         self.go_to_room(np.random.choice([self.world.locations], 1, [1.0 / n_locations] * n_locations)[0])
 
     def go_to_room(self, location):
