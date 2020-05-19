@@ -2,10 +2,6 @@ from __future__ import annotations
 
 from enum import Enum
 
-import numpy as np
-
-import gym_life.envs.life_channels as ch
-
 
 class See(Enum):  # keep nothing as 0
     GoodLandmark: 0
@@ -33,16 +29,13 @@ ACTIONS = \
         # (1, 1),  # Down Right
         # (1, -1),  # Down Left
         # (-1, -1),  # Up Left
-
     ]
 
 
 class Seeable():
-    def __init__(self, id: str, see_value, location=None, world=None):
-        self.see_value = see_value
+    def __init__(self, id: str, location=None):
         self.id = id
         self.location = location
-        self.world = world
 
     def __str__(self):
         return '{} {}'.format(self.id, self.__class__)
@@ -54,17 +47,12 @@ class Seeable():
         self.location = location
 
 
-class Actionable():
-    pass
-
-
-class Movable():
-    def __init__(self, id: str, see_value: ch.See, location=None, world=None, actions=None):
-        super(Movable, self).__init__(id=id, see_value=see_value)
+class Actionable(Seeable):
+    def __init__(self, id: str, location=None, policy=None, **kwargs):
+        super(Actionable, self).__init__(id=id, **kwargs)
         self.id = id
         self.location = location
-        if actions == None:
-            actions = np.zeros()
+        self.policy = policy
 
     def place(self, location):
         self.location = location

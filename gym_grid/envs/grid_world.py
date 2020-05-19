@@ -23,7 +23,8 @@ class GridEnv(gym.Env):
         self.width = cfg['width']
         self.n_agents = cfg.get('n_agents', 1)
         self.n_landmarks = cfg.get('n_landmarks', 10)
-        self.n_foreign_agents = cfg.get('n_foreign_agents', 10)
+        self.foreign_friendlies = cfg.get('foreign_friendlies', [])
+        self.foreign_enemies = cfg.get('foreign_enemies', [])
 
         # ---------------------------------------------------------------------------
         # initializing agents according to arbitrary naming scheme

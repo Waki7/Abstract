@@ -11,6 +11,9 @@ env:
     height: 10
     width: 10
 
+    foreign_friendlies: [random, follow, avoid]
+    foreign_enemies: [random, follow, avoid]
+
   cart:
     name: 'CartPole-v0'
 
@@ -24,7 +27,7 @@ agents:
   social:
     controller_name: SocialCRAController
     agent_name: SocialCRAAgent
-#    update_threshold: 1
+    #    update_threshold: 1
     ac_network: ConceptNetwork
     n_concepts: 20
 
