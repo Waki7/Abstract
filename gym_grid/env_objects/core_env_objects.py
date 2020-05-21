@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from enum import Enum
 
+import numpy as np
+
 
 class See(Enum):  # keep nothing as 0
     GoodLandmark: 0
@@ -32,7 +34,7 @@ ACTIONS = \
     ]
 
 
-class Seeable():
+class GridObject():
     def __init__(self, id: str, location=None):
         self.id = id
         self.location = location
@@ -47,18 +49,18 @@ class Seeable():
         self.location = location
 
 
-class Actionable(Seeable):
-    def __init__(self, id: str, location=None, policy=None, **kwargs):
-        super(Actionable, self).__init__(id=id, **kwargs)
+class ActionableItem(GridObject):
+    def __init__(self, id: str, policy=None, location=None, **kwargs):
+        super(ActionableItem, self).__init__(id=id, location=location, **kwargs)
         self.id = id
         self.location = location
         self.policy = policy
 
-    def place(self, location):
-        self.location = location
-
-    def random_move(self):
+    def step(self, obs, **kwargs) -> np.ndarray:
         pass
+        # if self.policy is None:
+        #     raise NotImplementedError
+        # return self.policy.step(obs)
 
     def move_towards(self, destination):
         pass

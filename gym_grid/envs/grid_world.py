@@ -2,11 +2,10 @@ import logging
 from enum import Enum
 
 import gym
+import gym_grid.envs.grid_objects as objects
 import numpy as np
 import torch
 from gym import spaces
-
-import gym_grid.envs.grid_objects as objects
 
 
 class GridEnv(gym.Env):
@@ -55,27 +54,11 @@ class GridEnv(gym.Env):
         self.reset()
 
     def reset(self):
-
         for i in range(0, self.n_landmarks):
             y = torch.randint(high=self.height, size=(1,)).item()
             x = torch.randint(high=self.width, size=(1,)).item()
             point = (y, x)
             self.object_coordinates.append(point)
-
-
-        print(exit(9))
-
-        self.room1 = objects.Location(id='room1', world=self, see_value=ch.See.room1)
-        self.room2 = objects.Location(id='room2', world=self, see_value=ch.See.room2)
-        self.outside = objects.Location(id='outside', world=self, see_value=ch.See.outisde)
-        self.mom = objects.Mom(id='mom', world=self)
-        self.objects = {
-            self.room1.id: self.room1,
-            self.room2.id: self.sroom2,
-            self.outside.id: self.outside,
-            self.mom.id: self.mom,
-        }
-        return self.state
 
     def add_agent(self):
         pass

@@ -3,11 +3,19 @@ import logging
 from gym_grid.env_objects.core_env_objects import *
 
 
-class ForeignAgent(Actionable):
-    def __init__(self, id: str, policy, location=None, **kwargs):
+class ForeignAgent(ActionableItem):
+    def __init__(self, id: str, policy=None, location=None, **kwargs):
         super(ForeignAgent, self).__init__(id=id, location=location, **kwargs)
-        self.location = location
-        self.policy = policy
+
+
+class ForeignEnemies(ForeignAgent):
+    def __init__(self, id: str, policy, location=None, **kwargs):
+        super(ForeignEnemies, self).__init__(id=id, location=location, policy=policy, **kwargs)
+
+
+class ForeignFriendlies(ForeignAgent):
+    def __init__(self, id: str, policy, location=None, **kwargs):
+        super(ForeignFriendlies, self).__init__(id=id, location=location, **kwargs)
 
     def place(self, location):
         self.location = location
@@ -18,12 +26,6 @@ class ForeignAgent(Actionable):
 
     def step(self, env_input):
         return self.policy(env_input)
-
-    def go_to_room(self, location):
-        if self.location is not None:
-            self.location.remove_person(self)
-        location.add_person(self)
-        self.location = location
 
     def say(self):
         raise NotImplementedError

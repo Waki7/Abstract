@@ -1,7 +1,7 @@
 from gym_grid.env_objects.core_env_objects import *
 
 
-class Landmark(Seeable):
+class Landmark(GridObject):
     def __init__(self, id: str, location = None, **kwargs):
         super(Landmark, self).__init__(id=id, **kwargs)
         self.id = id
