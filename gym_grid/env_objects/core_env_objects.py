@@ -19,7 +19,6 @@ class Actions(Enum):
     Left: 3
     Stay: 4
 
-
 ACTIONS = \
     [
         (-1, 0),  # Up
@@ -33,6 +32,8 @@ ACTIONS = \
         # (-1, -1),  # Up Left
     ]
 
+def get_action_direction_tuple(index):
+    return ACTIONS[index]
 
 class GridObject():
     def __init__(self, id: str, location=None):

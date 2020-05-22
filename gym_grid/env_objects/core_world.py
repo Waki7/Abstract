@@ -1,14 +1,15 @@
 import gym_grid.envs.grid_world as grid_world
-import gym_grid.env_objects as core
 import logging
 from enum import Enum
+import gym_grid.env_objects as core
 
 import gym
+import gym_grid.envs.grid_objects as objects
 import numpy as np
 import torch
 from gym import spaces
 
-class GridEnv(grid_world.GridEnv):
+class CoreWorld(grid_world.GridEnv):
     def __init__(self, cfg):
         '''
         This environment is a continuous task (non episodic)
@@ -20,42 +21,66 @@ class GridEnv(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         self.height = cfg['height']
         self.width = cfg['width']
-        self.agent_keys = cfg.get('agents', ['agent_0'])
         self.n_agents = cfg.get('n_agents', 1)
-        self.n_landmarks = cfg.get('n_landmarks', 10)
         self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
         self.n_foreign_enemies = cfg.get('foreign_enemies', [])
+        self.agent_list = cfg.get('agents', ['agent_0'])
 
-        self.agents = [core.Agent(id=agent) for agent in self.agent_keys]
+        self.agent_map = [core.Agent(id=agent) for agent in self.agent_list]
 
         # ---------------------------------------------------------------------------
         # initializing agents according to arbitrary naming scheme
         # ---------------------------------------------------------------------------
-        self.world = core.CoreWorld(cfg)
-        self.action_space = spaces.Discrete(len(core.ACTIONS))
-        high = np.zeros_like(self.grid)
-        low = np.ones_like(self.grid)
-        self.observation_space = spaces.Box(high=high, low=low)
-        logging.info('total of {} actions available'.format(self.action_space.n))
-        logging.info('total of {} observable discrete observations'.format(self.observation_space.high.shape))
+
+        self.grid = torch.zeros((self.height, self.width))
+
 
         # ---------------------------------------------------------------------------
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
 
-        # ---------------------------------------------------------------------------
-        # episodic initializations
-        # ---------------------------------------------------------------------------
-        self.agent_action_map = None
-        self.t = 0
-        self.reset()
+
 
     def reset(self):
+
         self.grid = torch.zeros((self.height, self.width))
 
+        for i in range(0, self.n_landmarks):
+            y = torch.randint(high=self.height, size=(1,)).item()
+            x = torch.randint(high=self.width, size=(1,)).item()
+            point = (y, x)
+            self.object_coordinates.append(point)
+        for i in range(0, self.n_foreign_friendlies):
+            pass
+        for i in range(0, self.n_foreign_friendlies):
+            pass
 
     def add_agent(self):
+        pass
+
+    def is_legal_move(self, destination, agent = None):
+        '''
+
+        :param destination: point to see if it can be occupied
+        :param agent: optionally include agent, perhaps some moves are only illegal for some agents
+        :return: boolean, true or false
+        '''
+        pass
+
+    def move_agent(self, agent_key, action):
+        destination = self.agent_map[agent_key].get_destination(action)
+        if self.is_legal_move(destination=destination):
+            self.agent_map[agent_key].place(destination)
+
+
+    def step_agents(self):
+        pass
+
+    def step_friendlies(self):
+        pass
+
+    def step_enemies(self):
         pass
 
 
@@ -71,8 +96,7 @@ class GridEnv(grid_world.GridEnv):
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
         for agent in agent_actions.keys():
-            action = agent_actions[agent]
-            self.world.move_agent(agent, action)
+            self.move_agent()
         return self.step_enum(None)
 
     def initialize_empty_map(self):
