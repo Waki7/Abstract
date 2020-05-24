@@ -7,8 +7,8 @@ class Agent(ActionableItem):
     def __init__(self, id: str, policy=None, location=None, **kwargs):
         super(Agent, self).__init__(id=id, location=location, **kwargs)
 
-    def get_destination(self, action: int):
-        return get_action_direction_tuple(action)
+    # def get_destination(self, action: np.ndarray):
+    #     return
 
     # def move(self, action: int):
     #     return get_action_direction_tuple(action)

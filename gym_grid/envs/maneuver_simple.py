@@ -1,12 +1,11 @@
-import gym_grid.envs.grid_world as grid_world
-import gym_grid.env_objects as core
 import logging
-from enum import Enum
 
-import gym
 import numpy as np
-import torch
 from gym import spaces
+
+import gym_grid.env_objects as core
+import gym_grid.envs.grid_world as grid_world
+
 
 class GridEnv(grid_world.GridEnv):
     def __init__(self, cfg):
@@ -18,8 +17,6 @@ class GridEnv(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
-        self.height = cfg['height']
-        self.width = cfg['width']
         self.agent_keys = cfg.get('agents', ['agent_0'])
         self.n_agents = cfg.get('n_agents', 1)
         self.n_landmarks = cfg.get('n_landmarks', 10)
@@ -43,6 +40,8 @@ class GridEnv(grid_world.GridEnv):
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
+        self.target = core.GridObject(id='target')
+        self.avoid = core.GridObject(id='obstacle')
 
         # ---------------------------------------------------------------------------
         # episodic initializations
@@ -52,12 +51,12 @@ class GridEnv(grid_world.GridEnv):
         self.reset()
 
     def reset(self):
-        self.grid = torch.zeros((self.height, self.width))
+        self.target.place(self.world.get_random_point())
+        self.avoid.place(self.world.get_random_point())
 
 
     def add_agent(self):
         pass
-
 
     def step(self, agent_actions):
         """
@@ -73,7 +72,11 @@ class GridEnv(grid_world.GridEnv):
         for agent in agent_actions.keys():
             action = agent_actions[agent]
             self.world.move_agent(agent, action)
-        return self.step_enum(None)
+
+        agent_obss = self.calc_agent_obs()
+        agent_rewards = self.calc_agent_rewards()
+        agent_dones = self.calc_agent_dones()
+        agent_infos = self.calc_agent_info()
 
     def initialize_empty_map(self):
         return dict(zip(self.agent_state_channels, [[], [], [], []]))
@@ -96,3 +99,15 @@ class GridEnv(grid_world.GridEnv):
         for object_id in self.objects.keys():
             self.objects[object_id].log_summary()
         logging.debug('___________end step {}_______________\n'.format(self.t))
+
+    def calc_agent_obs(self):
+        obs_map = {}
+
+    def calc_agent_rewards(self):
+        pass
+
+    def calc_agent_info(self):
+        pass
+
+    def calc_agent_info(self):
+        pass

@@ -1,13 +1,11 @@
-import gym_grid.envs.grid_world as grid_world
 import logging
-from enum import Enum
-import gym_grid.env_objects as core
 
-import gym
-import gym_grid.envs.grid_objects as objects
 import numpy as np
 import torch
-from gym import spaces
+
+import gym_grid.env_objects as core
+import gym_grid.envs.grid_world as grid_world
+
 
 class CoreWorld(grid_world.GridEnv):
     def __init__(self, cfg):
@@ -19,28 +17,20 @@ class CoreWorld(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
-        self.height = cfg['height']
-        self.width = cfg['width']
+        self.bounds = cfg.get('bounds', [-1.0, 1.0])
+
         self.n_agents = cfg.get('n_agents', 1)
         self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
         self.n_foreign_enemies = cfg.get('foreign_enemies', [])
         self.agent_list = cfg.get('agents', ['agent_0'])
+        self.dt = cfg.get('dt', .1)  # time grandularity
 
         self.agent_map = [core.Agent(id=agent) for agent in self.agent_list]
-
-        # ---------------------------------------------------------------------------
-        # initializing agents according to arbitrary naming scheme
-        # ---------------------------------------------------------------------------
-
-        self.grid = torch.zeros((self.height, self.width))
-
 
         # ---------------------------------------------------------------------------
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
-
-
 
     def reset(self):
 
@@ -59,7 +49,7 @@ class CoreWorld(grid_world.GridEnv):
     def add_agent(self):
         pass
 
-    def is_legal_move(self, destination, agent = None):
+    def is_legal_move(self, destination, agent=None):
         '''
 
         :param destination: point to see if it can be occupied
@@ -68,11 +58,11 @@ class CoreWorld(grid_world.GridEnv):
         '''
         pass
 
-    def move_agent(self, agent_key, action):
-        destination = self.agent_map[agent_key].get_destination(action)
-        if self.is_legal_move(destination=destination):
-            self.agent_map[agent_key].place(destination)
-
+    def move_agent(self, agent_key, action: np.ndarray):
+        agent = self.agent_map[agent_key]
+        location = agent.get_location()
+        new_location = location + (self.dt * action)
+        destination = agent.place(new_location)
 
     def step_agents(self):
         pass
@@ -82,7 +72,6 @@ class CoreWorld(grid_world.GridEnv):
 
     def step_enemies(self):
         pass
-
 
     def step(self, agent_actions):
         """
@@ -95,9 +84,16 @@ class CoreWorld(grid_world.GridEnv):
             done (bool): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
-        for agent in agent_actions.keys():
-            self.move_agent()
-        return self.step_enum(None)
+        for agent_key in agent_actions.keys():
+            self.move_agent(agent_key=agent_key, action=agent_actions[agent_key])
+
+    def get_random_point(self):
+        granularity = 1000.
+        rand_x = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
+        rand_y = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
+        rand_x = rand_x / granularity
+        rand_y = rand_y / granularity
+        return np.asarray(rand_y, rand_x)
 
     def initialize_empty_map(self):
         return dict(zip(self.agent_state_channels, [[], [], [], []]))
