@@ -1,3 +1,4 @@
+import gym.spaces as gym_spaces
 import numpy as np
 import torch
 
@@ -6,6 +7,19 @@ import settings
 
 def true_with_probability(p):
     return np.random.choice([True, False], 1, [p, 1 - p])
+
+
+def spaces_to_shapes(spaces: gym_spaces.Space):
+    shapes = []
+    for space in spaces:
+        if isinstance(space, gym_spaces.Discrete):
+            shapes.append((space.n,))
+        elif isinstance(space, gym_spaces.Box):
+            shape = spaces.shape
+            shapes.append(shape)
+        else:
+            raise NotImplementedError('have not implemented calculation for other spaces yet')
+    return shapes
 
 
 def get_target_action(n_actions, actions_taken, advantage):

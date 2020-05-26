@@ -6,12 +6,9 @@ def register_network(network):
     return network
 
 
-def get_network(key, cfg, out_shape, out_shape2=None, out_shape3=None, n_features=0, in_image_shape=None):
+def get_network(key, cfg, in_shapes, out_shapes):
     return NETWORK_REGISTERY[key](
         cfg=cfg,
-        out_shape=out_shape,
-        out_shape2=out_shape2,
-        out_shape3=out_shape3,
-        n_features=n_features,
-        in_image_shape=in_image_shape
+        out_shape=out_shapes,
+        in_shapes=in_shapes,
     )
