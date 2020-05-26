@@ -10,7 +10,7 @@ from networks.factory import register_network
 
 
 class BaseNetwork(nn.Module):
-    def __init__(self, cfg={}):
+    def __init__(self, input_shapes, cfg={}):
         super(BaseNetwork, self).__init__()
         self.cfg = cfg
         self.extra_parameters = nn.ParameterList()

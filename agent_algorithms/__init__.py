@@ -5,4 +5,4 @@ from agent_algorithms.cra_agent import *
 from agent_algorithms.ccra_agent import *
 from agent_algorithms.pg_agent import *
 from agent_algorithms.trpo import *
-from agent_algorithms.social_cra_agent import *
+from agent_algorithms.auto_encoding_agent import *

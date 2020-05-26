@@ -11,7 +11,7 @@ from agent_algorithms.factory import register_agent
 
 
 @register_agent
-class SocialCRAAgent():
+class AutoEncodingAgent():
     # this agent can work with environments x, y, z (life and gym envs)
     # todo move cragent controller here, and move this stuff in life network
     # try to make the encoding part separate

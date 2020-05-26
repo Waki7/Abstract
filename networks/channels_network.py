@@ -9,6 +9,7 @@ import settings
 from networks.base_networks import BaseNetwork
 from networks.factory import register_network
 
+# OLD EXPERIMENTS PROBABLY WON'T USE AGAIN FOR A WHILE
 
 def attention():
     attention_heads = 5

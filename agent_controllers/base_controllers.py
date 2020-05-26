@@ -75,7 +75,6 @@ class BaseController:  # currently implemented as (i)AC
         training = experiment_folder == ''
 
         n_episodes = training_cfg['n_episodes']
-        timeout = training_cfg['timeout']
 
         self.experiment_logger.create_experiment(self.agent_name,
                                                  self.env_cfg['name'],
@@ -103,7 +102,7 @@ class BaseController:  # currently implemented as (i)AC
                     if self.is_episodic:
                         self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
 
-                if step > timeout or (self.is_episodic and episode_end) or (not self.is_episodic and updated):
+                if (self.is_episodic and episode_end) or (not self.is_episodic and updated):
                     break
 
                 step += 1
