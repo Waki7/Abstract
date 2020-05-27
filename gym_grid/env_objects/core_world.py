@@ -6,7 +6,7 @@ import torch
 import gym_grid.env_objects as core
 import gym_grid.envs.grid_world as grid_world
 
-import gym_grid.rendering.rendering as rendering
+import gym_grid.rendering.environment_rendering as rendering
 
 class CoreWorld(grid_world.GridEnv):
     def __init__(self, cfg):
@@ -32,7 +32,7 @@ class CoreWorld(grid_world.GridEnv):
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
-        self.renderer = rendering.Renderer()
+        self.renderer = rendering.EnvironmentRenderer()
 
     def reset(self):
 

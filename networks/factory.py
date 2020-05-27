@@ -9,6 +9,6 @@ def register_network(network):
 def get_network(key, cfg, in_shapes, out_shapes):
     return NETWORK_REGISTERY[key](
         cfg=cfg,
-        out_shape=out_shapes,
+        out_shapes=out_shapes,
         in_shapes=in_shapes,
     )

@@ -6,14 +6,17 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import settings
+import utils.model_utils as model_utils
 from networks.factory import register_network
 
 
 class BaseNetwork(nn.Module):
-    def __init__(self, input_shapes, cfg={}):
+    def __init__(self, in_shapes, cfg={}):
         super(BaseNetwork, self).__init__()
         self.cfg = cfg
         self.extra_parameters = nn.ParameterList()
+        self.in_shapes = in_shapes
+        self.in_features = model_utils.sum_multi_modal_shapes(in_shapes)
 
         ##########################################################################################
         # set cfg parameters
@@ -43,11 +46,11 @@ class BaseNetwork(nn.Module):
 
 @register_network
 class ActorFCNetwork(BaseNetwork):
-    def __init__(self, out_shape, cfg, n_features=0, **kwargs):
-        super().__init__(cfg)
-        self.n_actions = out_shape
-        self.linear1 = nn.Linear(n_features, self.model_size)
-        self.linear2 = nn.Linear(self.model_size, out_shape)
+    def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
+        super().__init__(in_shapes=in_shapes, cfg=cfg)
+        self.n_actions = out_shapes[0]
+        self.linear1 = nn.Linear(self.in_features, self.model_size)
+        self.linear2 = nn.Linear(self.model_size, self.n_actions)
         self.create_optimizer()
 
     def forward(self, x):
@@ -65,10 +68,10 @@ class ActorFCNetwork(BaseNetwork):
 
 @register_network
 class CriticFCNetwork(BaseNetwork):
-    def __init__(self, out_shape, cfg, n_features, **kwargs):
-        super().__init__(cfg)
-        self.linear1 = nn.Linear(n_features, self.model_size)
-        self.linear2 = nn.Linear(self.model_size, out_shape)
+    def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
+        super().__init__(in_shapes=in_shapes, cfg=cfg)
+        self.linear1 = nn.Linear(self.in_features, self.model_size)
+        self.linear2 = nn.Linear(self.model_size, out_shapes[0])
         self.create_optimizer()
 
     def forward(self, x):
@@ -93,59 +96,3 @@ class CENetwork(BaseNetwork):
         critic_estimate = self.linear_critic(x)
         linear_estimate = self.linear_estimator(x)
         return critic_estimate, linear_estimate
-
-
-@register_network
-class ACENetwork(BaseNetwork):
-    def __init__(self, n_features, out_shape, out_shape2, out_shape3, cfg, **kwargs):
-        super().__init__(cfg)
-        n_actions = out_shape
-        critic_estimates = out_shape2
-        aux_estimates = out_shape3
-        self.n_actions = n_actions
-
-        split_size = self.model_size // 2
-
-        self.shared_1 = nn.Linear(n_features, split_size)
-        self.actor_1 = nn.Linear(n_features, split_size)
-        self.critic_1 = nn.Linear(n_features, split_size)
-        self.aux_1 = nn.Linear(n_features, split_size)
-
-        self.actor_out = nn.Linear(self.model_size, n_actions)
-        self.critic_out = nn.Linear(self.model_size, critic_estimates)
-        self.aux_out = nn.Linear(self.model_size, aux_estimates)
-        self.create_optimizer()
-
-    def forward(self, x):
-        x_shared = torch.tanh(self.shared_1(x))
-        x_actor = F.relu(self.actor_1(x))
-        x_critic = F.relu(self.critic_1(x))
-        x_aux = F.relu(self.aux_1(x))
-
-        x_actor = torch.cat([x_shared, x_actor], dim=-1)
-        x_critic = torch.cat([x_shared, x_critic], dim=-1)
-        x_aux = torch.cat([x_shared, x_aux], dim=-1)
-
-        actor_estimate = F.softmax(self.actor_out(x_actor), dim=-1)
-        critic_estimate = self.critic_out(x_critic)
-        aux_estimates = self.aux_out(x_aux)
-        return actor_estimate, (critic_estimate, aux_estimates)
-
-
-@register_network
-class ACNetwork(BaseNetwork):  # actor critic method, parameterized baseline estimate with network
-    def __init__(self, n_features, out_shape, out_shape2, cfg, **kwargs):
-        super().__init__(cfg)
-        n_actions = out_shape
-        critic_estimates = out_shape2
-        self.n_actions = n_actions
-        self.linear_shared = nn.Linear(n_features, self.model_size)
-        self.linear_actor = nn.Linear(self.model_size, n_actions)
-        self.linear_critic = nn.Linear(self.model_size, critic_estimates)
-        self.create_optimizer()
-
-    def forward(self, x):
-        x = F.relu(self.linear_shared(x))
-        actor_estimate = F.softmax(self.linear_actor(x), dim=-1)
-        critic_estimate = self.linear_critic(x)
-        return actor_estimate, critic_estimate

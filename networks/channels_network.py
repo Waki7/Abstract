@@ -11,55 +11,6 @@ from networks.factory import register_network
 
 # OLD EXPERIMENTS PROBABLY WON'T USE AGAIN FOR A WHILE
 
-def attention():
-    attention_heads = 5
-    attention_inputs = torch.tensor(list(range(attention_heads)))
-    inputs = [1, 2, 3, 4, 5]
-    attention_layer = nn.Linear(2, 1)
-    attention_output = []
-    for attention_input in attention_inputs:
-        attention_attributes = []
-        for input in inputs:
-            full_input = torch.cat(attention_input, input)
-            attention_attributes.append(attention_layer(full_input))
-        attention_output.append(inputs * F.softmax(attention_attributes, dim=-1))
-
-
-def attention2():
-    attention_heads = 5
-    inputs = [1, 2, 3, 4, 5]
-    attention_layer = nn.Linear(2, 5)
-    attention_output = []
-    for input in inputs:
-        attention_out = F.softmax(attention_layer(input), dim=-1)
-        attention_output.append(inputs * F.softmax(attention_out, dim=-1))
-
-
-@register_network
-class Attention(BaseNetwork):
-    def __init__(self, n_features, out_shape, cfg={},
-                 in_channels=None, in_shapes=None, out_channels=None, out_shapes=None, **kwargs):
-        super(Attention, self).__init__(cfg)
-        self.attenion_head = nn.Linear(n_features, out_shape)
-        self.create_optimizer()
-
-    def forward(self, inputs):
-        attention_inputs = torch.tensor(list(range(inputs.shape[-1]))).to(settings.DEVICE).float()
-        attention_inputs = attention_inputs / inputs.shape[-1]
-
-        attention_attributes = []
-        for input, attention_input in zip(inputs, attention_inputs):
-            full_input = torch.stack([attention_input, input])
-            attention_attributes.append(self.attenion_head(full_input))
-        attention_attributes = torch.cat(attention_attributes)
-        weighted_attention = inputs * F.softmax(attention_attributes, dim=-1)
-        # print(inputs)
-        # print()
-        # print(weighted_attention)
-        # print(exit(9))
-        return weighted_attention
-
-
 @register_network
 class ChannelNetworkBasic(BaseNetwork):
     def __init__(self, n_features, out_shape, cfg,

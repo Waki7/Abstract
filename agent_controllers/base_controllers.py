@@ -1,5 +1,6 @@
 import gym
 
+import utils.model_utils as model_utils
 from agent_algorithms.factory import AGENT_REGISTRY
 from agent_controllers.factory import register_controller
 from networks.factory import get_network
@@ -33,6 +34,7 @@ class BaseController:  # currently implemented as (i)AC
         self.experiment_logger = ExperimentLogger()
 
     def make_agents(self):
+        model_utils.spaces_to_shapes()
         if isinstance(self.env.observation_space, gym.spaces.Box):
             n_features = self.env.observation_space.shape[0]
         else:
@@ -47,8 +49,8 @@ class BaseController:  # currently implemented as (i)AC
             if self.ac_name is not None:
 
                 ac_network = get_network(key=self.ac_name,
-                                         out_shape=n_actions,
-                                         out_shape2=critic_estimates,
+                                         in_shapes=[],
+                                         out_shapes=[(n_actions,)],
                                          cfg=self.ac_cfg,
                                          n_features=n_features)
                 agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
@@ -140,33 +142,3 @@ class ACController(BaseController):
         self.actor_cfg = self.ac_cfg
         self.critic_cfg = cfg.get('critic', None)
         super(ACController, self).__init__(env_cfg, cfg)
-
-
-@register_controller
-class PGController(BaseController):
-    def __init__(self, env_cfg, cfg):
-        self.actor_name = cfg.get('actor_network', None)
-        self.actor_cfg = cfg['actor']
-        super(PGController, self).__init__(env_cfg, cfg)
-
-    def make_agents(self):
-        if isinstance(self.env.observation_space, gym.spaces.Box):
-            n_features = self.env.observation_space.shape[0]
-        else:
-            if isinstance(self.env.observation_space, gym.spaces.Discrete):
-                n_features = self.env.observation_space.n
-            else:
-                raise NotImplementedError
-        n_actions = self.env.action_space.n
-        agents = []
-        for i in range(0, self.n_agents):
-            actor_network = get_network(key=self.actor_name,
-                                        out_shape=n_actions,
-                                        cfg=self.actor_cfg,
-                                        n_features=n_features)
-            agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
-                                                    self.cfg,
-                                                    actor_network)
-            agents.append(agent)
-
-        return agents

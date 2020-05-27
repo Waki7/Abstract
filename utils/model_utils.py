@@ -9,6 +9,20 @@ def true_with_probability(p):
     return np.random.choice([True, False], 1, [p, 1 - p])
 
 
+def sum_multi_modal_shapes(shapes):
+    total_features = 0
+    for shape in shapes:
+        if isinstance(shapes, int):
+            total_features += shape
+        elif isinstance(shape, float):
+            total_features += int(shape)
+        elif isinstance(shape, tuple) or isinstance(shape, np.ndarray) or isinstance(shape, list):
+            total_features += np.prod(shape)
+        else:
+            raise NotImplementedError('type of shape is not supported, feel free to add it.')
+    return total_features
+
+
 def spaces_to_shapes(spaces: gym_spaces.Space):
     shapes = []
     for space in spaces:

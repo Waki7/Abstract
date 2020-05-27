@@ -1,8 +1,9 @@
 import numpy as np
 
 
-class Renderer():
-    def __init__(self, resolution):
+class ObservationRenderer():
+    def __init__(self, cfg):
+        resolution = cfg['resolution']
         self.resolution = resolution
         self.drawing = np.zeros((resolution, resolution), dtype=np.uint8)
 
@@ -46,6 +47,6 @@ class Renderer():
 
 
 if __name__ == '__main__':
-    renderer = Renderer(resolution=100)
+    renderer = EnvRenderer(resolution=100)
     circle = renderer.draw_circle(point=(1, 2), radius=100)
     print(circle.to())
