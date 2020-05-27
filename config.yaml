@@ -8,8 +8,8 @@ env:
     name: 'Grid-v0'
     update_rate: 1
     n_agents: 1
-    height: 10
-    width: 10
+    bounds: [-1,1]
+    timeout: 100
 
     foreign_friendlies: [random, follow, avoid]
     foreign_enemies: [random, follow, avoid]
@@ -36,10 +36,6 @@ agents:
     td_step: -1
 
     actor:
-      lr: .01
-      model_size: 64
-      gradient_clip: 1.5
-    critic:
       lr: .01
       model_size: 64
       gradient_clip: 1.5

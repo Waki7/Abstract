@@ -2,11 +2,13 @@ import logging
 
 import numpy as np
 import torch
+from gym import spaces
 
 import gym_grid.env_objects as core
+import gym_grid.env_objects.core_env_objects as objects
 import gym_grid.envs.grid_world as grid_world
-
 import gym_grid.rendering.environment_rendering as rendering
+
 
 class CoreWorld(grid_world.GridEnv):
     def __init__(self, cfg):
@@ -19,6 +21,8 @@ class CoreWorld(grid_world.GridEnv):
         # set parameters from config
         # ---------------------------------------------------------------------------
         self.bounds = cfg.get('bounds', [-1.0, 1.0])
+        self.resolution = cfg.get('resolution', 100)
+        self.agent_resolution = cfg.get('agent_resolution', self.resolution)
 
         self.n_agents = cfg.get('n_agents', 1)
         self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
@@ -32,7 +36,19 @@ class CoreWorld(grid_world.GridEnv):
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
-        self.renderer = rendering.EnvironmentRenderer()
+        self.renderer = rendering.EnvironmentRenderer(resolution=self.resolution)
+
+    def get_obs_space(self):
+        high = 1.
+        low = 0.
+        obs_space = spaces.Box(high=high, low=low, shape=(self.agent_resolution, self.agent_resolution))
+        logging.info('total of {} observable discrete observations'.format(obs_space.high.shape))
+        return obs_space
+
+    def get_action_space(self):
+        action_space = spaces.Discrete(len(objects.ACTIONS))
+        logging.info('total of {} actions available'.format(action_space.n))
+        return action_space
 
     def reset(self):
 
@@ -102,6 +118,9 @@ class CoreWorld(grid_world.GridEnv):
 
     def get_current_state(self):
         return self.state
+
+    def get_done(self, agent_key):
+        pass
 
     def log_summary(self):
         logging.debug('\n___________start step {}_______________'.format(self.t))

@@ -34,44 +34,7 @@ class BaseController:  # currently implemented as (i)AC
         self.experiment_logger = ExperimentLogger()
 
     def make_agents(self):
-        model_utils.spaces_to_shapes()
-        if isinstance(self.env.observation_space, gym.spaces.Box):
-            n_features = self.env.observation_space.shape[0]
-        else:
-            if isinstance(self.env.observation_space, gym.spaces.Discrete):
-                n_features = self.env.observation_space.n
-            else:
-                raise NotImplementedError
-        n_actions = self.env.action_space.n
-        critic_estimates = 1  # value estimator
-        agents = []
-        for i in range(0, self.n_agents):
-            if self.ac_name is not None:
-
-                ac_network = get_network(key=self.ac_name,
-                                         in_shapes=[],
-                                         out_shapes=[(n_actions,)],
-                                         cfg=self.ac_cfg,
-                                         n_features=n_features)
-                agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
-                                                        self.cfg,
-                                                        ac_network)
-            else:
-                actor_network = get_network(key=self.actor_name,
-                                            out_shape=n_actions,
-                                            cfg=self.actor_cfg,
-                                            n_features=n_features)
-                critic_network = get_network(key=self.critic_name,
-                                             out_shape=critic_estimates,
-                                             cfg=self.critic_cfg,
-                                             n_features=n_features)
-                agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
-                                                        self.cfg,
-                                                        actor_network,
-                                                        critic_network)
-            agents.append(agent)
-
-        return agents
+        raise NotImplementedError
 
     def teach_agents(self, training_cfg, experiment_folder=''):
         training = experiment_folder == ''
@@ -139,6 +102,41 @@ class ACController(BaseController):
         self.actor_name = cfg.get('actor_network', None)
         self.critic_name = cfg.get('critic_network', None)
         self.ac_cfg = cfg.get('ac', cfg['actor'])
+        self.share_parameters = self.ac_name is not None
         self.actor_cfg = self.ac_cfg
         self.critic_cfg = cfg.get('critic', None)
         super(ACController, self).__init__(env_cfg, cfg)
+
+    def make_agents(self):
+        in_shapes = model_utils.spaces_to_shapes(self.env.observation_space)
+        action_shapes = model_utils.spaces_to_shapes(
+            self.env.action_space)  # n_actions, can add to output shapes in controller
+        critic_estimates = [(1,), ]  # value estimator
+
+        agents = []
+        for i in range(0, self.n_agents):
+            if self.share_parameters:
+
+                ac_network = get_network(key=self.ac_name,
+                                         in_shapes=in_shapes,
+                                         out_shapes=action_shapes,
+                                         cfg=self.ac_cfg)
+                agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
+                                                        self.cfg,
+                                                        ac_network)
+            else:
+                actor_network = get_network(key=self.actor_name,
+                                            in_shapes=in_shapes,
+                                            out_shapes=action_shapes,
+                                            cfg=self.actor_cfg)
+                critic_network = get_network(key=self.critic_name,
+                                             in_shapes=in_shapes,
+                                             out_shapes=critic_estimates,
+                                             cfg=self.critic_cfg)
+                agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
+                                                        self.cfg,
+                                                        actor_network,
+                                                        critic_network)
+            agents.append(agent)
+
+        return agents

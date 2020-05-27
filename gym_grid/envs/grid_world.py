@@ -2,10 +2,9 @@ import logging
 from enum import Enum
 
 import gym
-import gym_grid.envs.grid_objects as objects
-import numpy as np
 import torch
-from gym import spaces
+
+import gym_grid.env_objects as core
 
 
 class GridEnv(gym.Env):
@@ -18,8 +17,7 @@ class GridEnv(gym.Env):
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
-        self.height = cfg['height']
-        self.width = cfg['width']
+        self.timeout = cfg['timeout']
         self.n_agents = cfg.get('n_agents', 1)
         self.n_landmarks = cfg.get('n_landmarks', 10)
         self.foreign_friendlies = cfg.get('foreign_friendlies', [])
@@ -28,15 +26,9 @@ class GridEnv(gym.Env):
         # ---------------------------------------------------------------------------
         # initializing agents according to arbitrary naming scheme
         # ---------------------------------------------------------------------------
-
-        self.grid = torch.zeros((self.height, self.width))
-
-        self.action_space = spaces.Discrete(len(objects.ACTIONS))
-        high = np.zeros_like(self.grid)
-        low = np.ones_like(self.grid)
-        self.observation_space = spaces.Box(high=high, low=low)
-        logging.info('total of {} actions available'.format(self.action_space.n))
-        logging.info('total of {} observable discrete observations'.format(self.observation_space.high.shape))
+        self.world = core.CoreWorld(cfg)
+        self.action_space = self.get_action_space()
+        self.observation_space = self.get_obs_space()
 
         # ---------------------------------------------------------------------------
         # initializations
@@ -60,6 +52,12 @@ class GridEnv(gym.Env):
             point = (y, x)
             self.object_coordinates.append(point)
 
+    def get_obs_space(self):
+        return self.world.get_obs_space()
+
+    def get_action_space(self):
+        return self.world.get_action_space()
+
     def add_agent(self):
         pass
 
@@ -81,7 +79,15 @@ class GridEnv(gym.Env):
             done (bool): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
-        return self.step_enum(None)
+        self.world.step
+        self.t += 1
+        done = {}
+
+        timeout = self.t > self.timeout
+        for agent_key in agent_actions.keys():
+            done[agent_key] = self.world.get_done(agent_key) or timeout
+        done['__all__'] = all(done.values())
+        return None, None, done, None
 
     def initialize_empty_map(self):
         return dict(zip(self.agent_state_channels, [[], [], [], []]))

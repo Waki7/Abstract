@@ -25,16 +25,6 @@ class GridEnv(grid_world.GridEnv):
 
         self.agents = [core.Agent(id=agent) for agent in self.agent_keys]
 
-        # ---------------------------------------------------------------------------
-        # initializing agents according to arbitrary naming scheme
-        # ---------------------------------------------------------------------------
-        self.world = core.CoreWorld(cfg)
-        self.action_space = spaces.Discrete(len(core.ACTIONS))
-        high = np.zeros_like(self.grid)
-        low = np.ones_like(self.grid)
-        self.observation_space = spaces.Box(high=high, low=low)
-        logging.info('total of {} actions available'.format(self.action_space.n))
-        logging.info('total of {} observable discrete observations'.format(self.observation_space.high.shape))
 
         # ---------------------------------------------------------------------------
         # initializations
