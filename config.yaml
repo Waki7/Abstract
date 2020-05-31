@@ -11,9 +11,6 @@ env:
     bounds: [-1,1]
     timeout: 100
 
-    foreign_friendlies: [random, follow, avoid]
-    foreign_enemies: [random, follow, avoid]
-
   cart:
     name: 'CartPole-v0'
 

@@ -91,6 +91,7 @@ class GridEnv(grid_world.GridEnv):
         logging.debug('___________end step {}_______________\n'.format(self.t))
 
     def calc_agent_obs(self):
+        self.world.draw()
         obs_map = {}
 
     def calc_agent_rewards(self):

@@ -1,5 +1,7 @@
 import numpy as np
 
+import gym_grid.rendering.draw_functions as drawing
+
 
 class ObservationRenderer():
     def __init__(self, cfg):
@@ -10,40 +12,27 @@ class ObservationRenderer():
     def get_drawing(self):
         return self.drawing
 
-    def draw_circle(self, center: np.ndarray, radius, width=10):
+    def start_drawing(self):
         '''
-        Draws a circle on the Renderers current drawing memory, if width is not declared, will go with 1 pixel,
-        see draw_circle method if you wanted a filled ring
-        :param center: ndarray with two values, one for the y and one for the x dimension center
-        :param radius: how many pixels from the center the ring should be drawn
-        :param width: how many pixels wide the ring should be, default 1
+        start a new drawing
         :return:
         '''
-        xx, yy = np.mgrid[:self.resolution, :self.resolution]  # basically just a 2d np.arange
-        circle_dist = (xx - center[1]) ** 2 + (yy - center[0]) ** 2
-        half_width = width // 2
-        ring_dist = radius ** 2
-        circle = circle_dist < (ring_dist + half_width)
-        return circle
+        self.drawing = 0 * self.drawing
+
+    def draw_circle(self, center: np.ndarray, radius):
+        drawing.draw_circle(self.drawing, center=center, radius=radius)
 
     def draw_ring(self, center: np.ndarray, radius, width=10):
-        '''
-        Draws a circle on the Renderers current drawing memory, if width is not declared, will go with 1 pixel,
-        see draw_circle method if you wanted a filled ring
-        :param center: ndarray with two values, one for the y and one for the x dimension center
-        :param radius: how many pixels from the center the ring should be drawn
-        :param width: how many pixels wide the ring should be, default 1
-        :return:
-        '''
-        xx, yy = np.mgrid[:self.resolution, :self.resolution]  # basically just a 2d np.arange
-        circle_dist = (xx - center[1]) ** 2 + (yy - center[0]) ** 2
-        half_width = width // 2
-        ring_dist = radius ** 2
-        ring = (circle_dist < (ring_dist + half_width)) & (circle_dist > (ring_dist - half_width))
-        return ring
+        drawing.draw_ring(self.drawing, center=center, radius=radius, width=width)
+
+    def get_obs(self, center):
+        pass
 
     def draw_line(self):
         raise NotImplementedError
+
+    def convert_to_gif(self):
+        pass
 
 
 if __name__ == '__main__':

@@ -1,5 +1,4 @@
 import logging
-from enum import Enum
 
 import gym
 import torch
@@ -52,6 +51,17 @@ class GridEnv(gym.Env):
             point = (y, x)
             self.object_coordinates.append(point)
 
+    def load_agents(self):
+        '''
+        When rerunning agents, this method will allow you to update any shapes to fit the parameters
+        todo
+        :return:
+        '''
+        pass
+
+    def render(self):
+        raise NotImplementedError
+
     def get_obs_space(self):
         return self.world.get_obs_space()
 
@@ -60,13 +70,6 @@ class GridEnv(gym.Env):
 
     def add_agent(self):
         pass
-
-    def step_enum(self, agent_action_map: Enum):  # this will not be an enum for long i think
-        agent_feel = []
-        self.agent_action_map = agent_action_map
-        # self.log_summary(agent_action_map)
-
-        return self.state, self.current_reward, False, {}
 
     def step(self, agent_actions):
         """

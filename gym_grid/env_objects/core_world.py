@@ -80,7 +80,9 @@ class CoreWorld(grid_world.GridEnv):
         agent = self.agent_map[agent_key]
         location = agent.get_location()
         new_location = location + (self.dt * action)
+        # todo logic for bouncing off and avoiding collisions, add to vector
         destination = agent.place(new_location)
+        return destination
 
     def step_agents(self):
         pass
@@ -91,19 +93,11 @@ class CoreWorld(grid_world.GridEnv):
     def step_enemies(self):
         pass
 
-    def step(self, agent_actions):
-        """
-        Args:
-            action (object): an action done by the agent, encoded into its channel
+    def draw(self):
+        self.renderer.
+        for f in self.foreign_enemies:
 
-        Returns:
-            observation (object): agent's observation of the current environment
-            reward (float) : amount of reward returned after previous action
-            done (bool): whether the episode has ended, in which case further step() calls will return undefined results
-            info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
-        """
-        for agent_key in agent_actions.keys():
-            self.move_agent(agent_key=agent_key, action=agent_actions[agent_key])
+
 
     def get_random_point(self):
         granularity = 1000.
