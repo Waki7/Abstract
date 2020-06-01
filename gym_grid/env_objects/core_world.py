@@ -1,13 +1,15 @@
 import logging
+from typing import List
 
 import numpy as np
 import torch
 from gym import spaces
 
-import gym_grid.env_objects as core
-import gym_grid.env_objects.core_env_objects as objects
+import gym_grid.env_objects.core_env_objects as core_objects
+import gym_grid.env_objects.env_agents as core_agents
+import gym_grid.env_objects.landmarks as core_landmarks
 import gym_grid.envs.grid_world as grid_world
-import gym_grid.rendering.environment_rendering as rendering
+import gym_grid.rendering.observation_rendering as rendering
 
 
 class CoreWorld(grid_world.GridEnv):
@@ -24,19 +26,15 @@ class CoreWorld(grid_world.GridEnv):
         self.resolution = cfg.get('resolution', 100)
         self.agent_resolution = cfg.get('agent_resolution', self.resolution)
 
-        self.n_agents = cfg.get('n_agents', 1)
-        self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
-        self.n_foreign_enemies = cfg.get('foreign_enemies', [])
-        self.agent_list = cfg.get('agents', ['agent_0'])
         self.dt = cfg.get('dt', .1)  # time grandularity
-
-        self.agent_map = [core.Agent(id=agent) for agent in self.agent_list]
 
         # ---------------------------------------------------------------------------
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
-        self.renderer = rendering.EnvironmentRenderer(resolution=self.resolution)
+        self.landmark_map = {}
+        self.agent_map = {}
+        self.renderer = rendering.ObservationRenderer(resolution=self.resolution)
 
     def get_obs_space(self):
         high = 1.
@@ -46,7 +44,7 @@ class CoreWorld(grid_world.GridEnv):
         return obs_space
 
     def get_action_space(self):
-        action_space = spaces.Discrete(len(objects.ACTIONS))
+        action_space = spaces.Discrete(len(core_objects.ACTIONS))
         logging.info('total of {} actions available'.format(action_space.n))
         return action_space
 
@@ -66,6 +64,20 @@ class CoreWorld(grid_world.GridEnv):
 
     def add_agent(self):
         pass
+
+    def spawn_agents(self, agents: List[core_agents.Agent]):
+        for agent in agents:
+            self.agent_map[agent.id] = agent
+
+    def spawn_agent(self, agent: core_agents.Agent):
+        self.agent_map[agent.id] = agent
+
+    def spawn_landmarks(self, landmarks: List[core_landmarks.Landmark]):
+        for landmark in landmarks:
+            self.landmark_map[landmark.id] = landmark
+
+    def spawn_landmark(self, landmark: core_landmarks.Landmark):
+        self.landmark_map[landmark.id] = landmark
 
     def is_legal_move(self, destination, agent=None):
         '''
@@ -94,10 +106,11 @@ class CoreWorld(grid_world.GridEnv):
         pass
 
     def draw(self):
-        self.renderer.
-        for f in self.foreign_enemies:
-
-
+        self.renderer.reset_drawing()
+        for agent in self.agent_map.values():
+            self.renderer.draw_circle(center=agent.location, radius=1.)
+        for landmark in self.landmark_map.values():
+            self.renderer.draw_square(center=landmark.location, length=1.)
 
     def get_random_point(self):
         granularity = 1000.
@@ -113,8 +126,12 @@ class CoreWorld(grid_world.GridEnv):
     def get_current_state(self):
         return self.state
 
-    def get_done(self, agent_key):
+    def get_done(self, agent):
         pass
+
+    def get_obs(self, agent):
+        assert self.agent_map.get(agent.id, None) is not None, 'agent has not been spawned in world'
+        return self.renderer.get_obs(agent.location)
 
     def log_summary(self):
         logging.debug('\n___________start step {}_______________'.format(self.t))

@@ -4,8 +4,8 @@ from gym_grid.env_objects.core_env_objects import *
 
 
 class Agent(ActionableItem):
-    def __init__(self, id: str, policy=None, location=None, **kwargs):
-        super(Agent, self).__init__(id=id, location=location, **kwargs)
+    def __init__(self, observed_value, policy=None, id: str = None, location=None, **kwargs):
+        super(Agent, self).__init__(observed_value=observed_value, policy=policy, id=id, location=location, **kwargs)
 
     # def get_destination(self, action: np.ndarray):
     #     return
@@ -13,14 +13,15 @@ class Agent(ActionableItem):
     # def move(self, action: int):
     #     return get_action_direction_tuple(action)
 
-class Enemies(Agent):
-    def __init__(self, id: str, policy, location=None, **kwargs):
-        super(Enemies, self).__init__(id=id, location=location, policy=policy, **kwargs)
+
+class Enemy(Agent):
+    def __init__(self, observed_value, policy, id: str = None, location=None, **kwargs):
+        super(Enemy, self).__init__(observed_value=observed_value, policy=policy, id=id, location=location, **kwargs)
 
 
-class Friendlies(Agent):
-    def __init__(self, id: str, policy, location=None, **kwargs):
-        super(Friendlies, self).__init__(id=id, location=location, **kwargs)
+class Friendly(Agent):
+    def __init__(self, observed_value, policy, id: str = None, location=None, **kwargs):
+        super(Friendly, self).__init__(observed_value=observed_value, policy=policy, id=id, location=location, **kwargs)
 
     def place(self, location):
         self.location = location

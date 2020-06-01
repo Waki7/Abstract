@@ -1,8 +1,5 @@
 import logging
 
-import numpy as np
-from gym import spaces
-
 import gym_grid.env_objects as core
 import gym_grid.envs.grid_world as grid_world
 
@@ -23,15 +20,14 @@ class GridEnv(grid_world.GridEnv):
         self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
         self.n_foreign_enemies = cfg.get('foreign_enemies', [])
 
-        self.agents = [core.Agent(id=agent) for agent in self.agent_keys]
-
+        self.agents = [core.Agent(id=agent, observed_value=.1) for agent in self.agent_keys]
 
         # ---------------------------------------------------------------------------
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
-        self.target = core.GridObject(id='target')
-        self.avoid = core.GridObject(id='obstacle')
+        self.target = core.GridObject(id='target', observed_value=.4)
+        self.avoid = core.GridObject(id='obstacle', observed_value=.8)
 
         # ---------------------------------------------------------------------------
         # episodic initializations
@@ -43,7 +39,8 @@ class GridEnv(grid_world.GridEnv):
     def reset(self):
         self.target.place(self.world.get_random_point())
         self.avoid.place(self.world.get_random_point())
-
+        self.world.spawn_landmarks([self.target, self.avoid])
+        self.world.spawn_agents(self.agents)
 
     def add_agent(self):
         pass
@@ -91,8 +88,10 @@ class GridEnv(grid_world.GridEnv):
         logging.debug('___________end step {}_______________\n'.format(self.t))
 
     def calc_agent_obs(self):
-        self.world.draw()
         obs_map = {}
+        self.world.draw()
+        for agent in self.agents:
+            obs_map[agent.id] = self.world.get_obs(agent)
 
     def calc_agent_rewards(self):
         pass

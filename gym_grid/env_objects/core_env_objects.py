@@ -39,7 +39,8 @@ def get_action_unit_vector(index):
 
 
 class GridObject():
-    def __init__(self, id: str, location=None):
+    def __init__(self, observed_value, id: str = None, location=None):
+        self.observed_value = observed_value
         self.id = id
         self.location = location
 
@@ -57,8 +58,8 @@ class GridObject():
 
 
 class ActionableItem(GridObject):
-    def __init__(self, id: str, policy=None, location=None, **kwargs):
-        super(ActionableItem, self).__init__(id=id, location=location, **kwargs)
+    def __init__(self, observed_value, policy=None, id: str = None, location=None, **kwargs):
+        super(ActionableItem, self).__init__(observed_value=observed_value, id=id, location=location, **kwargs)
         self.id = id
         self.location = location
         self.policy = policy
