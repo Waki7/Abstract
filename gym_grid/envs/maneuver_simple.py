@@ -42,6 +42,7 @@ class GridEnv(grid_world.GridEnv):
         self.world.spawn_landmarks([self.target, self.avoid])
         self.world.spawn_agents(self.agents)
 
+
     def add_agent(self):
         pass
 

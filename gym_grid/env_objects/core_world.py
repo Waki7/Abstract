@@ -2,17 +2,15 @@ import logging
 from typing import List
 
 import numpy as np
-import torch
 from gym import spaces
 
 import gym_grid.env_objects.core_env_objects as core_objects
 import gym_grid.env_objects.env_agents as core_agents
 import gym_grid.env_objects.landmarks as core_landmarks
-import gym_grid.envs.grid_world as grid_world
 import gym_grid.rendering.observation_rendering as rendering
 
 
-class CoreWorld(grid_world.GridEnv):
+class CoreWorld():
     def __init__(self, cfg):
         '''
         This environment is a continuous task (non episodic)
@@ -48,34 +46,21 @@ class CoreWorld(grid_world.GridEnv):
         logging.info('total of {} actions available'.format(action_space.n))
         return action_space
 
-    def reset(self):
-
-        self.grid = torch.zeros((self.height, self.width))
-
-        for i in range(0, self.n_landmarks):
-            y = torch.randint(high=self.height, size=(1,)).item()
-            x = torch.randint(high=self.width, size=(1,)).item()
-            point = (y, x)
-            self.object_coordinates.append(point)
-        for i in range(0, self.n_foreign_friendlies):
-            pass
-        for i in range(0, self.n_foreign_friendlies):
-            pass
+    def reset_world(self):
+        self.renderer.reset_drawing()
 
     def add_agent(self):
         pass
 
     def spawn_agents(self, agents: List[core_agents.Agent]):
-        for agent in agents:
-            self.agent_map[agent.id] = agent
+        [self.spawn_agent(agent) for agent in agents]
 
     def spawn_agent(self, agent: core_agents.Agent):
         self.agent_map[agent.id] = agent
 
     def spawn_landmarks(self, landmarks: List[core_landmarks.Landmark]):
-        for landmark in landmarks:
-            self.landmark_map[landmark.id] = landmark
-
+        [self.spawn_landmark(landmark) for landmark in landmarks]
+        
     def spawn_landmark(self, landmark: core_landmarks.Landmark):
         self.landmark_map[landmark.id] = landmark
 

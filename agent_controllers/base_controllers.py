@@ -1,9 +1,6 @@
 import gym
 
-import utils.model_utils as model_utils
-from agent_algorithms.factory import AGENT_REGISTRY
-from agent_controllers.factory import register_controller
-from networks.factory import get_network
+from utils.env_wrappers import SubprocVecEnv
 from utils.storage_utils import ExperimentLogger
 
 
@@ -11,16 +8,15 @@ class BaseController:  # currently implemented as (i)AC
     def __init__(self, env_cfg, cfg):
         self.cfg = cfg
         self.env_cfg = env_cfg
+        self.env_name = env_cfg['name']
+        self.env = self.make_env()
 
         ##########################################################################################
         # set cfg parameters
         ##########################################################################################
         self.log_freq = cfg.get('log_freq', 50)
         self.agent_name = cfg['agent_name']
-        if len(env_cfg) > 1:
-            self.env = gym.make(env_cfg['name'], cfg=env_cfg)
-        else:
-            self.env = gym.make(env_cfg['name'])
+
         self.agent_keys = self.env.agent_keys if hasattr(self.env, 'agent_keys') else None
         self.n_agents = 1 if self.agent_keys is None else len(self.agent_keys)
 
@@ -36,10 +32,19 @@ class BaseController:  # currently implemented as (i)AC
     def make_agents(self):
         raise NotImplementedError
 
+    def reload_env(self, env_cfg):
+        self.env_cfg = env_cfg
+        self.env_name = env_cfg['name']
+
+    def make_env(self):
+        return gym.make(self.env_name, cfg=self.env_cfg) if len(self.env_cfg) > 1 else gym.make(self.env_name)
+
     def teach_agents(self, training_cfg, experiment_folder=''):
         training = experiment_folder == ''
 
         n_episodes = training_cfg['n_episodes']
+        n_threads = self.cfg.get('n_threads', 1)
+        is_batch_env = n_threads > 1
 
         self.experiment_logger.create_experiment(self.agent_name,
                                                  self.env_cfg['name'],
@@ -49,12 +54,15 @@ class BaseController:  # currently implemented as (i)AC
                                                  agent_cfg=self.cfg,
                                                  )  # this is a wraapper over summarywriter()
         step = 0
-        state = self.env.reset()
+
+        env = SubprocVecEnv([self.make_env() for i in range(n_threads)]) if is_batch_env else self.env
+
+        state = env.reset()
         for episode in range(n_episodes):
             while True:
                 actions = self.step_agents(state)
-                state, reward, episode_end, info = self.env.step(actions)
-                self.env.log_summary()
+                state, reward, episode_end, info = env.step(actions)
+                # self.env.log_summary()
                 losses = self.update_agents(reward, episode_end, state)
                 assert isinstance(losses, dict), 'expect losses to be returned as a dictionary'
                 updated = len(losses) != 0
@@ -93,50 +101,3 @@ class BaseController:  # currently implemented as (i)AC
                     reward[key], episode_end[key], new_state[key]
                 ))
         return loss
-
-
-@register_controller
-class ACController(BaseController):
-    def __init__(self, env_cfg, cfg):
-        self.ac_name = cfg.get('ac_network', None)
-        self.actor_name = cfg.get('actor_network', None)
-        self.critic_name = cfg.get('critic_network', None)
-        self.ac_cfg = cfg.get('ac', cfg['actor'])
-        self.share_parameters = self.ac_name is not None
-        self.actor_cfg = self.ac_cfg
-        self.critic_cfg = cfg.get('critic', None)
-        super(ACController, self).__init__(env_cfg, cfg)
-
-    def make_agents(self):
-        in_shapes = model_utils.spaces_to_shapes(self.env.observation_space)
-        action_shapes = model_utils.spaces_to_shapes(
-            self.env.action_space)  # n_actions, can add to output shapes in controller
-        critic_estimates = [(1,), ]  # value estimator
-
-        agents = []
-        for i in range(0, self.n_agents):
-            if self.share_parameters:
-
-                ac_network = get_network(key=self.ac_name,
-                                         in_shapes=in_shapes,
-                                         out_shapes=action_shapes,
-                                         cfg=self.ac_cfg)
-                agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
-                                                        self.cfg,
-                                                        ac_network)
-            else:
-                actor_network = get_network(key=self.actor_name,
-                                            in_shapes=in_shapes,
-                                            out_shapes=action_shapes,
-                                            cfg=self.actor_cfg)
-                critic_network = get_network(key=self.critic_name,
-                                             in_shapes=in_shapes,
-                                             out_shapes=critic_estimates,
-                                             cfg=self.critic_cfg)
-                agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
-                                                        self.cfg,
-                                                        actor_network,
-                                                        critic_network)
-            agents.append(agent)
-
-        return agents

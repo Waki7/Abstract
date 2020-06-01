@@ -1,7 +1,6 @@
 import logging
 
 import gym
-import torch
 
 import gym_grid.env_objects as core
 
@@ -45,11 +44,7 @@ class GridEnv(gym.Env):
         self.reset()
 
     def reset(self):
-        for i in range(0, self.n_landmarks):
-            y = torch.randint(high=self.height, size=(1,)).item()
-            x = torch.randint(high=self.width, size=(1,)).item()
-            point = (y, x)
-            self.object_coordinates.append(point)
+        raise NotImplementedError
 
     def load_agents(self):
         '''
@@ -67,36 +62,6 @@ class GridEnv(gym.Env):
 
     def get_action_space(self):
         return self.world.get_action_space()
-
-    def add_agent(self):
-        pass
-
-    def step(self, agent_actions):
-        """
-        Args:
-            action (object): an action done by the agent, encoded into its channel
-
-        Returns:
-            observation (object): agent's observation of the current environment
-            reward (float) : amount of reward returned after previous action
-            done (bool): whether the episode has ended, in which case further step() calls will return undefined results
-            info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
-        """
-        self.world.step
-        self.t += 1
-        done = {}
-
-        timeout = self.t > self.timeout
-        for agent_key in agent_actions.keys():
-            done[agent_key] = self.world.get_done(agent_key) or timeout
-        done['__all__'] = all(done.values())
-        return None, None, done, None
-
-    def initialize_empty_map(self):
-        return dict(zip(self.agent_state_channels, [[], [], [], []]))
-
-    def get_current_state(self):
-        return self.state
 
     def log_summary(self):
         logging.debug('\n___________start step {}_______________'.format(self.t))

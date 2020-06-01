@@ -64,7 +64,7 @@ class AutoEncodingAgent():
     def step(self, env_input):
         env_action = None
         probs = None
-        env_input = model_utils.convert_env_input(env_input)
+        env_input = model_utils.convert_env_batch_input(env_input)
         self.inputs.append(env_input.squeeze(0))
         while env_action is None:
 

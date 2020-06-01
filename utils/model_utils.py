@@ -49,11 +49,12 @@ def get_target_action(n_actions, actions_taken, advantage):
     return target_action
 
 
-def convert_env_input(env_input, action=None):
-    env_input = torch.from_numpy(env_input).to(settings.DEVICE).float().unsqueeze(0)
+def convert_env_batch_input(env_inputs, action=None):
+
+    env_inputs = torch.from_numpy(env_inputs).to(settings.DEVICE).float().unsqueeze(0)
     if action is not None:
-        return torch.cat([env_input, action], dim=-1)
-    return env_input
+        return torch.cat([env_inputs, action], dim=-1)
+    return env_inputs
 
 
 def one_hot(logits, idx=None):
