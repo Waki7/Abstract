@@ -21,10 +21,8 @@ class CoreWorld():
         # set parameters from config
         # ---------------------------------------------------------------------------
         self.bounds = cfg.get('bounds', [-1.0, 1.0])
-        self.resolution = cfg.get('resolution', 100)
-        self.agent_resolution = cfg.get('agent_resolution', self.resolution)
-
         self.dt = cfg.get('dt', .1)  # time grandularity
+        observation_cfg = cfg.get('observations')
 
         # ---------------------------------------------------------------------------
         # initializations
@@ -32,18 +30,20 @@ class CoreWorld():
         self.object_coordinates = []
         self.landmark_map = {}
         self.agent_map = {}
-        self.renderer = rendering.ObservationRenderer(resolution=self.resolution)
+        self.renderer = rendering.ObservationRenderer(cfg=observation_cfg)
 
     def get_obs_space(self):
-        high = 1.
-        low = 0.
-        obs_space = spaces.Box(high=high, low=low, shape=(self.agent_resolution, self.agent_resolution))
-        logging.info('total of {} observable discrete observations'.format(obs_space.high.shape))
+        obs_spaces: List[spaces.Space] = []
+        obs_spaces.append(self.renderer.get_obs_shape())
+        logging.info('total of {} observable discrete observations'.format(obs_spaces[-1].high.shape))
+        obs_space = spaces.Tuple(obs_spaces)
         return obs_space
 
     def get_action_space(self):
-        action_space = spaces.Discrete(len(core_objects.ACTIONS))
-        logging.info('total of {} actions available'.format(action_space.n))
+        action_spaces: List[spaces.Space] = []
+        action_spaces.append(spaces.Discrete(len(core_objects.ACTIONS)))
+        logging.info('total of {} actions available'.format(action_spaces[-1].n))
+        action_space = spaces.Tuple(action_spaces)
         return action_space
 
     def reset_world(self):
@@ -60,7 +60,7 @@ class CoreWorld():
 
     def spawn_landmarks(self, landmarks: List[core_landmarks.Landmark]):
         [self.spawn_landmark(landmark) for landmark in landmarks]
-        
+
     def spawn_landmark(self, landmark: core_landmarks.Landmark):
         self.landmark_map[landmark.id] = landmark
 
@@ -103,7 +103,7 @@ class CoreWorld():
         rand_y = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
         rand_x = rand_x / granularity
         rand_y = rand_y / granularity
-        return np.asarray(rand_y, rand_x)
+        return np.asarray([rand_y, rand_x])
 
     def initialize_empty_map(self):
         return dict(zip(self.agent_state_channels, [[], [], [], []]))

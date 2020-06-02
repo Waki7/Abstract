@@ -10,7 +10,9 @@ env:
     n_agents: 1
     bounds: [-1,1]
     timeout: 100
-
+    observations:
+      global_resolution: [100, 100]
+      observation_resolution: [50, 50]
   cart:
     name: 'CartPole-v0'
 

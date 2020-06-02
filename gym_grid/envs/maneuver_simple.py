@@ -4,23 +4,21 @@ import gym_grid.env_objects as core
 import gym_grid.envs.grid_world as grid_world
 
 
-class GridEnv(grid_world.GridEnv):
+class ManeuverSimple(grid_world.GridEnv):
     def __init__(self, cfg):
         '''
         This environment is a continuous task (non episodic)
         '''
+        super().__init__(cfg)
         self.cfg = cfg
 
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
-        self.agent_keys = cfg.get('agents', ['agent_0'])
         self.n_agents = cfg.get('n_agents', 1)
         self.n_landmarks = cfg.get('n_landmarks', 10)
         self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
         self.n_foreign_enemies = cfg.get('foreign_enemies', [])
-
-        self.agents = [core.Agent(id=agent, observed_value=.1) for agent in self.agent_keys]
 
         # ---------------------------------------------------------------------------
         # initializations
@@ -42,6 +40,11 @@ class GridEnv(grid_world.GridEnv):
         self.world.spawn_landmarks([self.target, self.avoid])
         self.world.spawn_agents(self.agents)
 
+    def get_obs_space(self):
+        return self.world.get_obs_space()
+
+    def get_action_space(self):
+        return self.world.get_action_space()
 
     def add_agent(self):
         pass

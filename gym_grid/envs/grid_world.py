@@ -17,9 +17,8 @@ class GridEnv(gym.Env):
         # ---------------------------------------------------------------------------
         self.timeout = cfg['timeout']
         self.n_agents = cfg.get('n_agents', 1)
-        self.n_landmarks = cfg.get('n_landmarks', 10)
-        self.foreign_friendlies = cfg.get('foreign_friendlies', [])
-        self.foreign_enemies = cfg.get('foreign_enemies', [])
+        self.agent_keys = cfg.get('agents', ['agent_0'])
+        self.agents = [core.Agent(id=agent, observed_value=.1) for agent in self.agent_keys]
 
         # ---------------------------------------------------------------------------
         # initializing agents according to arbitrary naming scheme
@@ -29,19 +28,10 @@ class GridEnv(gym.Env):
         self.observation_space = self.get_obs_space()
 
         # ---------------------------------------------------------------------------
-        # initializations
-        # ---------------------------------------------------------------------------
-        self.object_coordinates = []
-
-        # ---------------------------------------------------------------------------
         # episodic initializations
         # ---------------------------------------------------------------------------
         self.agent_action_map = None
         self.t = 0
-        self.hunger_level = 0
-        self.thirst_level = 0
-        self.current_reward = 0
-        self.reset()
 
     def reset(self):
         raise NotImplementedError
@@ -58,10 +48,10 @@ class GridEnv(gym.Env):
         raise NotImplementedError
 
     def get_obs_space(self):
-        return self.world.get_obs_space()
+        raise NotImplementedError
 
     def get_action_space(self):
-        return self.world.get_action_space()
+        raise NotImplementedError
 
     def log_summary(self):
         logging.debug('\n___________start step {}_______________'.format(self.t))

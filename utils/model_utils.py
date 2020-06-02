@@ -29,7 +29,7 @@ def spaces_to_shapes(spaces: gym_spaces.Space):
         if isinstance(space, gym_spaces.Discrete):
             shapes.append((space.n,))
         elif isinstance(space, gym_spaces.Box):
-            shape = spaces.shape
+            shape = space.shape
             shapes.append(shape)
         else:
             raise NotImplementedError('have not implemented calculation for other spaces yet')
@@ -50,7 +50,6 @@ def get_target_action(n_actions, actions_taken, advantage):
 
 
 def convert_env_batch_input(env_inputs, action=None):
-
     env_inputs = torch.from_numpy(env_inputs).to(settings.DEVICE).float().unsqueeze(0)
     if action is not None:
         return torch.cat([env_inputs, action], dim=-1)

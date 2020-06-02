@@ -1,13 +1,15 @@
 import numpy as np
+from gym import spaces
 
 import gym_grid.rendering.draw_functions as drawing
 
 
 class ObservationRenderer():
-    def __init__(self, cfg, channels=1):
-        resolution = cfg['resolution']
-        self.resolution = resolution
-        self.drawing = np.zeros((channels, resolution, resolution), dtype=np.uint8)
+    def __init__(self, cfg):
+        self.resolution = cfg['global_resolution']
+        self.obs_resolution = cfg.get('observation_resolution')
+        self.n_channels = cfg.get('n_channels', 1)
+        self.drawing = np.zeros((self.n_channels, self.resolution[0], self.resolution[1]), dtype=np.uint8)
 
     def get_drawing(self):
         return self.drawing
@@ -18,6 +20,11 @@ class ObservationRenderer():
         :return:
         '''
         self.drawing = 0 * self.drawing
+
+    def get_obs_shape(self):
+        high = 1.
+        low = 0.
+        return spaces.Box(high=high, low=low, shape=(self.obs_resolution[0], self.obs_resolution[1]))
 
     def draw_circle(self, center: np.ndarray, radius: float = 5., channel: int = 0.):
         drawing.draw_circle(self.drawing[channel], center=center, radius=radius)
