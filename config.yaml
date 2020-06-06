@@ -12,7 +12,7 @@ env:
     timeout: 100
     observations:
       global_resolution: [100, 100]
-      observation_resolution: [50, 50]
+      observation_resolution: [49, 49]
   cart:
     name: 'CartPole-v0'
 

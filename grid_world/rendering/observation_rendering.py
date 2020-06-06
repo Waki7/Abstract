@@ -10,9 +10,7 @@ import utils.model_utils as model_utils
 class ObservationRenderer():
     def __init__(self, cfg):
         self.resolution = cfg['global_resolution']
-        assert model_utils.is_odd(self.resolution[0]) and model_utils.is_odd(
-            self.resolution[1]), 'keep resolutions odd for simplicity'
-
+    
         self.obs_resolution = cfg.get('observation_resolution', self.resolution)
         assert model_utils.is_odd(self.obs_resolution[0]) and model_utils.is_odd(
             self.obs_resolution[1]), 'keep resolutions odd for simplicity'
@@ -64,8 +62,7 @@ class ObservationRenderer():
         target_row_end = target_row_start + drawing_slice.shape[-1]
         target_col_end = target_col_start + drawing_slice.shape[-2]
 
-        frame[:, target_row_start: target_row_end,
-        target_col_start: target_col_end] = drawing_slice
+        frame[:, target_row_start: target_row_end, target_col_start: target_col_end] = drawing_slice
         return frame
 
     def draw_line(self):
