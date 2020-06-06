@@ -4,10 +4,10 @@ from typing import List
 import numpy as np
 from gym import spaces
 
-import gym_grid.env_objects.core_env_objects as core_objects
-import gym_grid.env_objects.env_agents as core_agents
-import gym_grid.env_objects.landmarks as core_landmarks
-import gym_grid.rendering.observation_rendering as rendering
+import grid_world.env_objects.core_env_objects as core_objects
+import grid_world.env_objects.env_agents as core_agents
+import grid_world.env_objects.landmarks as core_landmarks
+import grid_world.rendering.observation_rendering as rendering
 
 
 class CoreWorld():

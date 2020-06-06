@@ -2,7 +2,7 @@ from agent_controllers.factory import CONTROLLER_REGISTERY
 from networks.base_networks import *
 import yaml
 import gym_life
-import gym_grid
+import grid_world
 
 with open('config.yaml') as f:
     cfg = yaml.load(f, Loader=yaml.FullLoader)

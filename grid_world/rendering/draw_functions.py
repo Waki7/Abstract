@@ -1,7 +1,9 @@
+from typing import Iterable
+
 import numpy as np
 
 
-def draw_circle(background: np.ndarray, center: np.ndarray, radius):
+def draw_circle(background: np.ndarray, center: Iterable[int], radius):
     '''
     Draws a circle on the Renderers current drawing memory
     :param background: grid to draw over, will mimic shape
@@ -17,7 +19,7 @@ def draw_circle(background: np.ndarray, center: np.ndarray, radius):
     return circle + background
 
 
-def draw_ring(background: np.ndarray, center: np.ndarray, radius, width):
+def draw_ring(background: np.ndarray, center: Iterable[int], radius, width):
     '''
     Draws a ring on the Renderers current drawing memory,
     see draw_circle method if you wanted a filled ring
@@ -35,7 +37,7 @@ def draw_ring(background: np.ndarray, center: np.ndarray, radius, width):
     return ring + background
 
 
-def draw_square(background: np.ndarray, center: np.ndarray, length):
+def draw_square(background: np.ndarray, center: Iterable[int], length):
     '''
         Draws a square on the Renderers current drawing memory
         :param background: grid to draw over, will mimic shape

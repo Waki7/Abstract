@@ -1,4 +1,4 @@
-from gym_grid.env_objects.core_env_objects import *
+from grid_world.env_objects.core_env_objects import *
 
 
 class Landmark(GridObject):

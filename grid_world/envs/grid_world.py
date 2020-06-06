@@ -2,7 +2,7 @@ import logging
 
 import gym
 
-import gym_grid.env_objects as core
+import grid_world.env_objects as core
 
 
 class GridEnv(gym.Env):

@@ -61,3 +61,10 @@ def one_hot(logits, idx=None):
     one_hot = torch.zeros_like(logits)
     one_hot.scatter_(-1, max_idx, 1)
     return one_hot
+
+
+# ---------------------------------------------------------------------------
+# numeric property utilities
+# ---------------------------------------------------------------------------
+def is_odd(val):
+    return val % 2 == 1

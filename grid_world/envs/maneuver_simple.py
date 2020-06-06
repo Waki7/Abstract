@@ -1,7 +1,7 @@
 import logging
 
-import gym_grid.env_objects as core
-import gym_grid.envs.grid_world as grid_world
+import grid_world.env_objects as core
+import grid_world.envs.grid_world as grid_world
 
 
 class ManeuverSimple(grid_world.GridEnv):
