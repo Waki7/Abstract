@@ -35,8 +35,17 @@ class ObservationRenderer():
     def draw_square(self, center: np.ndarray, length: float = 5., channel: int = 0):
         drawing.draw_square(self.drawing[channel], center=center, length=length)
 
-    def get_obs(self, center):
-        pass
+    def get_frame(self, center):
+        frame = np.zeros(self.drawing)
+        row_start = max(0, self.resolution[0] - center[0])
+        row_end = min(self.resolution[0], - self.resolution[0] + center[0])
+
+        col_start = max(0, self.resolution[1] - center[1])
+        col_end = min(self.resolution[1], - self.resolution[1] + center[1])
+
+        drawing_slice = self.drawing[:, row_start:row_end, col_start:col_end]
+
+        frame[0 + row_start: drawing_slice.shape[-2], 0 + col_start + drawing_slice.shape[-1]] = drawing_slice
 
     def draw_line(self):
         raise NotImplementedError

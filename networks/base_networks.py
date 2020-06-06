@@ -11,12 +11,13 @@ from networks.factory import register_network
 
 
 class BaseNetwork(nn.Module):
-    def __init__(self, in_shapes, cfg={}):
+    def __init__(self, in_shapes, out_shapes, cfg={}):
         super(BaseNetwork, self).__init__()
         self.cfg = cfg
         self.extra_parameters = nn.ParameterList()
         self.in_shapes = in_shapes
         self.in_features = model_utils.sum_multi_modal_shapes(in_shapes)
+        self.out_features = model_utils.sum_multi_modal_shapes(out_shapes)
 
         ##########################################################################################
         # set cfg parameters
@@ -47,10 +48,10 @@ class BaseNetwork(nn.Module):
 @register_network
 class ActorFCNetwork(BaseNetwork):
     def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
-        super().__init__(in_shapes=in_shapes, cfg=cfg)
-        self.n_actions = out_shapes[0]
+        super().__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
+        self.n_actions = self.out_features
         self.linear1 = nn.Linear(self.in_features, self.model_size)
-        self.linear2 = nn.Linear(self.model_size, self.n_actions)
+        self.linear2 = nn.Linear(self.model_size, self.out_features)
         self.create_optimizer()
 
     def forward(self, x):
@@ -69,9 +70,9 @@ class ActorFCNetwork(BaseNetwork):
 @register_network
 class CriticFCNetwork(BaseNetwork):
     def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
-        super().__init__(in_shapes=in_shapes, cfg=cfg)
+        super().__init__(in_shapes=in_shapes, out_shapes = out_shapes, cfg=cfg)
         self.linear1 = nn.Linear(self.in_features, self.model_size)
-        self.linear2 = nn.Linear(self.model_size, out_shapes[0])
+        self.linear2 = nn.Linear(self.model_size, self.out_features)
         self.create_optimizer()
 
     def forward(self, x):

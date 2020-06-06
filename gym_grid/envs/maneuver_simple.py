@@ -64,10 +64,14 @@ class ManeuverSimple(grid_world.GridEnv):
             action = agent_actions[agent]
             self.world.move_agent(agent, action)
 
+        self.world.render_world()
+
         agent_obss = self.calc_agent_obs()
         agent_rewards = self.calc_agent_rewards()
         agent_dones = self.calc_agent_dones()
         agent_infos = self.calc_agent_info()
+
+        return agent_obss, agent_rewards, agent_dones, agent_infos
 
     def initialize_empty_map(self):
         return dict(zip(self.agent_state_channels, [[], [], [], []]))
@@ -93,9 +97,8 @@ class ManeuverSimple(grid_world.GridEnv):
 
     def calc_agent_obs(self):
         obs_map = {}
-        self.world.draw()
         for agent in self.agents:
-            obs_map[agent.id] = self.world.get_obs(agent)
+            obs_map[agent.id] = self.world.get_frame(agent.location)
 
     def calc_agent_rewards(self):
         pass

@@ -90,7 +90,7 @@ class CoreWorld():
     def step_enemies(self):
         pass
 
-    def draw(self):
+    def render_world(self):
         self.renderer.reset_drawing()
         for agent in self.agent_map.values():
             self.renderer.draw_circle(center=agent.location, radius=1.)
