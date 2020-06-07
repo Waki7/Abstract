@@ -35,10 +35,15 @@ class ManeuverSimple(grid_world.GridEnv):
         self.reset()
 
     def reset(self):
-        self.target.place(self.world.get_random_point())
-        self.avoid.place(self.world.get_random_point())
-        self.world.spawn_landmarks([self.target, self.avoid])
-        self.world.spawn_agents(self.agents)
+        # --- get spawning locations
+        landmark_locations = [self.world.get_random_point(), self.world.get_random_point()]
+        agent_locations = [self.world.get_random_point() for agent in self.agents]
+        # --- spawn the landmarks in the world, this includes placing them in the world
+        self.world.spawn_landmarks([self.target, self.avoid], landmark_locations)
+        self.world.spawn_agents(self.agents, agent_locations)
+
+        agent_obss = self.calc_agent_obs()
+        return agent_obss
 
     def get_obs_space(self):
         return self.world.get_obs_space()
@@ -98,7 +103,9 @@ class ManeuverSimple(grid_world.GridEnv):
     def calc_agent_obs(self):
         obs_map = {}
         for agent in self.agents:
-            obs_map[agent.id] = self.world.get_frame(agent.location)
+            print(agent)
+            obs_map[agent.id] = self.world.get_agent_pov(agent)
+        return obs_map
 
     def calc_agent_rewards(self):
         pass

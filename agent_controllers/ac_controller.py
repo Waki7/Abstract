@@ -22,8 +22,6 @@ class ACController(BaseController):
         action_shapes = model_utils.spaces_to_shapes(
             self.env.action_space)  # n_actions, can add to output shapes in controller
         critic_estimates = [(1,), ]  # value estimator
-        print(in_shapes)
-        print(action_shapes)
         agents = []
         for i in range(0, self.n_agents):
             if self.share_parameters:

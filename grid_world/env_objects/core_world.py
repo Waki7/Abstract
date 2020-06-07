@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Iterable
 
 import numpy as np
 from gym import spaces
@@ -52,17 +52,19 @@ class CoreWorld():
     def add_agent(self):
         pass
 
-    def spawn_agents(self, agents: List[core_agents.Agent]):
-        [self.spawn_agent(agent) for agent in agents]
+    def spawn_agents(self, agents: List[core_agents.Agent], locations: List[Iterable[int]]):
+        [self.spawn_agent(agent, location) for agent, location in zip(agents, locations)]
 
-    def spawn_agent(self, agent: core_agents.Agent):
+    def spawn_agent(self, agent: core_agents.Agent, location: Iterable[int]):
         self.agent_map[agent.id] = agent
+        agent.place(location)
 
-    def spawn_landmarks(self, landmarks: List[core_landmarks.Landmark]):
-        [self.spawn_landmark(landmark) for landmark in landmarks]
+    def spawn_landmarks(self, landmarks: List[core_landmarks.Landmark], locations: List[Iterable[int]]):
+        [self.spawn_landmark(landmark, location) for landmark, location in zip(landmarks, locations)]
 
-    def spawn_landmark(self, landmark: core_landmarks.Landmark):
+    def spawn_landmark(self, landmark: core_landmarks.Landmark, location: Iterable[int]):
         self.landmark_map[landmark.id] = landmark
+        landmark.place(location)
 
     def is_legal_move(self, destination, agent=None):
         '''
@@ -114,9 +116,9 @@ class CoreWorld():
     def get_done(self, agent):
         pass
 
-    def get_obs(self, agent):
+    def get_agent_pov(self, agent: core_agents.Agent):
         assert self.agent_map.get(agent.id, None) is not None, 'agent has not been spawned in world'
-        return self.renderer.get_obs(agent.location)
+        return self.renderer.get_frame(agent.location)
 
     def log_summary(self):
         logging.debug('\n___________start step {}_______________'.format(self.t))

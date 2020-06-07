@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import Iterable
 
 import numpy as np
 
@@ -50,7 +51,7 @@ class GridObject():
     def __repr__(self):
         return '{} {}'.format(self.id, self.__class__)
 
-    def place(self, location):
+    def place(self, location: Iterable[int]):
         self.location = location
 
     def get_location(self):

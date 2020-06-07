@@ -86,6 +86,8 @@ class BaseController:  # currently implemented as (i)AC
                 state = self.env.reset()
 
     def step_agents(self, state):
+        print(state)
+        print(exit(9))
         if self.n_agents == 1:
             return self.agents[0].step(state)
         else:
