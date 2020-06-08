@@ -49,8 +49,6 @@ class ObservationRenderer():
         # todo https://shapely.readthedocs.io/en/latest/manual.html#object.intersection
         frame = np.zeros((self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
         frame_center = (self.obs_resolution[0] // 2, self.obs_resolution[1] // 2)
-        print(center)
-        print(frame_center)
         row_start = int(max(0, center[0] - (frame_center[0] + 1)))
         col_start = int(max(0, center[1] - (frame_center[1] + 1)))
         row_end = int(min(self.obs_resolution[0], frame_center[0] + center[0] + 1))

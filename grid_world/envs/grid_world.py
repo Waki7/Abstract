@@ -47,6 +47,9 @@ class GridEnv(gym.Env):
     def render(self):
         raise NotImplementedError
 
+    def get_spaces(self):
+        return self.observation_space, self.action_space
+
     def get_obs_space(self):
         raise NotImplementedError
 

@@ -1,8 +1,9 @@
 """
 Modified from OpenAI Baselines code to work with multi-agent envs
 """
-import numpy as np
 from multiprocessing import Process, Pipe
+
+import numpy as np
 from baselines.common.vec_env import VecEnv, CloudpickleWrapper
 
 
@@ -13,8 +14,6 @@ def worker(remote, parent_remote, env_fn_wrapper):
         cmd, data = remote.recv()
         if cmd == 'step':
             ob, reward, done, info = env.step(data)
-            if all(done):
-                ob = env.reset()
             remote.send((ob, reward, done, info))
         elif cmd == 'reset':
             ob = env.reset()
@@ -27,10 +26,15 @@ def worker(remote, parent_remote, env_fn_wrapper):
             break
         elif cmd == 'get_spaces':
             remote.send((env.observation_space, env.action_space))
-        elif cmd == 'render':
-            remote.send(env.render())
+        elif cmd == 'env_method':
+            method = getattr(env, data[0])
+            remote.send(method(*data[1], **data[2]))
+        elif cmd == 'get_attr':
+            remote.send(getattr(env, data))
+        elif cmd == 'set_attr':
+            remote.send(setattr(env, data[0], data[1]))
         else:
-            raise NotImplementedError
+            raise NotImplementedError("`{}` is not implemented in the worker".format(cmd))
 
 
 class SubprocVecEnv(VecEnv):
@@ -43,17 +47,15 @@ class SubprocVecEnv(VecEnv):
         nenvs = len(env_fns)
         self.remotes, self.work_remotes = zip(*[Pipe() for _ in range(nenvs)])
         self.ps = [Process(target=worker, args=(work_remote, remote, CloudpickleWrapper(env_fn)))
-            for (work_remote, remote, env_fn) in zip(self.work_remotes, self.remotes, env_fns)]
+                   for (work_remote, remote, env_fn) in zip(self.work_remotes, self.remotes, env_fns)]
         for p in self.ps:
-            p.daemon = True # if the main process crashes, we should not cause things to hang
+            p.daemon = True  # if the main process crashes, we should not cause things to hang
             p.start()
         for remote in self.work_remotes:
             remote.close()
 
         self.remotes[0].send(('get_spaces', None))
         observation_space, action_space = self.remotes[0].recv()
-        self.remotes[0].send(('get_agent_types', None))
-        self.agent_types = self.remotes[0].recv()
         VecEnv.__init__(self, len(env_fns), observation_space, action_space)
 
     def step_async(self, actions):
@@ -64,13 +66,14 @@ class SubprocVecEnv(VecEnv):
     def step_wait(self):
         results = [remote.recv() for remote in self.remotes]
         self.waiting = False
-        obs, rews, dones, infos = zip(*results)
-        return np.stack(obs), np.stack(rews), np.stack(dones), infos
+        observations, rewards, dones, infos = zip(*results)
+        return observations, rewards, dones, infos
 
     def reset(self):
         for remote in self.remotes:
             remote.send(('reset', None))
-        return np.stack([remote.recv() for remote in self.remotes])
+        a = [remote.recv() for remote in self.remotes]
+        return a
 
     def reset_task(self):
         for remote in self.remotes:
@@ -89,3 +92,35 @@ class SubprocVecEnv(VecEnv):
             p.join()
         self.closed = True
 
+    def get_attr(self, attr_name, indices=None):
+        """Return attribute from vectorized environment (see base class)."""
+        target_remotes = self._get_target_remotes(indices)
+        for remote in target_remotes:
+            remote.send(('get_attr', attr_name))
+        return [remote.recv() for remote in target_remotes]
+
+    def set_attr(self, attr_name, value, indices=None):
+        """Set attribute inside vectorized environments (see base class)."""
+        target_remotes = self._get_target_remotes(indices)
+        for remote in target_remotes:
+            remote.send(('set_attr', (attr_name, value)))
+        for remote in target_remotes:
+            remote.recv()
+
+    def env_method(self, method_name, *method_args, indices=None, **method_kwargs):
+        """Call instance methods of vectorized environments."""
+        target_remotes = self._get_target_remotes(indices)
+        for remote in target_remotes:
+            remote.send(('env_method', (method_name, method_args, method_kwargs)))
+        return [remote.recv() for remote in target_remotes]
+
+    def _get_target_remotes(self, indices):
+        """
+        Get the connection object needed to communicate with the wanted
+        envs that are in subprocesses.
+
+        :param indices: (None,int,Iterable) refers to indices of envs.
+        :return: ([multiprocessing.Connection]) Connection object to communicate between processes.
+        """
+        indices = self._get_indices(indices)
+        return [self.remotes[i] for i in indices]

@@ -4,6 +4,13 @@ from utils.env_wrappers import SubprocVecEnv
 from utils.storage_utils import ExperimentLogger
 
 
+def get_env_func(env_name, env_cfg):
+    if len(env_cfg) > 1:
+        return gym.make(env_name, cfg=env_cfg)
+    else:
+        return gym.make(env_cfg)
+
+
 class BaseController:  # currently implemented as (i)AC
     def __init__(self, env_cfg, cfg):
         self.cfg = cfg
@@ -37,7 +44,10 @@ class BaseController:  # currently implemented as (i)AC
         self.env_name = env_cfg['name']
 
     def make_env(self):
-        return gym.make(self.env_name, cfg=self.env_cfg) if len(self.env_cfg) > 1 else gym.make(self.env_name)
+        if len(self.env_cfg) > 1:
+            return gym.make(self.env_name, cfg=self.env_cfg)
+        else:
+            return gym.make(self.env_name)
 
     def teach_agents(self, training_cfg, experiment_folder=''):
         training = experiment_folder == ''
@@ -54,13 +64,15 @@ class BaseController:  # currently implemented as (i)AC
                                                  agent_cfg=self.cfg,
                                                  )  # this is a wraapper over summarywriter()
         step = 0
-
-        env = SubprocVecEnv([self.make_env() for i in range(n_threads)]) if is_batch_env else self.env
+        env_name = self.env_name
+        env_cfg = self.env_cfg
+        env = SubprocVecEnv([lambda: get_env_func(env_name=env_name, env_cfg=env_cfg) for i in
+                             range(n_threads)]) if is_batch_env else self.env
 
         state = env.reset()
         for episode in range(n_episodes):
             while True:
-                actions = self.step_agents(state)
+                actions = self.step_agents(state, is_batch_env)
                 state, reward, episode_end, info = env.step(actions)
                 # self.env.log_summary()
                 losses = self.update_agents(reward, episode_end, state)
@@ -85,13 +97,17 @@ class BaseController:  # currently implemented as (i)AC
                 step = 0
                 state = self.env.reset()
 
-    def step_agents(self, state):
-        print(state)
-        print(exit(9))
+    def step_agents(self, state, is_batch_env):
         if self.n_agents == 1:
-            return self.agents[0].step(state)
+            if is_batch_env:
+                raise NotImplementedError
+            else:
+                return self.agents[0].step(state)
         else:
-            return [self.agents[key].step(state[key]) for key in self.agent_keys]
+            if is_batch_env:
+                raise NotImplementedError
+            else:
+                return [self.agents[key].step(state[key]) for key in self.agent_keys]
 
     def update_agents(self, reward, episode_end, new_state):
         if self.n_agents == 1:
