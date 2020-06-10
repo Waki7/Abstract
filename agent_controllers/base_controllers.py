@@ -1,5 +1,6 @@
 import gym
 
+import utils.model_utils as model_utils
 from utils.env_wrappers import SubprocVecEnv
 from utils.storage_utils import ExperimentLogger
 
@@ -12,6 +13,7 @@ def get_env_func(env_name, env_cfg):
 
 
 class BaseController:  # currently implemented as (i)AC
+    # THIS CONTROLLER IS PASSING IN TORCH TENSORS TO THE AGENTS, AND THE ENVIRONMENTS WILL GET NUMPY ARRAYS
     def __init__(self, env_cfg, cfg):
         self.cfg = cfg
         self.env_cfg = env_cfg
@@ -97,17 +99,21 @@ class BaseController:  # currently implemented as (i)AC
                 step = 0
                 state = self.env.reset()
 
-    def step_agents(self, state, is_batch_env):
+    def step_agents(self, obs, is_batch_env):
+        if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one
+            obs = [obs, ]
         if self.n_agents == 1:
-            if is_batch_env:
-                raise NotImplementedError
-            else:
-                return self.agents[0].step(state)
+            agent = self.agents[0]
+            batched_obs = model_utils.batch_env_observations(obs, self.env.observation_space)
+            batched_obs = model_utils.convert_env_batch_input(env_inputs=batched_obs,
+                                                              space=self.env.observation_space)
+            return agent.step(batched_obs)
         else:
-            if is_batch_env:
-                raise NotImplementedError
-            else:
-                return [self.agents[key].step(state[key]) for key in self.agent_keys]
+            raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
+            # if is_batch_env:
+            #     raise NotImplementedError
+            # else:
+            #     return [self.agents[key].step(obs[key]) for key in self.agent_keys]
 
     def update_agents(self, reward, episode_end, new_state):
         if self.n_agents == 1:

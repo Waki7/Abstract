@@ -1,3 +1,5 @@
+from typing import List, Union
+
 import gym.spaces as gym_spaces
 import numpy as np
 import torch
@@ -5,10 +7,17 @@ import torch
 import settings
 
 
+# ---------------------------------------------------------------------------
+# SPACES AND SHAPES
+# ---------------------------------------------------------------------------
+
 def true_with_probability(p):
     return np.random.choice([True, False], 1, [p, 1 - p])
 
 
+# ---------------------------------------------------------------------------
+# SPACES AND SHAPES
+# ---------------------------------------------------------------------------
 def sum_multi_modal_shapes(shapes):
     total_features = 0
     for shape in shapes:
@@ -36,6 +45,36 @@ def spaces_to_shapes(spaces: gym_spaces.Space):
     return shapes
 
 
+def batch_env_observations(observation_list: List[np.ndarray], space: gym_spaces.Space):
+    if isinstance(space, gym_spaces.Tuple):
+        batched_observation = []
+        for obs_idx in range(len(observation_list[0])):
+            obss = torch.stack([torch.tensor(obs_batch[obs_idx]) for obs_batch in observation_list])
+            batched_observation.append(obss)
+    elif isinstance(space, gym_spaces.Box):
+        batched_observation = torch.stack([torch.tensor(obs_batch) for obs_batch in observation_list])
+    else:
+        raise NotImplementedError
+    return batched_observation
+
+
+def convert_env_batch_input(env_inputs: Union[List[torch.Tensor], torch.Tensor],
+                            space: gym_spaces.Tuple, action: torch.Tensor = None):
+    if isinstance(space, gym_spaces.Tuple):
+        # treating as multimodal input
+        env_inputs = [tensor.to(settings.DEVICE).float() for tensor in env_inputs]
+        if action is not None:
+            # TODO remove
+            assert action.shape[0] == env_inputs[0].shape[0]
+            env_inputs.append(action)
+    else:
+        # treating as unimodal input
+        env_inputs = env_inputs.to(settings.DEVICE).float()
+        if action is not None:
+            env_inputs = torch.cat([env_inputs, action], dim=-1)
+    return env_inputs
+
+
 def get_target_action(n_actions, actions_taken, advantage):
     signs = (torch.sign(advantage) - 1) / 2
 
@@ -47,13 +86,6 @@ def get_target_action(n_actions, actions_taken, advantage):
     target_action = torch.abs(target_action + signs)
 
     return target_action
-
-
-def convert_env_batch_input(env_inputs, action=None):
-    env_inputs = torch.from_numpy(env_inputs).to(settings.DEVICE).float().unsqueeze(0)
-    if action is not None:
-        return torch.cat([env_inputs, action], dim=-1)
-    return env_inputs
 
 
 def one_hot(logits, idx=None):

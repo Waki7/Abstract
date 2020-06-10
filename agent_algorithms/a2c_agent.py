@@ -47,6 +47,11 @@ class A2CAgent():
         self.value_estimates = []
         self.t = 0
 
+    def get_action(self):
+        if len(self.actions) == 0:
+            return None
+        return self.actions[-1]
+
     def step(self, env_input):
         env_input = model_utils.convert_env_batch_input(env_input)
         if self.ac is not None:

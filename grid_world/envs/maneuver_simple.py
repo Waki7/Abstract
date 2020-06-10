@@ -103,8 +103,11 @@ class ManeuverSimple(grid_world.GridEnv):
     def calc_agent_obs(self):
         obs_map = {}
         for agent in self.agents:
-            obs_map[agent.id] = self.world.get_agent_pov(agent)
-
+            features = []
+            map_obs = self.world.get_agent_pov(agent)
+            features.append(map_obs)
+            obs_map[agent.id] = features
+            
         if self.n_agents == 1:
             return obs_map[self.agent_keys[0]]
         return obs_map
