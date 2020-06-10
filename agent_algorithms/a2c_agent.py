@@ -53,7 +53,6 @@ class A2CAgent():
         return self.actions[-1]
 
     def step(self, env_input):
-        env_input = model_utils.convert_env_batch_input(env_input)
         if self.ac is not None:
             probs, estimates = self.ac.forward(env_input)
         else:

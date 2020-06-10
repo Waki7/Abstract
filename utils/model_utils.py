@@ -59,19 +59,13 @@ def batch_env_observations(observation_list: List[np.ndarray], space: gym_spaces
 
 
 def convert_env_batch_input(env_inputs: Union[List[torch.Tensor], torch.Tensor],
-                            space: gym_spaces.Tuple, action: torch.Tensor = None):
+                            space: gym_spaces.Tuple):
     if isinstance(space, gym_spaces.Tuple):
         # treating as multimodal input
         env_inputs = [tensor.to(settings.DEVICE).float() for tensor in env_inputs]
-        if action is not None:
-            # TODO remove
-            assert action.shape[0] == env_inputs[0].shape[0]
-            env_inputs.append(action)
     else:
         # treating as unimodal input
         env_inputs = env_inputs.to(settings.DEVICE).float()
-        if action is not None:
-            env_inputs = torch.cat([env_inputs, action], dim=-1)
     return env_inputs
 
 
