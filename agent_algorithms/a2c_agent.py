@@ -40,17 +40,17 @@ class A2CAgent():
         self.is_episodic = is_episodic
         self.reward = 0
 
-        self.action_batch = []
+        self.batch_actions = []
         self.batch_probs_selected = []
         self.batch_probs = []
-        self.value_estimates = []
+        self.batch_value_estimates = []
         self.rewards = []
         self.t = 0
 
     def get_action(self):
-        if len(self.actions) == 0:
+        if len(self.batch_actions) == 0:
             return None
-        return self.actions[-1]
+        return self.batch_actions[-1]
 
     def step(self, env_input):
         if self.ac is not None:
@@ -58,26 +58,18 @@ class A2CAgent():
         else:
             probs = self.actor.forward(env_input)
             estimates = self.critic.forward(env_input)
-        print(probs)
 
-        import time
+        batch_actions = model_utils.random_choice_prob_batch(self.n_actions,
+                                                             probs.detach().cpu().numpy())
+        selected_probs = torch.stack([probs[i][action] for i, action in enumerate(batch_actions)])
 
-        start_time = time.time()
-        print(time.ctime())
-        for i in range(0, 10000):
-            batch_actions = model_utils.random_choice_batch(self.n_actions, probs.detach().cpu().numpy())
-            selected_probs = torch.gather(probs, dim=-1,
-                                          index=torch.tensor(batch_actions).to(settings.DEVICE).long().unsqueeze(-1))
-        print('minutes: ', (time.time() - start_time) / 60)
-        print(selected_probs)
-        print(exit(9))
-    # .075
-        self.action_batch.append(batch_actions)
-        self.batch_probs_selected.append()
-        self.batch_probs.append()
-        self.value_estimates.append()
+        self.batch_actions.append(batch_actions)
+        self.batch_probs_selected.append(selected_probs)
+        self.batch_probs.append(probs)
+        self.batch_value_estimates.append(estimates.squeeze(-1))
+
         self.t += 1
-        return action
+        return self.batch_actions[-1]
 
     def update_policy(self, env_reward, episode_end, new_state=None):
         ret_loss = {}
@@ -91,7 +83,7 @@ class A2CAgent():
             discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
 
             Q_val = torch.tensor(discounted_rewards).to(**args)
-            V_estimate = torch.cat(self.value_estimates, dim=0)
+            V_estimate = torch.cat(self.batch_value_estimates, dim=0)
             advantage = Q_val - V_estimate
             if advantage.shape[0] > 1:
                 advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
@@ -130,7 +122,7 @@ class A2CAgent():
         self.probs = []
         self.action_probs = []
         self.actions = []
-        self.value_estimates = []
+        self.batch_value_estimates = []
 
     def should_update(self, episode_end, reward):
         steps_since_update = len(self.rewards) + 1

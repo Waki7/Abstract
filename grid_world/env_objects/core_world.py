@@ -75,8 +75,9 @@ class CoreWorld():
         '''
         pass
 
-    def move_agent(self, agent_key, action: np.ndarray):
-        agent = self.agent_map[agent_key]
+    def move_agent(self, agent: core_agents.Agent, action: np.ndarray):
+        assert agent.id in self.agent_map, 'agent has not been spawned in world'
+        agent = self.agent_map[agent]
         location = agent.get_location()
         new_location = location + (self.dt * action)
         # todo logic for bouncing off and avoiding collisions, add to vector
@@ -117,7 +118,7 @@ class CoreWorld():
         pass
 
     def get_agent_pov(self, agent: core_agents.Agent):
-        assert self.agent_map.get(agent.id, None) is not None, 'agent has not been spawned in world'
+        assert agent.id in self.agent_map, 'agent has not been spawned in world'
         return self.renderer.get_frame(agent.location)
 
     def log_summary(self):

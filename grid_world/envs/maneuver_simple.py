@@ -1,4 +1,7 @@
 import logging
+from typing import Union, Dict
+
+import numpy as np
 
 import grid_world.env_objects as core
 import grid_world.envs.grid_world as grid_world
@@ -54,10 +57,10 @@ class ManeuverSimple(grid_world.GridEnv):
     def add_agent(self):
         pass
 
-    def step(self, agent_actions):
+    def step(self, agent_actions: Union[Dict, np.long]):
         """
         Args:
-            action (object): an action done by the agent, encoded into its channel
+            agent_actions (object): an action done by the agent, encoded into its channel
 
         Returns:
             observation (object): agent's observation of the current environment
@@ -65,9 +68,13 @@ class ManeuverSimple(grid_world.GridEnv):
             done (bool): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
-        for agent in agent_actions.keys():
-            action = agent_actions[agent]
-            self.world.move_agent(agent, action)
+        if self.n_agents == 1:
+            self.world.move_agent(self.agents[0],
+                                  core.core_objects.get_action_unit_vector(agent_actions))
+
+        for agent_key in agent_actions.keys():
+            action = agent_actions[agent_key]
+            self.world.move_agent(self.agents[0], core.core_objects.get_action_unit_vector(action))
 
         self.world.render_world()
 
@@ -107,7 +114,7 @@ class ManeuverSimple(grid_world.GridEnv):
             map_obs = self.world.get_agent_pov(agent)
             features.append(map_obs)
             obs_map[agent.id] = features
-            
+
         if self.n_agents == 1:
             return obs_map[self.agent_keys[0]]
         return obs_map

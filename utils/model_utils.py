@@ -15,7 +15,7 @@ def true_with_probability(p):
     return np.random.choice([True, False], 1, [p, 1 - p])
 
 
-def random_choice_batch(n: int, batch_ps: np.ndarray, size: int = 1) -> np.ndarray:
+def random_choice_prob_batch(n: int, batch_ps: np.ndarray) -> np.ndarray:
     '''
     perform numpy random select over a batch of probabilities
     :param n: number of indices to select from for each batch
@@ -23,13 +23,11 @@ def random_choice_batch(n: int, batch_ps: np.ndarray, size: int = 1) -> np.ndarr
     :param size: optional, select this number of elements from each batch
     :return: a numpy array A (selected) of shape b x size where for all a in A 0 >= x < n
     '''
-    selected = np.zeros((batch_ps.shape[0], size))
+    selected_idxs = np.zeros(batch_ps.shape[0])
     for batch_idx, probs in enumerate(batch_ps):
-        selected[batch_idx] = np.random.choice(n, size=size, p=probs)
-    selected = np.asarray(selected)
-    if size == 1:
-        return selected.squeeze(axis=-1)
-    return np.asarray(selected)
+        idx = np.random.choice(n, p=probs)
+        selected_idxs[batch_idx] = idx
+    return np.asarray(selected_idxs, dtype=np.long)
 
 
 # ---------------------------------------------------------------------------
