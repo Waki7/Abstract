@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 import numpy as np
 import torch
@@ -54,10 +55,11 @@ class ActorFCNetwork(BaseNetwork):
         self.linear2 = nn.Linear(self.model_size, self.out_features)
         self.create_optimizer()
 
-    def forward(self, x):
-        x = F.relu(self.linear1(x))
-        x = F.softmax(self.linear2(x), dim=-1)
-        return x
+    def forward(self, features: List[torch.Tensor]) -> torch.Tensor:
+        features = torch.cat([x.flatten(start_dim=1) for x in features], dim=-1)
+        features = F.relu(self.linear1(features))
+        features = F.softmax(self.linear2(features), dim=-1)
+        return features
 
     def get_action(self, state):
         state = torch.from_numpy(state).float().unsqueeze(0)
@@ -70,15 +72,16 @@ class ActorFCNetwork(BaseNetwork):
 @register_network
 class CriticFCNetwork(BaseNetwork):
     def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
-        super().__init__(in_shapes=in_shapes, out_shapes = out_shapes, cfg=cfg)
+        super().__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
         self.linear1 = nn.Linear(self.in_features, self.model_size)
         self.linear2 = nn.Linear(self.model_size, self.out_features)
         self.create_optimizer()
 
-    def forward(self, x):
-        x = F.relu(self.linear1(x))
-        x = self.linear2(x)
-        return x
+    def forward(self, features: List[torch.Tensor]) -> torch.Tensor:
+        features = torch.cat([x.flatten(start_dim=1) for x in features], dim=-1)
+        features = F.relu(self.linear1(features))
+        features = self.linear2(features)
+        return features
 
 
 @register_network

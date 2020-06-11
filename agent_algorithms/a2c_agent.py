@@ -1,4 +1,3 @@
-import utils.model_utils as model_utils
 from agent_algorithms.factory import register_agent
 from networks.base_networks import *
 
@@ -40,11 +39,12 @@ class A2CAgent():
 
         self.is_episodic = is_episodic
         self.reward = 0
-        self.action_probs = []
-        self.actions = []
-        self.probs = []
-        self.rewards = []
+
+        self.action_batch = []
+        self.batch_probs_selected = []
+        self.batch_probs = []
         self.value_estimates = []
+        self.rewards = []
         self.t = 0
 
     def get_action(self):
@@ -56,15 +56,26 @@ class A2CAgent():
         if self.ac is not None:
             probs, estimates = self.ac.forward(env_input)
         else:
-            probs = self.actor.forward(env_input).squeeze(0)
-            estimates = self.critic.forward(env_input).squeeze(0)
+            probs = self.actor.forward(env_input)
+            estimates = self.critic.forward(env_input)
+        print(probs)
 
-        self.probs.append(probs)
-        self.value_estimates.append(estimates)
+        import time
 
-        action = np.random.choice(self.n_actions, p=probs.detach().cpu().numpy())
-        self.action_probs.append(probs[action])
-        self.actions.append(action)
+        start_time = time.time()
+        print(time.ctime())
+        for i in range(0, 10000):
+            batch_actions = model_utils.random_choice_batch(self.n_actions, probs.detach().cpu().numpy())
+            selected_probs = torch.gather(probs, dim=-1,
+                                          index=torch.tensor(batch_actions).to(settings.DEVICE).long().unsqueeze(-1))
+        print('minutes: ', (time.time() - start_time) / 60)
+        print(selected_probs)
+        print(exit(9))
+    # .075
+        self.action_batch.append(batch_actions)
+        self.batch_probs_selected.append()
+        self.batch_probs.append()
+        self.value_estimates.append()
         self.t += 1
         return action
 
