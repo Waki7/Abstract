@@ -74,10 +74,11 @@ class ManeuverSimple(grid_world.GridEnv):
     def add_agent(self):
         pass
 
-    def step(self, agent_actions: Union[Dict, np.long]):
+    def step(self, actions: Union[Dict, np.long]):
         """
         Args:
-            agent_actions (object): an action done by the agent, encoded into its channel
+            actions (Dict or np.long): an action done by the agent, encoded into its channel,
+            can be a map if multi agent or one value that matches the environment's action space
 
         Returns:
             observation (object): agent's observation of the current environment
@@ -87,11 +88,11 @@ class ManeuverSimple(grid_world.GridEnv):
         """
         if self.n_agents == 1:
             self.world.move_agent(self.agents[0],
-                                  self.action_mapper.encode(agent_actions))
-
-        for agent_key in agent_actions.keys():
-            action = agent_actions[agent_key]
-            self.world.move_agent(self.agents[0], self.action_mapper.encode(action))
+                                  self.action_mapper.encode(actions))
+        else:
+            for agent_key in actions.keys():
+                action = actions[agent_key]
+                self.world.move_agent(self.agents[0], self.action_mapper.encode(action))
 
         self.world.render_world()
 
@@ -140,7 +141,7 @@ class ManeuverSimple(grid_world.GridEnv):
         reward_map = {}
         for agent in self.agents:
             reward = -.1
-            dist = self.world.get_dist(agent, self.target)
+            dist = self.world.get_distance(agent, self.target)
             if dist < self.agent_fov:
                 reward = 1.
             reward_map[agent.id] = reward

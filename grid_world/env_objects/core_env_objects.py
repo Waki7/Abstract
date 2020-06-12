@@ -36,7 +36,7 @@ DISCRETE_ACTIONS = \
 
 
 def get_action_unit_vector(index):
-    return DISCRETE_ACTIONS[index]
+    return np.asarray(DISCRETE_ACTIONS[index])
 
 
 class GridObject():

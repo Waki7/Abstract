@@ -38,6 +38,7 @@ def draw_ring(background: np.ndarray, center: Iterable[int], radius, width):
 
 
 def draw_square(background: np.ndarray, center: Iterable[int], length):
+    # TODO THIS IS A DIAMOND BECAUSE OF THE CORNERS
     '''
         Draws a square on the Renderers current drawing memory
         :param background: grid to draw over, will mimic shape
@@ -47,10 +48,12 @@ def draw_square(background: np.ndarray, center: Iterable[int], length):
         :return:
         '''
     xx, yy = np.mgrid[:background.shape[0], :background.shape[1]]  # basically just a 2d np.arange
-    center_dist = (xx - center[1]) + (yy - center[0])
+    center_dist = np.abs(xx - center[1]) + np.abs(yy - center[0])
     half_length = length // 2
-    ring = (center_dist < (center + half_length)) & (center_dist > (center - half_length))
-    return ring + background
+    # print(center_dist)
+    # print(half_length)
+    square = (center_dist <= half_length) & (center_dist >= half_length)
+    return square + background
 
 
 def draw_line(background):

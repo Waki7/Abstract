@@ -63,7 +63,7 @@ class GridEnv(gym.Env):
             raise NotImplementedError('no implementation for continuous actions')
         raise NotImplementedError
 
-    def step(self):
+    def step(self, actions, **kwargs):
         raise NotImplementedError
 
     def render(self):
