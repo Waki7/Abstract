@@ -8,6 +8,7 @@ import grid_world.env_objects.core_env_objects as core_objects
 import grid_world.env_objects.env_agents as core_agents
 import grid_world.env_objects.landmarks as core_landmarks
 import grid_world.rendering.observation_rendering as rendering
+import utils.model_utils as model_utils
 
 
 class CoreWorld():
@@ -32,19 +33,23 @@ class CoreWorld():
         self.agent_map = {}
         self.renderer = rendering.ObservationRenderer(cfg=observation_cfg)
 
-    def get_obs_space(self):
+    def get_world_obs_space(self) -> spaces.Tuple:
+        '''
+        this is the observation space for the world per agent, so not the global grid view, but as far how the
+        world is seen by the agent, this will give the space for that, it won't include any additional data, such as
+        the agent's action or communication, etc.
+        :return:
+        '''
         obs_spaces: List[spaces.Space] = []
         obs_spaces.append(self.renderer.get_obs_shape())
         logging.info('total of {} observable discrete observations'.format(obs_spaces[-1].high.shape))
         obs_space = spaces.Tuple(obs_spaces)
         return obs_space
 
-    def get_action_space(self):
-        action_spaces: List[spaces.Space] = []
-        action_spaces.append(spaces.Discrete(len(core_objects.ACTIONS)))
-        logging.info('total of {} actions available'.format(action_spaces[-1].n))
-        action_space = spaces.Tuple(action_spaces)
-        return action_space
+    def get_world_action_space(self) -> spaces.Box:
+        high = 1.0
+        low = -1.0
+        return spaces.Box(high=high, low=low, shape=(2,))  # x and y direction
 
     def reset_world(self):
         self.renderer.reset_drawing()
@@ -77,7 +82,7 @@ class CoreWorld():
 
     def move_agent(self, agent: core_agents.Agent, action: np.ndarray):
         assert agent.id in self.agent_map, 'agent has not been spawned in world'
-        agent = self.agent_map[agent]
+        agent = self.agent_map[agent.id]
         location = agent.get_location()
         new_location = location + (self.dt * action)
         # todo logic for bouncing off and avoiding collisions, add to vector
@@ -92,6 +97,10 @@ class CoreWorld():
 
     def step_enemies(self):
         pass
+
+    def get_distance(self, obj1: core_objects.GridObject, obj2: core_objects.GridObject):
+        loc1, loc2 = obj1.location, obj2.location
+        return model_utils.get_euclidean_distance(loc1, loc2)
 
     def render_world(self):
         self.renderer.reset_drawing()

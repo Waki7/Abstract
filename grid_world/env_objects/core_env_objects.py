@@ -21,7 +21,7 @@ class Actions(Enum):
     Stay: 4
 
 
-ACTIONS = \
+DISCRETE_ACTIONS = \
     [
         (-1, 0),  # Up
         (0, 1),  # Right
@@ -36,11 +36,11 @@ ACTIONS = \
 
 
 def get_action_unit_vector(index):
-    return ACTIONS[index]
+    return DISCRETE_ACTIONS[index]
 
 
 class GridObject():
-    def __init__(self, observed_value, id: str, location=None, **kwargs):
+    def __init__(self, observed_value, id: str, location: np.ndarray = None, **kwargs):
         self.observed_value = observed_value
         self.id = id
         self.location = location

@@ -60,6 +60,10 @@ def spaces_to_shapes(spaces: gym_spaces.Space):
     return shapes
 
 
+# ---------------------------------------------------------------------------
+# DATA CONVERSION
+# ---------------------------------------------------------------------------
+
 def batch_env_observations(observation_list: List[np.ndarray], space: gym_spaces.Space):
     if isinstance(space, gym_spaces.Tuple):
         batched_observation = []
@@ -84,28 +88,34 @@ def convert_env_batch_input(env_inputs: Union[List[torch.Tensor], torch.Tensor],
     return env_inputs
 
 
-def get_target_action(n_actions, actions_taken, advantage):
-    signs = (torch.sign(advantage) - 1) / 2
-
-    target_action = torch.zeros(len(actions_taken), n_actions).to(settings.DEVICE)
-    actions_taken = torch.tensor(actions_taken).to(settings.DEVICE).unsqueeze(-1)
-    target_action.scatter_(dim=1, index=actions_taken, value=1)
-    signs = signs.unsqueeze(-1).repeat(1, n_actions)
-    # scaling = torch.abs(advantage.unsqueeze(-1).repeat(1, n_actions))
-    target_action = torch.abs(target_action + signs)
-
-    return target_action
-
-
-def one_hot(logits, idx=None):
-    max_idx = torch.argmax(logits, dim=-1, keepdim=True) if idx is None else idx
-    one_hot = torch.zeros_like(logits)
-    one_hot.scatter_(-1, max_idx, 1)
-    return one_hot
+# ---------------------------------------------------------------------------
+# GEOMETRY
+# ---------------------------------------------------------------------------
+def get_euclidean_distance(point1: np.ndarray, point2: np.ndarray):
+    return np.linalg.norm(point1 - point2, ord=2)
 
 
 # ---------------------------------------------------------------------------
-# numeric property utilities
+# NUMERIC PROPERTIES
 # ---------------------------------------------------------------------------
 def is_odd(val):
     return val % 2 == 1
+
+# def get_target_action(n_actions, actions_taken, advantage):
+#     signs = (torch.sign(advantage) - 1) / 2
+#
+#     target_action = torch.zeros(len(actions_taken), n_actions).to(settings.DEVICE)
+#     actions_taken = torch.tensor(actions_taken).to(settings.DEVICE).unsqueeze(-1)
+#     target_action.scatter_(dim=1, index=actions_taken, value=1)
+#     signs = signs.unsqueeze(-1).repeat(1, n_actions)
+#     # scaling = torch.abs(advantage.unsqueeze(-1).repeat(1, n_actions))
+#     target_action = torch.abs(target_action + signs)
+#
+#     return target_action
+#
+#
+# def one_hot(logits, idx=None):
+#     max_idx = torch.argmax(logits, dim=-1, keepdim=True) if idx is None else idx
+#     one_hot = torch.zeros_like(logits)
+#     one_hot.scatter_(-1, max_idx, 1)
+#     return one_hot

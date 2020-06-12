@@ -8,7 +8,7 @@ import grid_world.env_objects as core
 import grid_world.envs.grid_world as grid_world
 
 
-class ManeuverSimple(grid_world.GridEnv):
+class ManeuverMulti(grid_world.GridEnv):
     def __init__(self, cfg):
         '''
         This environment is an episodic task with discrete actions and a single agent
@@ -137,17 +137,17 @@ class ManeuverSimple(grid_world.GridEnv):
         return obs_map
 
     def calc_agent_rewards(self):
-        reward_map = {}
+        obs_map = {}
         for agent in self.agents:
-            reward = -.1
-            dist = self.world.get_dist(agent, self.target)
-            if dist < self.agent_fov:
-                reward = 1.
-            reward_map[agent.id] = reward
+            self.world.get_dist(agent.ke)
+            features = []
+            map_obs = self.world.get_agent_pov(agent)
+            features.append(map_obs)
+            obs_map[agent.id] = features
 
         if self.n_agents == 1:
-            return reward_map[self.agent_keys[0]]
-        return reward_map
+            return obs_map[self.agent_keys[0]]
+        return obs_map
 
     def calc_agent_info(self):
         info_map = {}

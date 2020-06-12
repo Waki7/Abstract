@@ -1,6 +1,9 @@
 import logging
+from typing import Union
 
 import gym
+import numpy as np
+from gym import spaces
 
 import grid_world.env_objects as core
 
@@ -43,6 +46,25 @@ class GridEnv(gym.Env):
         :return:
         '''
         pass
+
+    def convert_action(self, action: Union[int, np.ndarray]):
+        '''
+        fall back action conversion, u can create an action mapper for more particular behavior
+        todo consider how design this vs action mapper, which is better, or both is good?
+        :param action:
+        :return:
+        '''
+        if isinstance(self.action_space, spaces.Discrete):
+            return core.get_action_unit_vector(action)
+        if isinstance(self.action_space, spaces.MultiDiscrete):
+            # todo zero center, assuming the action will be 0 (backward), 1 (stay), 2 (forward) for each component
+            raise NotImplementedError('no implementation for MultiDiscrete')
+        if isinstance(self.action_space, spaces.Box):
+            raise NotImplementedError('no implementation for continuous actions')
+        raise NotImplementedError
+
+    def step(self):
+        raise NotImplementedError
 
     def render(self):
         raise NotImplementedError
