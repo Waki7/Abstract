@@ -150,6 +150,19 @@ class ManeuverSimple(grid_world.GridEnv):
             return reward_map[self.agent_keys[0]]
         return reward_map
 
+    def calc_agent_dones(self):
+        done_map = {}
+        for agent in self.agents:
+            done = False
+            dist = self.world.get_distance(agent, self.target)
+            if dist < self.agent_fov:
+                done = True
+            done_map[agent.id] = done
+
+        if self.n_agents == 1:
+            return done_map[self.agent_keys[0]]
+        return done_map
+
     def calc_agent_info(self):
         info_map = {}
         return info_map
