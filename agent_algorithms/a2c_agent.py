@@ -1,3 +1,5 @@
+from typing import Union
+
 from agent_algorithms.factory import register_agent
 from networks.base_networks import *
 
@@ -44,7 +46,8 @@ class A2CAgent():
         self.batch_probs_selected = []
         self.batch_probs = []
         self.batch_value_estimates = []
-        self.rewards = []
+        self.batch_rewards = []
+        self.batch_episode_ends = []
         self.t = 0
 
     def get_action(self):
@@ -52,7 +55,7 @@ class A2CAgent():
             return None
         return self.batch_actions[-1]
 
-    def step(self, env_input):
+    def step(self, env_input: Union[List[torch.Tensor], torch.Tensor]):
         if self.ac is not None:
             probs, estimates = self.ac.forward(env_input)
         else:
@@ -71,20 +74,24 @@ class A2CAgent():
         self.t += 1
         return self.batch_actions[-1]
 
-    def update_policy(self, env_reward, episode_end, new_state=None):
+    def update_policy(self, batch_reward: torch.tensor, batch_episode_end: torch.tensor, **kwargs):
         ret_loss = {}
-        self.rewards.append(env_reward)
-        should_update = self.should_update(episode_end, env_reward)
+        self.batch_rewards.append(batch_reward)
+        self.batch_episode_ends.append(batch_episode_end)
+        should_update = self.batch_should_update(batch_episode_end, batch_reward)
+
         if should_update:
             discounted_rewards = [0]
-            while self.rewards:
-                # latest reward + (future reward * gamma)
-                discounted_rewards.insert(0, self.rewards.pop(-1) + (self.discount_factor * discounted_rewards[0]))
-            discounted_rewards.pop(-1)  # remove the extra 0 placed before the loop
+            reward_vec = torch.stack(self.batch_rewards)
+            is_done_vec = torch.stack(self.batch_episode_ends)
+            zero_done_mask = torch.bitwise_not(is_done_vec)
 
-            Q_val = torch.tensor(discounted_rewards).to(**args)
+            discounted_rewards = model_utils.discount_rewards(rewards=reward_vec, discount=self.discount_factor,
+                                                              td_step=self.td_step)
+    
             V_estimate = torch.cat(self.batch_value_estimates, dim=0)
-            advantage = Q_val - V_estimate
+            advantage = discounted_rewards - V_estimate
+            print(exit(9))
             if advantage.shape[0] > 1:
                 advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
 
@@ -118,16 +125,17 @@ class A2CAgent():
             self.critic.update_parameters()
 
     def reset_buffers(self):
-        self.rewards = []
-        self.probs = []
-        self.action_probs = []
-        self.actions = []
+        self.batch_actions = []
+        self.batch_probs_selected = []
+        self.batch_probs = []
         self.batch_value_estimates = []
+        self.batch_rewards = []
+        self.batch_episode_ends = []
 
-    def should_update(self, episode_end, reward):
-        steps_since_update = len(self.rewards) + 1
+    def batch_should_update(self, batch_episode_end, batch_reward):
+        steps_since_update = len(self.batch_rewards) + 1
         td_update = self.td_step != -1 and steps_since_update % self.td_step == 0
         if self.update_threshold == -1:  # not trying the threshold updater
-            return episode_end or td_update
-        update = episode_end or np.abs(reward) >= self.update_threshold
+            return all(batch_episode_end) or td_update
+        update = batch_episode_end or np.abs(batch_reward) >= self.update_threshold
         return update

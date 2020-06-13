@@ -10,7 +10,7 @@ def test_draw():
     print()
     drawer = ObservationRenderer(CFG)
     drawer.reset_drawing()
-    drawing = drawer.draw_square(center=(2, 2), length=2)
+    drawing = drawer.draw_diamond(center=(2, 2), length=2)
     # drawing = drawer.draw_circle(center=(2,2), radius=2)
     frame = drawer.get_frame((0, 0))
     print('drawing:\n {}  \n'.format(drawing))

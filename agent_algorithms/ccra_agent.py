@@ -66,7 +66,7 @@ class CRAAgent():
         env_action = None
         probs = None
         action = None
-        env_input = model_utils.convert_env_batch_input(env_input, self.action)
+        env_input = model_utils.list_to_torch_device(env_input, self.action)
         estimates, _ = self.critic.forward(env_input)
 
         internal_esimates = []

@@ -2,6 +2,7 @@ import logging
 import os
 import re
 from datetime import datetime
+from typing import Iterable
 
 import numpy as np
 import yaml
@@ -98,7 +99,7 @@ class ExperimentLogger():
     def add_agent_scalars(self, label, data, step=-1, track_mean=False, track_sum=False, log=False):
         if data is None:
             return
-        if isinstance(data, list):
+        if isinstance(data, Iterable):
             data = np.mean(data)
 
         if track_mean:

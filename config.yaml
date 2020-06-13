@@ -112,7 +112,7 @@ agents:
     entropy_coef: .05
     n_threads: 2
     supervised_loss: False
-    td_step: 10
+    td_step: -1
     actor:
       lr: .01
       model_size: 64
@@ -125,5 +125,5 @@ agents:
 training:
   variation: ''
   n_episodes: 2000 #
-  timeout: 2000 # steps in one episode before time out, unless not episodic
+  timeout: 20 # steps in one episode before time out, unless not episodic
   eval_rewards_window: 20

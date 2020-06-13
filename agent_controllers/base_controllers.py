@@ -1,4 +1,8 @@
+from typing import Union, Dict, List
+
 import gym
+import numpy as np
+import torch
 
 import utils.model_utils as model_utils
 from utils.env_wrappers import SubprocVecEnv
@@ -71,25 +75,25 @@ class BaseController:  # currently implemented as (i)AC
         env = SubprocVecEnv([lambda: get_env_func(env_name=env_name, env_cfg=env_cfg) for i in
                              range(n_threads)]) if is_batch_env else self.env
 
-        state = env.reset()
+        states = env.reset()
         for episode in range(n_episodes):
             while True:
-                actions = self.step_agents(state, is_batch_env)
-                state, reward, episode_end, info = env.step(actions)
+                actions = self.step_agents(states, is_batch_env)
+                states, rewards, episode_ends, info = env.step(actions)
                 # self.env.log_summary()
-                losses = self.update_agents(reward, episode_end, state)
+                losses = self.update_agents(rewards, episode_ends, states)
                 assert isinstance(losses, dict), 'expect losses to be returned as a dictionary'
                 updated = len(losses) != 0
 
-                self.experiment_logger.add_scalar_dict('losses', losses, log=True)
-                self.experiment_logger.add_agent_scalars('reward', reward, track_mean=True, track_sum=True, log=True)
+                self.experiment_logger.add_scalar_dict('avg_batch_losses', losses, log=True)
+                self.experiment_logger.add_agent_scalars('avg_batch_reward', rewards, track_mean=True, track_sum=True, log=True)
 
-                if (self.is_episodic and episode_end) or (not self.is_episodic and updated):
+                if (self.is_episodic and all(episode_ends)) or (not self.is_episodic and updated):
                     self.experiment_logger.log_progress(episode, step)
                     if self.is_episodic:
                         self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
 
-                if (self.is_episodic and episode_end) or (not self.is_episodic and updated):
+                if (self.is_episodic and all(episode_ends)) or (not self.is_episodic and updated):
                     break
 
                 step += 1
@@ -97,16 +101,16 @@ class BaseController:  # currently implemented as (i)AC
             # only reset the step if the environment is episodic
             if self.is_episodic:
                 step = 0
-                state = self.env.reset()
+                states = self.env.reset()
 
-    def step_agents(self, obs, is_batch_env):
+    def step_agents(self, obs: Union[List[np.ndarray], Dict],
+                    is_batch_env):
         if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one
             obs = [obs, ]
         if self.n_agents == 1:
             agent = self.agents[0]
             batched_obs = model_utils.batch_env_observations(obs, self.env.observation_space)
-            batched_obs = model_utils.convert_env_batch_input(env_inputs=batched_obs,
-                                                              space=self.env.observation_space)
+            batched_obs = model_utils.list_to_torch_device(batched_obs)
             return agent.step(batched_obs)
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
@@ -115,13 +119,25 @@ class BaseController:  # currently implemented as (i)AC
             # else:
             #     return [self.agents[key].step(obs[key]) for key in self.agent_keys]
 
-    def update_agents(self, reward, episode_end, new_state):
+    def update_agents(self, reward: Union[List[float], Dict],
+                      episode_end: Union[List[bool], Dict],
+                      is_batch_env):
+        if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one
+            reward = [reward, ]
+            episode_end = [episode_end, ]
         if self.n_agents == 1:
-            loss = self.agents[0].update_policy(reward, episode_end, new_state)
+            batch_reward = torch.tensor(reward)
+            batch_end = torch.tensor(episode_end)
+            loss = self.agents[0].update_policy(batch_reward, batch_end)
         else:
-            loss = {}
-            for key in self.agent_keys:
-                loss[key] = (self.agents[key].update_policy(
-                    reward[key], episode_end[key], new_state[key]
-                ))
+            raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES FOR THE NEW_STATE')
+            # agent_reward = []
+            # agent_ends = []
+            # agent_state = []
+            #
+            # loss = {}
+            # for key in self.agent_keys:
+            #     loss[key] = (self.agents[key].update_policy(
+            #         reward[key], episode_end[key], new_state[key]
+            #     ))
         return loss

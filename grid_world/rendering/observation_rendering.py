@@ -41,8 +41,8 @@ class ObservationRenderer():
         self.drawing[channel] = drawing.draw_ring(self.drawing[channel], center=center, radius=radius, width=width)
         return self.drawing
 
-    def draw_square(self, center: Iterable[int], length: float = 5., channel: int = 0):
-        self.drawing[channel] = drawing.draw_square(self.drawing[channel], center=center, length=length)
+    def draw_diamond(self, center: Iterable[int], length: float = 5., channel: int = 0):
+        self.drawing[channel] = drawing.draw_diamond(self.drawing[channel], center=center, length=length)
         return self.drawing
 
     def get_frame(self, center: Iterable[int]):

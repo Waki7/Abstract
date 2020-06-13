@@ -62,14 +62,14 @@ class SocialCRAController(BaseController):
 
         return agents
 
-    def update_agents(self, reward, episode_end, new_state):
+    def update_agents(self, reward, episode_end, new_obs):
         if self.n_agents == 1:
-            loss = self.agents[0].update_policy(reward, episode_end, new_state=new_state, learn_policy=self.learn_policy,
+            loss = self.agents[0].update_policy(reward, episode_end, new_state=new_obs, learn_policy=self.learn_policy,
                                                 learn_encoding=self.learn_encodings)
         else:
             loss = []
             for key in self.agent_keys:
                 loss.append(self.agents[key].update_policy(
-                    reward[key], episode_end[key], new_state[key]
+                    reward[key], episode_end[key], new_obs[key]
                 ))
         return loss

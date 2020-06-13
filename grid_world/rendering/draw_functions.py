@@ -37,7 +37,7 @@ def draw_ring(background: np.ndarray, center: Iterable[int], radius, width):
     return ring + background
 
 
-def draw_square(background: np.ndarray, center: Iterable[int], length):
+def draw_diamond(background: np.ndarray, center: Iterable[int], length):
     # TODO THIS IS A DIAMOND BECAUSE OF THE CORNERS
     '''
         Draws a square on the Renderers current drawing memory
