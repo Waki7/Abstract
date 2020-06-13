@@ -81,30 +81,33 @@ class A2CAgent():
         should_update = self.batch_should_update(batch_episode_end, batch_reward)
 
         if should_update:
-            discounted_rewards = [0]
             reward_vec = torch.stack(self.batch_rewards)
             is_done_vec = torch.stack(self.batch_episode_ends)
-            zero_done_mask = torch.bitwise_not(is_done_vec)
+            value_estimate_vec = torch.stack(self.batch_value_estimates)
+            probs_vec = torch.stack(self.batch_probs)
+            selected_prob_vec = torch.stack(self.batch_probs_selected)
 
-            discounted_rewards = model_utils.discount_rewards(rewards=reward_vec, discount=self.discount_factor,
-                                                              td_step=self.td_step)
-    
-            V_estimate = torch.cat(self.batch_value_estimates, dim=0)
-            advantage = discounted_rewards - V_estimate
-            print(exit(9))
+            discounted_rewards_vec = model_utils.discount_rewards(rewards=reward_vec, discount=self.discount_factor,
+                                                                  td_step=self.td_step)
+
+            advantage = discounted_rewards_vec - value_estimate_vec
             if advantage.shape[0] > 1:
                 advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
 
-            probs = torch.stack(self.probs)
-            action_probs = torch.stack(self.action_probs)
+            action_log_prob = torch.log(selected_prob_vec)
 
-            action_log_prob = torch.log(action_probs)
-            actor_loss = (-action_log_prob * advantage.detach()).sum()
+            zero_done_mask = torch.bitwise_not(is_done_vec).long()
 
-            critic_loss = F.smooth_l1_loss(input=V_estimate, target=Q_val,
+            print(zero_done_mask.shape)
+            print(zero_done_mask)
+
+            print(exit(9))
+            actor_loss = (-action_log_prob * advantage.detach()).mean(dim=-1).sum(dim=0)
+
+            critic_loss = F.smooth_l1_loss(input=value_estimate_vec, target=discounted_rewards_vec,
                                            reduction='mean')  # .5 * advantage.pow(2).mean()
 
-            entropy_loss = (torch.log(probs) * probs).mean()
+            entropy_loss = (torch.log(probs_vec) * probs_vec).mean()
 
             ac_loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
 

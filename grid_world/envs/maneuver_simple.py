@@ -86,6 +86,7 @@ class ManeuverSimple(grid_world.GridEnv):
             done (bool): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
+
         if self.n_agents == 1:
             self.world.move_agent(self.agents[0],
                                   self.action_mapper.encode(actions))
@@ -153,10 +154,9 @@ class ManeuverSimple(grid_world.GridEnv):
     def calc_agent_dones(self):
         done_map = {}
         for agent in self.agents:
-            done = False
             dist = self.world.get_distance(agent, self.target)
-            if dist < self.agent_fov:
-                done = True
+            out_of_bounds = self.world.is_out_of_bounds(agent)
+            done = dist < self.agent_fov or out_of_bounds
             done_map[agent.id] = done
 
         if self.n_agents == 1:

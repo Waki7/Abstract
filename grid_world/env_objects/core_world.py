@@ -71,6 +71,11 @@ class CoreWorld():
         self.landmark_map[landmark.id] = landmark
         landmark.place(location)
 
+    def is_out_of_bounds(self, object: core_objects.GridObject) -> bool:
+        location = object.location
+        return not (self.bounds[0] < location[0] < self.bounds[1]
+                    and self.bounds[0] < location[1] < self.bounds[1])
+
     def is_legal_move(self, destination, agent=None):
         '''
 
@@ -80,7 +85,7 @@ class CoreWorld():
         '''
         pass
 
-    def move_agent(self, agent: core_agents.Agent, action: np.ndarray):
+    def move_agent(self, agent: core_agents.Agent, action: np.ndarray, illegal_func=None):
         assert agent.id in self.agent_map, 'agent has not been spawned in world'
         agent = self.agent_map[agent.id]
         location = agent.get_location()
@@ -113,6 +118,11 @@ class CoreWorld():
         granularity = 1000.
         rand_x = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
         rand_y = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
+        print('___')
+
+        print(rand_x)
+        print(rand_y)
+        print('___')
         rand_x = rand_x / granularity
         rand_y = rand_y / granularity
         return np.asarray([rand_y, rand_x])
