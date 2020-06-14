@@ -43,6 +43,7 @@ class ManeuverSimple(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         # episodic initializations
         # ---------------------------------------------------------------------------
+        self.agents_in_episode = [agent for agent in self.agents]
         self.agent_action_map = None
         self.t = 0
         self.reset()
@@ -54,6 +55,11 @@ class ManeuverSimple(grid_world.GridEnv):
         # --- spawn the landmarks in the world, this includes placing them in the world
         self.world.spawn_landmarks([self.target, self.avoid], landmark_locations)
         self.world.spawn_agents(self.agents, agent_locations)
+
+        # --- episodic initializations
+        self.agents_in_episode = [agent for agent in self.agents]
+        self.agent_action_map = None
+        self.t = 0
 
         agent_obss = self.calc_agent_obs()
         return agent_obss
@@ -101,6 +107,8 @@ class ManeuverSimple(grid_world.GridEnv):
         agent_rewards = self.calc_agent_rewards()
         agent_dones = self.calc_agent_dones()
         agent_infos = self.calc_agent_info()
+
+        self.agents_in_episode = [agent for agent in self.agents_in_episode if agent_dones.get(agent.id)]
 
         return agent_obss, agent_rewards, agent_dones, agent_infos
 

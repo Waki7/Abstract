@@ -118,11 +118,6 @@ class CoreWorld():
         granularity = 1000.
         rand_x = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
         rand_y = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
-        print('___')
-
-        print(rand_x)
-        print(rand_y)
-        print('___')
         rand_x = rand_x / granularity
         rand_y = rand_y / granularity
         return np.asarray([rand_y, rand_x])
