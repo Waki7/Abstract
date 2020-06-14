@@ -43,7 +43,7 @@ class ManeuverSimple(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         # episodic initializations
         # ---------------------------------------------------------------------------
-        self.agents_in_episode = [agent for agent in self.agents]
+        self.agent_dones_map = dict(zip(self.agent_keys, [True] * self.n_agents))
         self.agent_action_map = None
         self.t = 0
         self.reset()
@@ -57,7 +57,7 @@ class ManeuverSimple(grid_world.GridEnv):
         self.world.spawn_agents(self.agents, agent_locations)
 
         # --- episodic initializations
-        self.agents_in_episode = [agent for agent in self.agents]
+        self.agent_dones_map = dict(zip(self.agent_keys, [True] * self.n_agents))
         self.agent_action_map = None
         self.t = 0
 
@@ -107,8 +107,6 @@ class ManeuverSimple(grid_world.GridEnv):
         agent_rewards = self.calc_agent_rewards()
         agent_dones = self.calc_agent_dones()
         agent_infos = self.calc_agent_info()
-
-        self.agents_in_episode = [agent for agent in self.agents_in_episode if agent_dones.get(agent.id)]
 
         return agent_obss, agent_rewards, agent_dones, agent_infos
 
@@ -162,10 +160,14 @@ class ManeuverSimple(grid_world.GridEnv):
     def calc_agent_dones(self):
         done_map = {}
         for agent in self.agents:
+            prev_done = self.agent_dones_map.get(agent.id)
             dist = self.world.get_distance(agent, self.target)
             out_of_bounds = self.world.is_out_of_bounds(agent)
-            done = dist < self.agent_fov or out_of_bounds
+            done = dist < self.agent_fov or out_of_bounds or prev_done
             done_map[agent.id] = done
+
+        # update dones
+        self.agent_dones_map = done_map
 
         if self.n_agents == 1:
             return done_map[self.agent_keys[0]]
