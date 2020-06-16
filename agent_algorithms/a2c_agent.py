@@ -83,6 +83,7 @@ class A2CAgent():
         if should_update:
             reward_vec = torch.stack(self.batch_rewards)
             is_done_vec = torch.stack(self.batch_episode_ends)
+
             value_estimate_vec = torch.stack(self.batch_value_estimates)
             probs_vec = torch.stack(self.batch_probs)
             selected_prob_vec = torch.stack(self.batch_probs_selected)
@@ -96,18 +97,14 @@ class A2CAgent():
 
             action_log_prob = torch.log(selected_prob_vec)
 
-            zero_done_mask = torch.bitwise_not(is_done_vec).long()
+            zero_done_mask = torch.bitwise_not(is_done_vec).float()
 
-            print(zero_done_mask.shape)
-            print(zero_done_mask)
+            actor_loss = ((-action_log_prob * advantage.detach()) * zero_done_mask).mean()
 
-            print(exit(9))
-            actor_loss = (-action_log_prob * advantage.detach()).mean(dim=-1).sum(dim=0)
+            critic_loss = (F.smooth_l1_loss(input=value_estimate_vec, target=discounted_rewards_vec,
+                                            reduction='none') * zero_done_mask).mean()  # .5 * advantage.pow(2).mean()
 
-            critic_loss = F.smooth_l1_loss(input=value_estimate_vec, target=discounted_rewards_vec,
-                                           reduction='mean')  # .5 * advantage.pow(2).mean()
-
-            entropy_loss = (torch.log(probs_vec) * probs_vec).mean()
+            entropy_loss = ((torch.log(probs_vec) * probs_vec).sum(dim=-1) * zero_done_mask).mean()
 
             ac_loss = actor_loss + critic_loss + (self.entropy_coef * entropy_loss)
 

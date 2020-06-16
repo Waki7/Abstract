@@ -4,6 +4,7 @@ import gym
 import numpy as np
 import torch
 
+import settings
 import utils.model_utils as model_utils
 from utils.env_wrappers import SubprocVecEnv
 from utils.storage_utils import ExperimentLogger
@@ -79,6 +80,7 @@ class BaseController:  # currently implemented as (i)AC
         for episode in range(n_episodes):
             while True:
                 actions = self.step_agents(states, is_batch_env)
+
                 states, rewards, episode_ends, info = env.step(actions)
                 # self.env.log_summary()
                 losses = self.update_agents(rewards, episode_ends, states)
@@ -93,8 +95,6 @@ class BaseController:  # currently implemented as (i)AC
                     self.experiment_logger.log_progress(episode, step)
                     if self.is_episodic:
                         self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
-
-                if (self.is_episodic and all(episode_ends)) or (not self.is_episodic and updated):
                     break
 
                 step += 1
@@ -102,7 +102,7 @@ class BaseController:  # currently implemented as (i)AC
             # only reset the step if the environment is episodic
             if self.is_episodic:
                 step = 0
-                states = self.env.reset()
+                states = env.reset()
 
     def convert_obs_for_agent(self, obs, is_batch_env):
         if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one
@@ -119,11 +119,11 @@ class BaseController:  # currently implemented as (i)AC
             #     agent_obs = model_utils.list_to_torch_device(agent_obs)
             #     obs_map[agent.id] = obs.get(agent.id, None)
 
-    def convert_scalars_for_agent(self, vector: Union[List[float], Dict], is_batch_env):
+    def convert_env_feedback_for_agent(self, vector: Union[List[float], Dict], is_batch_env):
         if not is_batch_env:
             vector = [vector, ]
         if self.n_agents == 1:
-            return torch.tensor(vector)
+            return torch.tensor(vector).to(settings.DEVICE)
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
 
@@ -138,8 +138,8 @@ class BaseController:  # currently implemented as (i)AC
     def update_agents(self, reward: Union[List[float], Dict],
                       episode_end: Union[List[bool], Dict],
                       is_batch_env):
-        batch_reward = self.convert_scalars_for_agent(reward, is_batch_env)
-        batch_end = self.convert_scalars_for_agent(episode_end, is_batch_env)
+        batch_reward = self.convert_env_feedback_for_agent(reward, is_batch_env)
+        batch_end = self.convert_env_feedback_for_agent(episode_end, is_batch_env)
         if self.n_agents == 1:
             loss = self.agents[0].update_policy(batch_reward, batch_end)
         else:

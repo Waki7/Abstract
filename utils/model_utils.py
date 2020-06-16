@@ -14,12 +14,12 @@ import settings
 def discount_rewards(rewards: torch.Tensor, discount: float, td_step: int = -1) -> torch.Tensor:
     if td_step != -1:
         raise NotImplementedError('currently only implemented monte carlo esimation')
-    prev_reward = torch.zeros(rewards.shape[-1])
-    discounted_reward = torch.zeros_like(rewards)
+    prev_reward = torch.zeros(rewards.shape[-1]).to(settings.DEVICE)
+    discounted_reward = torch.zeros_like(rewards).to(settings.DEVICE)
     for episode_idx in range(rewards.shape[0] - 1, -1, -1):
         discounted_reward[episode_idx] = rewards[episode_idx] + (prev_reward * discount)
         prev_reward = rewards[episode_idx]
-    return discounted_reward.to(settings.DEVICE)
+    return discounted_reward
 
 
 # ---------------------------------------------------------------------------
