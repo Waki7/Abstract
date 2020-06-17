@@ -69,6 +69,20 @@ class SubprocVecEnv(VecEnv):
         observations, rewards, dones, infos = zip(*results)
         return observations, rewards, dones, infos
 
+    def render(self, indices=[0]):
+        '''
+        By default we only want to render one enviornment's animations, you can pass None to render all
+        :param indices:
+        :return:
+        '''
+        target_remotes = self._get_target_remotes(indices)
+        for remote in target_remotes:
+            remote.send(('env_method', 'render'))
+        animations = [remote.recv() for remote in self.remotes]
+        if len(target_remotes) == 1:
+            return animations[0]
+        return animations
+
     def reset(self):
         for remote in self.remotes:
             remote.send(('reset', None))

@@ -1,3 +1,4 @@
+import logging
 from typing import Union, Dict, List
 
 import gym
@@ -29,6 +30,7 @@ class BaseController:  # currently implemented as (i)AC
         # set cfg parameters
         ##########################################################################################
         self.log_freq = cfg.get('log_freq', 50)
+        self.checkpoint_freq = cfg.get('checkpoint_freq', 50)
         self.agent_name = cfg['agent_name']
 
         self.agent_keys = self.env.agent_keys if hasattr(self.env, 'agent_keys') else None
@@ -39,6 +41,7 @@ class BaseController:  # currently implemented as (i)AC
         ##########################################################################################
         self.is_episodic = not hasattr(self.env, 'is_episodic') or (
                 hasattr(self.env, 'is_episodic') and self.env.is_episodic)
+        logging.info('environment is {}'.format('episodic' if self.is_episodic else 'not episodic (continuous)'))
         self.sample_state = self.env.observation_space.sample()
         self.agents = self.make_agents()
         self.experiment_logger = ExperimentLogger()
@@ -93,16 +96,17 @@ class BaseController:  # currently implemented as (i)AC
 
                 if (self.is_episodic and all(episode_ends)) or (not self.is_episodic and updated):
                     self.experiment_logger.log_progress(episode, step)
-                    if self.is_episodic:
-                        self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
                     break
 
                 step += 1
 
+            self.experiment_logger.checkpoint(episode, self.checkpoint_freq)
             # only reset the step if the environment is episodic
             if self.is_episodic:
+                self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
                 step = 0
                 states = env.reset()
+
 
     def convert_obs_for_agent(self, obs, is_batch_env):
         if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one

@@ -2,13 +2,15 @@ import logging
 import os
 import re
 from datetime import datetime
-from typing import Iterable
+from typing import Iterable, Union
 
+import gym
 import numpy as np
 import yaml
 from tensorboardX import SummaryWriter
 
 import settings
+import utils.env_wrappers as env_wrappers
 
 
 def clean_experiment_folders():
@@ -66,6 +68,9 @@ class ExperimentLogger():
 
         self.reset_buffers(True)
 
+    def create_sub_experiment(self):
+        pass
+
     def log_progress(self, episode, step):
         log_output = "episode: {}, step: {}  ".format(episode, step)
         for key in self.progress_values_mean.keys():
@@ -116,5 +121,13 @@ class ExperimentLogger():
                 step = self.counts[label]
             self.writer.add_scalar(label, data, global_step=step)
 
-    def checkpoint(self):
-        pass
+    def checkpoint(self, episode, checkpoint_freq, environment: Union[env_wrappers.SubprocVecEnv, gym.Env]):
+        if (episode + 1) % checkpoint_freq == 0:
+            # --- save models
+            pass
+
+            # --- save animations
+            animations = environment.render()
+            animations_folder = '{}/environment_episode_{}'.format(self.results_path, episode)
+        
+            return None

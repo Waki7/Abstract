@@ -101,6 +101,7 @@ class ManeuverSimple(grid_world.GridEnv):
                 self.world.move_agent(self.agents[0], self.action_mapper.encode(action))
 
         self.world.render_world()
+        self.t += 1
 
         agent_obss = self.calc_agent_obs()
         agent_rewards = self.calc_agent_rewards()
@@ -158,11 +159,13 @@ class ManeuverSimple(grid_world.GridEnv):
 
     def calc_agent_dones(self):
         done_map = {}
+        timed_out = self.t > self.timeout
         for agent in self.agents:
             prev_done = self.agent_dones_map.get(agent.id, False)
             dist = self.world.get_distance(agent, self.target)
             out_of_bounds = self.world.is_out_of_bounds(agent)
-            done = dist < self.agent_fov or out_of_bounds or prev_done
+
+            done = dist < self.agent_fov or out_of_bounds or prev_done or timed_out
             done_map[agent.id] = done
 
         # update dones
