@@ -129,5 +129,5 @@ class ExperimentLogger():
             # --- save animations
             animations = environment.render()
             animations_folder = '{}/environment_episode_{}'.format(self.results_path, episode)
-        
+
             return None
