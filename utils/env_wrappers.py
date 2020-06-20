@@ -26,6 +26,9 @@ def worker(remote, parent_remote, env_fn_wrapper):
             break
         elif cmd == 'get_spaces':
             remote.send((env.observation_space, env.action_space))
+        elif cmd == 'render':
+            rgb_frames = env.render()
+            remote.send(rgb_frames)
         elif cmd == 'env_method':
             method = getattr(env, data[0])
             remote.send(method(*data[1], **data[2]))
@@ -79,7 +82,7 @@ class SubprocVecEnv(VecEnv):
         '''
         target_remotes = self._get_target_remotes(indices)
         for remote in target_remotes:
-            remote.send(('env_method', 'render'))
+            remote.send(('render', None))
         animations = [remote.recv() for remote in self.remotes]
         if len(target_remotes) == 1:
             return animations[0]
