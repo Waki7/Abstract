@@ -7,6 +7,7 @@ from typing import Iterable, Union
 import gym
 import numpy as np
 import yaml
+from array2gif import write_gif
 from tensorboardX import SummaryWriter
 
 import settings
@@ -128,6 +129,5 @@ class ExperimentLogger():
 
             # --- save animations
             animations = environment.render()
-            animations_folder = '{}/environment_episode_{}'.format(self.results_path, episode)
-
-            return None
+            animations_folder = '{}/environment_episode_{}.gif'.format(self.results_path, episode)
+            write_gif(animations, animations_folder, fps=2)

@@ -8,6 +8,20 @@ import settings
 
 
 # ---------------------------------------------------------------------------
+# IMAGES
+# ---------------------------------------------------------------------------
+
+def convert_to_rgb_format(vector: Union[np.ndarray, torch.Tensor]):
+    image_vector = scale_vector_to_range(vector, 0, 255).astype(np.uint8)
+    assert image_vector.shape[0] == 1 or image_vector.shape[0] == 3, 'include the channel dimension'
+    if image_vector.shape[0] == 1:
+        image_vector = np.repeat(image_vector, repeats=3, axis=0)
+    image_vector = np.transpose(image_vector, axes=(1, 2, 0))
+    return image_vector
+    # return Image.fromarray(image_vector)
+
+
+# ---------------------------------------------------------------------------
 # FUNCTIONS/ALGORITHMS
 # ---------------------------------------------------------------------------
 
@@ -111,6 +125,14 @@ def get_euclidean_distance(point1: np.ndarray, point2: np.ndarray):
 # ---------------------------------------------------------------------------
 def is_odd(val):
     return val % 2 == 1
+
+
+def scale_vector_to_range(vector: Union[np.ndarray, torch.Tensor], new_min: Union[int, float], new_max: [int, float]):
+    """Rescale an arrary linearly."""
+    minimum, maximum = np.min(vector), np.max(vector)
+    m = (new_max - new_min) / (maximum - minimum)
+    b = new_min - m * minimum
+    return m * vector + b
 
 # def get_target_action(n_actions, actions_taken, advantage):
 #     signs = (torch.sign(advantage) - 1) / 2

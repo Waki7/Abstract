@@ -112,7 +112,7 @@ class CoreWorld():
         for agent in self.agent_map.values():
             self.renderer.draw_circle(center=agent.location, radius=1.)
         for landmark in self.landmark_map.values():
-            self.renderer.draw_diamond(center=landmark.location, length=1.)
+            self.renderer.draw_diamond(center=landmark.location, apothem=1.)
 
     def get_random_point(self):
         granularity = 1000.
@@ -133,7 +133,7 @@ class CoreWorld():
 
     def get_agent_pov(self, agent: core_agents.Agent):
         assert agent.id in self.agent_map, 'agent has not been spawned in world'
-        return self.renderer.get_frame(agent.location)
+        return self.renderer.get_frame_at_point(agent.location)
 
     def log_summary(self):
         logging.debug('\n___________start step {}_______________'.format(self.t))

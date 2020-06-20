@@ -3,7 +3,7 @@ from typing import Iterable
 import numpy as np
 from gym import spaces
 
-import grid_world.rendering.draw_functions as drawing
+import grid_world.rendering.boolean_draw_functions as drawing
 import utils.model_utils as model_utils
 
 
@@ -26,7 +26,7 @@ class ObservationRenderer():
         start a new drawing
         :return:
         '''
-        self.drawing = 0 * self.drawing
+        self.drawing = np.zeros_like(self.drawing)
 
     def get_obs_shape(self):
         high = 1.
@@ -41,11 +41,11 @@ class ObservationRenderer():
         self.drawing[channel] = drawing.draw_ring(self.drawing[channel], center=center, radius=radius, width=width)
         return self.drawing
 
-    def draw_diamond(self, center: Iterable[int], length: float = 5., channel: int = 0):
-        self.drawing[channel] = drawing.draw_diamond(self.drawing[channel], center=center, length=length)
+    def draw_diamond(self, center: Iterable[int], apothem: float = 5., channel: int = 0):
+        self.drawing[channel] = drawing.draw_diamond(self.drawing[channel], center=center, apothem=apothem)
         return self.drawing
 
-    def get_frame(self, center: Iterable[int]):
+    def get_frame_at_point(self, center: Iterable[int]):
         # todo https://shapely.readthedocs.io/en/latest/manual.html#object.intersection
         frame = np.zeros((self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
         frame_center = (self.obs_resolution[0] // 2, self.obs_resolution[1] // 2)

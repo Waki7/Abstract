@@ -30,7 +30,6 @@ class BaseController:  # currently implemented as (i)AC
         # set cfg parameters
         ##########################################################################################
         self.log_freq = cfg.get('log_freq', 50)
-        self.checkpoint_freq = cfg.get('checkpoint_freq', 50)
         self.agent_name = cfg['agent_name']
 
         self.agent_keys = self.env.agent_keys if hasattr(self.env, 'agent_keys') else None
@@ -63,6 +62,7 @@ class BaseController:  # currently implemented as (i)AC
         training = experiment_folder == ''
 
         n_episodes = training_cfg['n_episodes']
+        checkpoint_freq = training_cfg.get('checkpoint_freq', 50)
         n_threads = self.cfg.get('n_threads', 1)
         is_batch_env = n_threads > 1
 
@@ -100,13 +100,12 @@ class BaseController:  # currently implemented as (i)AC
 
                 step += 1
 
-            self.experiment_logger.checkpoint(episode, self.checkpoint_freq)
+            self.experiment_logger.checkpoint(episode, checkpoint_freq, environment=env)
             # only reset the step if the environment is episodic
             if self.is_episodic:
                 self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
                 step = 0
                 states = env.reset()
-
 
     def convert_obs_for_agent(self, obs, is_batch_env):
         if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one

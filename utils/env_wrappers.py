@@ -33,6 +33,8 @@ def worker(remote, parent_remote, env_fn_wrapper):
             remote.send(getattr(env, data))
         elif cmd == 'set_attr':
             remote.send(setattr(env, data[0], data[1]))
+        elif cmd == 'get_unwrapped':
+            remote.send(env)
         else:
             raise NotImplementedError("`{}` is not implemented in the worker".format(cmd))
 
@@ -69,7 +71,7 @@ class SubprocVecEnv(VecEnv):
         observations, rewards, dones, infos = zip(*results)
         return observations, rewards, dones, infos
 
-    def render(self, indices=[0]):
+    def render(self, indices=(0,)):
         '''
         By default we only want to render one enviornment's animations, you can pass None to render all
         :param indices:
@@ -128,6 +130,13 @@ class SubprocVecEnv(VecEnv):
             remote.send(('env_method', (method_name, method_args, method_kwargs)))
         return [remote.recv() for remote in target_remotes]
 
+    def get_unwrapped(self, indices=None):
+        """Call instance methods of vectorized environments."""
+        target_remotes = self._get_target_remotes(indices)
+        for remote in target_remotes:
+            remote.send(('get_unwrapped', ()))
+        return [remote.recv() for remote in target_remotes]
+
     def _get_target_remotes(self, indices):
         """
         Get the connection object needed to communicate with the wanted
@@ -138,3 +147,16 @@ class SubprocVecEnv(VecEnv):
         """
         indices = self._get_indices(indices)
         return [self.remotes[i] for i in indices]
+
+    def _get_indices(self, indices):
+        """
+        Convert a flexibly-typed reference to environment indices to an implied list of indices.
+
+        :param indices: (None,int,Iterable) refers to indices of envs.
+        :return: (list) the implied list of indices.
+        """
+        if indices is None:
+            indices = range(self.num_envs)
+        elif isinstance(indices, int):
+            indices = [indices]
+        return indices
