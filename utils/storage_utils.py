@@ -122,12 +122,20 @@ class ExperimentLogger():
                 step = self.counts[label]
             self.writer.add_scalar(label, data, global_step=step)
 
-    def checkpoint(self, episode, checkpoint_freq, environment: Union[env_wrappers.SubprocVecEnv, gym.Env]):
+    def checkpoint(self, episode, checkpoint_freq, agents,
+                   environment: Union[env_wrappers.SubprocVecEnv, gym.Env],
+                   render_agent_povs=False):
         if (episode + 1) % checkpoint_freq == 0:
             # --- save models
             pass
 
             # --- save animations
-            animations = environment.render()
+            if isinstance(environment, env_wrappers.SubprocVecEnv):
+                animations = environment.render(indices=(0,))
+            else:
+                animations = environment.render()
             animations_folder = '{}/environment_episode_{}.gif'.format(self.results_path, episode)
             write_gif(animations, animations_folder, fps=2)
+
+            # if render_agent_povs:
+            #     agent_animations = environment.env_method('render_agent_pov', indices=0)

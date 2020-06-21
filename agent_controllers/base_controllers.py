@@ -5,6 +5,7 @@ import gym
 import numpy as np
 import torch
 
+import grid_world.envs as grid_env
 import settings
 import utils.model_utils as model_utils
 from utils.env_wrappers import SubprocVecEnv
@@ -100,7 +101,10 @@ class BaseController:  # currently implemented as (i)AC
 
                 step += 1
 
-            self.experiment_logger.checkpoint(episode, checkpoint_freq, environment=env)
+            self.experiment_logger.checkpoint(episode, checkpoint_freq,
+                                              agents=self.agents, environment=env,
+                                              render_agent_povs=isinstance(self.env, grid_env.GridEnv))
+            print('asd')
             # only reset the step if the environment is episodic
             if self.is_episodic:
                 self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)

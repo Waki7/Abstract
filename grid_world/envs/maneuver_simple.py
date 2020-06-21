@@ -6,6 +6,7 @@ from gym import spaces
 
 import grid_world.env_objects as core
 import grid_world.envs.grid_world as grid_world
+import utils.model_utils as model_utils
 
 
 class ManeuverSimple(grid_world.GridEnv):
@@ -43,6 +44,8 @@ class ManeuverSimple(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         # episodic initializations
         # ---------------------------------------------------------------------------
+        self.global_render_frames = []
+        self.agent_render_frames = dict(zip(self.agent_keys, [[]] * self.n_agents))
         self.agent_dones_map = dict(zip(self.agent_keys, [False] * self.n_agents))
         self.agent_action_map = None
         self.t = 0
@@ -57,6 +60,8 @@ class ManeuverSimple(grid_world.GridEnv):
         self.world.spawn_agents(self.agents, agent_locations)
 
         # --- episodic initializations
+        self.global_render_frames = []
+        self.agent_render_frames = dict(zip(self.agent_keys, [[]] * self.n_agents))
         self.agent_dones_map = dict(zip(self.agent_keys, [False] * self.n_agents))
         self.agent_action_map = None
         self.t = 0
@@ -100,7 +105,8 @@ class ManeuverSimple(grid_world.GridEnv):
                 action = actions[agent_key]
                 self.world.move_agent(self.agents[0], self.action_mapper.encode(action))
 
-        self.world.render_world()
+        frame = self.world.render_world()
+        self.global_render_frames.append(frame)
         self.t += 1
 
         agent_obss = self.calc_agent_obs()
@@ -139,6 +145,7 @@ class ManeuverSimple(grid_world.GridEnv):
             map_obs = self.world.get_agent_pov(agent)
             features.append(map_obs)
             obs_map[agent.id] = features
+            self.agent_render_frames[agent.id].append(map_obs)
 
         if self.n_agents == 1:
             return obs_map[self.agent_keys[0]]
@@ -178,3 +185,11 @@ class ManeuverSimple(grid_world.GridEnv):
     def calc_agent_info(self):
         info_map = {}
         return info_map
+
+    def render(self):
+        raw_frames = self.global_render_frames
+        return [model_utils.convert_to_rgb_format(frame) for frame in raw_frames]
+
+    def render_agent_pov(self, agent_key):
+        raw_frames = self.agent_render_frames[agent_key]
+        return [model_utils.convert_to_rgb_format(frame) for frame in raw_frames]

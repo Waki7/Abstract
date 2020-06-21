@@ -12,6 +12,7 @@ import settings
 # ---------------------------------------------------------------------------
 
 def convert_to_rgb_format(vector: Union[np.ndarray, torch.Tensor]):
+    print(np.unique(vector))
     image_vector = scale_vector_to_range(vector, 0, 255).astype(np.uint8)
     assert image_vector.shape[0] == 1 or image_vector.shape[0] == 3, 'include the channel dimension'
     if image_vector.shape[0] == 1:

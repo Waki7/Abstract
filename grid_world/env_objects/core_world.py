@@ -110,9 +110,10 @@ class CoreWorld():
     def render_world(self):
         self.renderer.reset_drawing()
         for agent in self.agent_map.values():
-            self.renderer.draw_circle(center=agent.location, radius=1.)
+            self.renderer.draw_circle(center=agent.location, radius=2.)
         for landmark in self.landmark_map.values():
-            self.renderer.draw_diamond(center=landmark.location, apothem=1.)
+            self.renderer.draw_diamond(center=landmark.location, apothem=2.)
+        return self.renderer.get_drawing()
 
     def get_random_point(self):
         granularity = 1000.
