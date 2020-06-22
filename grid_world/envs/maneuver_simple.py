@@ -171,7 +171,6 @@ class ManeuverSimple(grid_world.GridEnv):
             prev_done = self.agent_dones_map.get(agent.id, False)
             dist = self.world.get_distance(agent, self.target)
             out_of_bounds = self.world.is_out_of_bounds(agent)
-
             done = dist < self.agent_fov or out_of_bounds or prev_done or timed_out
             done_map[agent.id] = done
 

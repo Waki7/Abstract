@@ -6,6 +6,3 @@ class Landmark(core.GridObject):
         super(Landmark, self).__init__(id=id, location=location, **kwargs)
         self.id = id
         self.location = location
-
-    def place(self, location):
-        self.location = location

@@ -7,7 +7,7 @@ import numpy as np
 ### DRAW FUNCTIONS DOESN'T DO ANYTHING SPECIAL FOR OVERLAPS
 ###
 
-def draw_circle(background: np.ndarray, center: Iterable[int], radius):
+def draw_circle(background: np.ndarray, center: Iterable[float], radius):
     '''
     Draws a circle on the Renderers current drawing memory
     :param background: grid to draw over, will mimic shape
@@ -23,7 +23,7 @@ def draw_circle(background: np.ndarray, center: Iterable[int], radius):
     return np.logical_or(circle, background)
 
 
-def draw_ring(background: np.ndarray, center: Iterable[int], radius, width):
+def draw_ring(background: np.ndarray, center: Iterable[float], radius, width):
     '''
     Draws a ring on the Renderers current drawing memory,
     see draw_circle method if you wanted a filled ring
@@ -41,7 +41,7 @@ def draw_ring(background: np.ndarray, center: Iterable[int], radius, width):
     return np.logical_or(ring, background)
 
 
-def draw_diamond(background: np.ndarray, center: Iterable[int], apothem):
+def draw_diamond(background: np.ndarray, center: Iterable[float], apothem):
     # TODO THIS IS A DIAMOND BECAUSE OF THE CORNERS
     '''
         Draws a square on the Renderers current drawing memory
@@ -53,7 +53,7 @@ def draw_diamond(background: np.ndarray, center: Iterable[int], apothem):
         '''
     xx, yy = np.mgrid[:background.shape[0], :background.shape[1]]  # basically just a 2d np.arange
     center_dist = np.abs(xx - center[1]) + np.abs(yy - center[0])
-    square = (center_dist <= apothem) & (center_dist >= apothem)
+    square = (center_dist <= apothem)
     return np.logical_or(square, background)
 
 

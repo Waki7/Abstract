@@ -21,7 +21,10 @@ class CoreWorld():
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
-        self.bounds = cfg.get('bounds', [-1.0, 1.0])
+        self.bounds = cfg.get('bounds', [[-1.0, 1.0], [-1.0, 1.0]])
+        if not isinstance(self.bounds[0], Iterable):
+            logging.info('bounds were provided in one dimension, will infer a box was desired')
+            self.bounds = (self.bounds, self.bounds)
         self.dt = cfg.get('dt', .1)  # time grandularity
         observation_cfg = cfg.get('observations')
 
@@ -73,8 +76,8 @@ class CoreWorld():
 
     def is_out_of_bounds(self, object: core_objects.GridObject) -> bool:
         location = object.location
-        return not (self.bounds[0] < location[0] < self.bounds[1]
-                    and self.bounds[0] < location[1] < self.bounds[1])
+        return not (self.bounds[0][0] < location[0] < self.bounds[0][1]
+                    and self.bounds[1][0] < location[1] < self.bounds[1][1])
 
     def is_legal_move(self, destination, agent=None):
         '''
@@ -110,17 +113,19 @@ class CoreWorld():
     def render_world(self):
         self.renderer.reset_drawing()
         for agent in self.agent_map.values():
-            self.renderer.draw_circle(center=agent.location, radius=2.)
+            location = self.renderer.convert_location_to_global(location=agent.location, origin_bounds=self.bounds)
+            self.renderer.draw_circle(center=location, radius=3.)
         for landmark in self.landmark_map.values():
-            self.renderer.draw_diamond(center=landmark.location, apothem=2.)
+            location = self.renderer.convert_location_to_global(location=landmark.location, origin_bounds=self.bounds)
+            self.renderer.draw_diamond(center=location, apothem=10.)
         return self.renderer.get_drawing()
 
     def get_random_point(self):
         granularity = 1000.
-        rand_x = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
-        rand_y = np.random.randint(low=self.bounds[0] * granularity, high=self.bounds[1] * granularity)
-        rand_x = rand_x / granularity
+        rand_y = np.random.randint(low=self.bounds[0][0] * granularity, high=self.bounds[0][1] * granularity)
+        rand_x = np.random.randint(low=self.bounds[1][0] * granularity, high=self.bounds[1][1] * granularity)
         rand_y = rand_y / granularity
+        rand_x = rand_x / granularity
         return np.asarray([rand_y, rand_x])
 
     def initialize_empty_map(self):

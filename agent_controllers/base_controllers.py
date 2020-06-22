@@ -104,7 +104,6 @@ class BaseController:  # currently implemented as (i)AC
             self.experiment_logger.checkpoint(episode, checkpoint_freq,
                                               agents=self.agents, environment=env,
                                               render_agent_povs=isinstance(self.env, grid_env.GridEnv))
-            print('asd')
             # only reset the step if the environment is episodic
             if self.is_episodic:
                 self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
