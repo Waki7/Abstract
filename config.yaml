@@ -35,7 +35,7 @@ agents:
     td_step: -1
 
     actor:
-      lr: .01
+      lr: .001
       model_size: 64
       gradient_clip: 1.5
 
@@ -127,5 +127,5 @@ training:
   n_episodes: 2000 #
   timeout: 20 # steps in one episode before time out, unless not episodic
   eval_rewards_window: 20
-  checkpoint_freq: 1
+  checkpoint_freq: 10
 

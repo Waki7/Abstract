@@ -74,25 +74,27 @@ class BaseController:  # currently implemented as (i)AC
                                                  env_cfg=self.env_cfg,
                                                  agent_cfg=self.cfg,
                                                  )  # this is a wraapper over summarywriter()
-        step = 0
         env_name = self.env_name
         env_cfg = self.env_cfg
         env = SubprocVecEnv([lambda: get_env_func(env_name=env_name, env_cfg=env_cfg) for i in
                              range(n_threads)]) if is_batch_env else self.env
 
+        step = 0
         states = env.reset()
         for episode in range(n_episodes):
+            episode_lengths = [-1] * n_threads
+
             while True:
                 actions = self.step_agents(states, is_batch_env)
+                states, rewards, episode_ends, info = self.step_env(env, actions, is_batch_env)
 
-                states, rewards, episode_ends, info = env.step(actions)
                 # self.env.log_summary()
                 losses = self.update_agents(rewards, episode_ends, states)
                 assert isinstance(losses, dict), 'expect losses to be returned as a dictionary'
                 updated = len(losses) != 0
 
-                self.experiment_logger.add_scalar_dict('avg_batch_losses', losses, log=True)
-                self.experiment_logger.add_agent_scalars('avg_batch_reward', rewards, track_mean=True, track_sum=True,
+                self.experiment_logger.add_scalar_dict('batch_losses', losses, log=True)
+                self.experiment_logger.add_agent_scalars('batch_reward', rewards, track_mean=True, track_sum=True,
                                                          log=True)
 
                 if (self.is_episodic and all(episode_ends)) or (not self.is_episodic and updated):
@@ -100,13 +102,17 @@ class BaseController:  # currently implemented as (i)AC
                     break
 
                 step += 1
+                for batch_idx, end in enumerate(episode_ends):
+                    if episode_lengths[batch_idx] <= 0 and end:
+                        episode_lengths[batch_idx] = step
 
             self.experiment_logger.checkpoint(episode, checkpoint_freq,
                                               agents=self.agents, environment=env,
                                               render_agent_povs=isinstance(self.env, grid_env.GridEnv))
             # only reset the step if the environment is episodic
             if self.is_episodic:
-                self.experiment_logger.add_agent_scalars('episode_length', data=step, step=episode, log=True)
+                self.experiment_logger.add_agent_scalars('batch_episode_length', data=np.mean(episode_lengths),
+                                                         step=episode, log=True)
                 step = 0
                 states = env.reset()
 
@@ -132,6 +138,14 @@ class BaseController:  # currently implemented as (i)AC
             return torch.tensor(vector).to(settings.DEVICE)
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
+
+    def step_env(self, env, actions, is_batch_env):
+        states, rewards, episode_ends, info = env.step(actions)
+        if self.n_agents > 1:
+            pass
+        if not is_batch_env:
+            return [states], [rewards], [episode_ends], [info]
+        return states, rewards, episode_ends, info
 
     def step_agents(self, obs: Union[List[np.ndarray], Dict], is_batch_env):
         batched_obs = self.convert_obs_for_agent(obs, is_batch_env)

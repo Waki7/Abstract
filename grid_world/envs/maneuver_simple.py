@@ -154,10 +154,13 @@ class ManeuverSimple(grid_world.GridEnv):
     def calc_agent_rewards(self):
         reward_map = {}
         for agent in self.agents:
-            reward = -.1
+            reward = -.01
             dist = self.world.get_distance(agent, self.target)
+            out_of_bounds = self.world.is_out_of_bounds(agent)
+            if out_of_bounds:
+                reward -= 1.0
             if dist < self.agent_fov:
-                reward = 1.
+                reward += 1.0
             reward_map[agent.id] = reward
 
         if self.n_agents == 1:

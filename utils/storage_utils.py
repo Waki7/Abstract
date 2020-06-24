@@ -77,13 +77,13 @@ class ExperimentLogger():
         for key in self.progress_values_mean.keys():
             label = 'average_{}'.format(key)
             mean = np.round(np.mean(self.progress_values_mean[key]), decimals=3)
-            log_output += '{}: {} , '.format(key, mean)
+            log_output += '{}: {} , '.format(label, mean)
             self.writer.add_scalar(label, mean, global_step=episode)
 
         for key in self.progress_values_sum.keys():
             label = 'total_{}'.format(key)
             sum = np.round(np.sum(self.progress_values_sum[key]), decimals=3)
-            log_output += '{}: {} , '.format(key, sum)
+            log_output += '{}: {} , '.format(label, sum)
             self.writer.add_scalar(label, sum, global_step=episode)
 
         logging.info(log_output)
