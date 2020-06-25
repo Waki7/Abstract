@@ -25,8 +25,19 @@ class BaseNetwork(nn.Module):
         ##########################################################################################
         self.model_size = cfg.get('model_size', settings.defaults.MODEL_SIZE)
         self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
+        self.use_lstm = cfg.get('use_lstm', False)
         logging.debug(' model_size : {}'.format(self.model_size))
         logging.debug(' gradient_clip : {}'.format(self.gradient_clip))
+        logging.debug(' use_lstm : {}'.format(self.use_lstm))
+
+
+        ##########################################################################################
+        # basic encoding layers
+        ##########################################################################################
+        self.linear1 = nn.Linear(self.in_features, self.model_size)
+        if self.use_lstm:
+            pass
+        self.linear2 = nn.Linear(self.model_size, self.out_features)
 
         self.optimizer = None  # call create_optimizer at end of your implementation's init
 
@@ -45,20 +56,24 @@ class BaseNetwork(nn.Module):
         self.optimizer.step()
         self.optimizer.zero_grad()
 
+    def encode(self, features: List[torch.Tensor]) -> torch.Tensor:
+        encoding = torch.cat([x.flatten(start_dim=1) for x in features], dim=-1)
+        if self.use_lstm:
+            encoding = self.lstm(encoding)
+        encoding = F.relu(self.linear1(encoding))
+        return encoding
+
 
 @register_network
 class ActorFCNetwork(BaseNetwork):
     def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
         super().__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
         self.n_actions = self.out_features
-        self.linear1 = nn.Linear(self.in_features, self.model_size)
-        self.linear2 = nn.Linear(self.model_size, self.out_features)
         self.create_optimizer()
 
     def forward(self, features: List[torch.Tensor]) -> torch.Tensor:
-        features = torch.cat([x.flatten(start_dim=1) for x in features], dim=-1)
-        features = F.relu(self.linear1(features))
-        features = F.softmax(self.linear2(features), dim=-1)
+        encoding = self.encode(features)
+        features = F.softmax(self.linear2(encoding), dim=-1)
         return features
 
     def get_action(self, state):
@@ -73,15 +88,10 @@ class ActorFCNetwork(BaseNetwork):
 class CriticFCNetwork(BaseNetwork):
     def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
         super().__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
-        self.linear1 = nn.Linear(self.in_features, self.model_size)
-        self.linear2 = nn.Linear(self.model_size, self.out_features)
         self.create_optimizer()
 
     def forward(self, features: List[torch.Tensor]) -> torch.Tensor:
-        features = torch.cat([x.flatten(start_dim=1) for x in features], dim=-1)
-        features = F.relu(self.linear1(features))
-        features = self.linear2(features)
-        return features
+        return self.encode(features)
 
 
 @register_network
