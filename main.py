@@ -22,7 +22,7 @@ def main():
                         )
     # train('a2c', 'cart')
     # train('social', 'cart')
-    train('a2c', 'grid')
+    train('grid', 'grid')
     # train('exp', 'cart')
     # train('ccra', 'cart')
     # train('cra', 'cart')

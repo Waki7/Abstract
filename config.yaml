@@ -29,8 +29,7 @@ agents:
     actor_network: ActorFCNetwork
     critic_network: CriticFCNetwork
     discount_factor: .99
-    entropy_coef: .05
-    supervised_loss: False
+    entropy_coef: .01
     n_threads: 40
     td_step: -1
 

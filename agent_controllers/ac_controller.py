@@ -14,7 +14,7 @@ class ACController(BaseController):
         self.ac_cfg = cfg.get('ac', cfg['actor'])
         self.share_parameters = self.ac_name is not None
         self.actor_cfg = self.ac_cfg
-        self.critic_cfg = cfg.get('critic', None)
+        self.critic_cfg = cfg.get('critic', self.ac_cfg)
         super(ACController, self).__init__(env_cfg, cfg)
 
     def make_agents(self):
