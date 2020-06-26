@@ -8,7 +8,7 @@ a2c:
   n_threads: 20
   td_step: -1
   actor:
-    lr: .001
+    lr: .0005
     model_size: 40
     gradient_clip: 1.5
     use_lstm: true

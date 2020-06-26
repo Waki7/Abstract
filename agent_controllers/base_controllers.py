@@ -25,7 +25,7 @@ class BaseController:  # currently implemented as (i)AC
         self.env_cfg = env_cfg
         self.env_name = env_cfg['name']
         self.env = self.make_env()
-
+        self.is_episodic = False
         ##########################################################################################
         # set cfg parameters
         ##########################################################################################
