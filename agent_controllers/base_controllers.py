@@ -1,4 +1,3 @@
-import logging
 from typing import Union, Dict, List
 
 import gym
@@ -39,9 +38,6 @@ class BaseController:  # currently implemented as (i)AC
         ##########################################################################################
         # set up experiment
         ##########################################################################################
-        self.is_episodic = not hasattr(self.env, 'is_episodic') or (
-                hasattr(self.env, 'is_episodic') and self.env.is_episodic)
-        logging.info('environment is {}'.format('episodic' if self.is_episodic else 'not episodic (continuous)'))
         self.sample_state = self.env.observation_space.sample()
         self.agents = self.make_agents()
         self.experiment_logger = ExperimentLogger()
@@ -79,11 +75,10 @@ class BaseController:  # currently implemented as (i)AC
         env = SubprocVecEnv([lambda: get_env_func(env_name=env_name, env_cfg=env_cfg) for i in
                              range(n_threads)]) if is_batch_env else self.env
 
-        step = 0
-        states = env.reset()
         for episode in range(n_episodes):
+            step = 0
+            states = env.reset()
             episode_lengths = [-1] * n_threads
-
             while True:
                 actions = self.step_agents(states, is_batch_env)
                 states, rewards, episode_ends, info = self.step_env(env, actions, is_batch_env)
@@ -91,7 +86,6 @@ class BaseController:  # currently implemented as (i)AC
                 # self.env.log_summary()
                 losses = self.update_agents(rewards, episode_ends, states)
                 assert isinstance(losses, dict), 'expect losses to be returned as a dictionary'
-                updated = len(losses) != 0
 
                 self.experiment_logger.add_scalar_dict('batch_losses', losses, log=True)
                 self.experiment_logger.add_agent_scalars('batch_reward', rewards, track_mean=True, track_sum=True,
@@ -102,7 +96,7 @@ class BaseController:  # currently implemented as (i)AC
                     if episode_lengths[batch_idx] <= 0 and end:
                         episode_lengths[batch_idx] = step
 
-                if (self.is_episodic and all(episode_ends)) or (not self.is_episodic and updated):
+                if all(episode_ends):
                     self.experiment_logger.log_progress(episode, np.mean(episode_lengths))
                     break
 
@@ -110,11 +104,8 @@ class BaseController:  # currently implemented as (i)AC
                                               agents=self.agents, environment=env,
                                               render_agent_povs=isinstance(self.env, grid_env.GridEnv))
             # only reset the step if the environment is episodic
-            if self.is_episodic:
-                self.experiment_logger.add_agent_scalars('batch_episode_length', data=np.mean(episode_lengths),
-                                                         step=episode, log=True)
-                step = 0
-                states = env.reset()
+            self.experiment_logger.add_agent_scalars('batch_episode_length', data=np.mean(episode_lengths),
+                                                     step=episode, log=True)
 
     def convert_obs_for_agent(self, obs, is_batch_env):
         if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one
