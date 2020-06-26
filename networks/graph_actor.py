@@ -1,11 +1,6 @@
-import logging
-
-import numpy as np
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import settings
 from networks.base_networks import BaseNetwork
 from networks.factory import register_network
 

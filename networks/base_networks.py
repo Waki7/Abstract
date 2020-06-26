@@ -64,13 +64,16 @@ class BaseNetwork(nn.Module):
 
     def encode(self, features: List[torch.Tensor]) -> torch.Tensor:
         encoding = torch.cat([x.flatten(start_dim=1) for x in features], dim=-1)
+        encoding = F.relu(self.linear1(encoding))
         if self.use_lstm:
             if self.hidden_state is None:
                 batch_size = encoding.shape[0]
                 self.hidden_state = torch.zeros((batch_size, self.model_size)).to(settings.DEVICE)
                 self.context = torch.zeros((batch_size, self.model_size)).to(settings.DEVICE)
-            encoding = self.lstm.forward(x=encoding, hidden=self.hidden_state, context=self.context)
-        encoding = F.relu(self.linear1(encoding))
+            self.hidden_state, self.context = self.lstm.forward(x=encoding, hidden=self.hidden_state,
+                                                                context=self.context)
+            encoding = self.hidden_state
+        encoding = F.relu(self.linear2(encoding))
         return encoding
 
 
@@ -83,7 +86,7 @@ class ActorFCNetwork(BaseNetwork):
 
     def forward(self, features: List[torch.Tensor]) -> torch.Tensor:
         encoding = self.encode(features)
-        features = F.softmax(self.linear2(encoding), dim=-1)
+        features = F.softmax(encoding, dim=-1)
         return features
 
     def get_action(self, state):
@@ -102,21 +105,3 @@ class CriticFCNetwork(BaseNetwork):
 
     def forward(self, features: List[torch.Tensor]) -> torch.Tensor:
         return self.encode(features)
-
-
-@register_network
-class CENetwork(BaseNetwork):
-    def __init__(self, n_features, out_shape, out_shape2, cfg, **kwargs):
-        super().__init__(cfg)
-        critic_estimates = out_shape
-        aux_estimates = out_shape2
-        self.linear_shared = nn.Linear(n_features, self.model_size)
-        self.linear_critic = nn.Linear(self.model_size, critic_estimates)
-        self.linear_estimator = nn.Linear(self.model_size, aux_estimates)
-        self.create_optimizer()
-
-    def forward(self, x):
-        x = F.relu(self.linear_shared(x))
-        critic_estimate = self.linear_critic(x)
-        linear_estimate = self.linear_estimator(x)
-        return critic_estimate, linear_estimate

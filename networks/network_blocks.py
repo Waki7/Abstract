@@ -4,7 +4,7 @@ import torch.nn as nn
 
 class LSTM(nn.Module):
     def __init__(self, in_features, hidden_features):
-        super(LSTM, self).__init__()
+        super().__init__()
 
         self.in_features = in_features
         self.hidden_features = hidden_features
@@ -28,12 +28,8 @@ class LSTM(nn.Module):
         output_t = torch.sigmoid(self.w_output(cell_input))
 
         cell_state_t = torch.tanh(self.w_cstate(cell_input))
-        print(forget_t.shape)
-        print(prev_context.shape)
         context_t = torch.sigmoid((forget_t * prev_context) + (input_t * cell_state_t))
-        print(context_t.shape)
         new_hidden = torch.tanh(context_t * output_t)
-        print(new_hidden.shape)
         return new_hidden, context_t
 
     def update(self):

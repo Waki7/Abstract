@@ -19,12 +19,12 @@ class A2CAgent():
         self.is_ac_shared = critic is None
         self.ac = None
         if self.is_ac_shared:
-            self.ac = actor
+            self.ac: BaseNetwork = actor
             self.n_actions = self.ac.n_actions
         else:
-            self.actor = actor
+            self.actor: BaseNetwork = actor
+            self.critic: BaseNetwork = critic
             self.n_actions = self.actor.n_actions
-            self.critic = critic
 
         ##########################################################################################
         # set cfg parameters
@@ -131,6 +131,12 @@ class A2CAgent():
         self.batch_value_estimates = []
         self.batch_rewards = []
         self.batch_episode_ends = []
+        self.ac.reset_time()
+        if self.is_ac_shared:
+            self.ac.reset_time()
+        else:
+            self.actor.reset_time()
+            self.critic.reset_time()
 
     def batch_should_update(self, batch_episode_end, batch_reward):
         steps_since_update = len(self.batch_rewards) + 1

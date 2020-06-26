@@ -1,0 +1,15 @@
+a2c:
+  controller_name: ACController
+  agent_name: A2CAgent
+  actor_network: ActorFCNetwork
+  critic_network: CriticFCNetwork
+  discount_factor: .99
+  entropy_coef: .01
+  n_threads: 40
+  td_step: -1
+  actor:
+    lr: .001
+    model_size: 64
+    gradient_clip: 1.5
+    use_lstm: true
+

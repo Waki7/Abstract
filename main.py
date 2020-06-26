@@ -1,18 +1,26 @@
+import yaml
+
 from agent_controllers.factory import CONTROLLER_REGISTERY
 from networks.base_networks import *
-import yaml
-import gym_life
-import grid_world
 
-with open('config.yaml') as f:
-    cfg = yaml.load(f, Loader=yaml.FullLoader)
+with open('./configs/cfg_execution.yaml') as f:
+    CFG_EXECUTION = yaml.load(f, Loader=yaml.FullLoader)
+
+with open('./configs/cfg_env.yaml') as f:
+    CFG_ENV = yaml.load(f, Loader=yaml.FullLoader)
+
+with open('./configs/cfg_agent.yaml') as f:
+    CFG_AGENT = yaml.load(f, Loader=yaml.FullLoader)
+
+with open('./configs/cfg_network.yaml') as f:
+    CFG_NETWORK = yaml.load(f, Loader=yaml.FullLoader)
 
 
 def train(algorithm, env_namespace):
-    env_cfg = cfg['env'][env_namespace]
-    algorithm_cfg = cfg['agents'][algorithm]
+    env_cfg = CFG_ENV[env_namespace]
+    algorithm_cfg = CFG_AGENT[algorithm]
     trainer = CONTROLLER_REGISTERY[algorithm_cfg['controller_name']](env_cfg, algorithm_cfg)
-    trainer.teach_agents(cfg['training'])
+    trainer.teach_agents(CFG_EXECUTION['training'])
 
 
 def main():
@@ -20,15 +28,8 @@ def main():
                         # logging.INFO
                         logging.DEBUG
                         )
-    # train('a2c', 'cart')
-    # train('social', 'cart')
-    train('grid', 'grid')
-    # train('exp', 'cart')
-    # train('ccra', 'cart')
-    # train('cra', 'cart')
-    # train('a2c', 'life')
-    # train('a2c', 'beam')
-    # train('pg', 'cart')
+    train('a2c', 'grid')
+
 
 if __name__ == "__main__":
     main()
