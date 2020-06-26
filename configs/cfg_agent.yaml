@@ -5,11 +5,11 @@ a2c:
   critic_network: CriticFCNetwork
   discount_factor: .99
   entropy_coef: .01
-  n_threads: 40
+  n_threads: 20
   td_step: -1
   actor:
     lr: .001
-    model_size: 64
+    model_size: 40
     gradient_clip: 1.5
     use_lstm: true
 

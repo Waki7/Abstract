@@ -97,14 +97,14 @@ class BaseController:  # currently implemented as (i)AC
                 self.experiment_logger.add_agent_scalars('batch_reward', rewards, track_mean=True, track_sum=True,
                                                          log=True)
 
-                if (self.is_episodic and all(episode_ends)) or (not self.is_episodic and updated):
-                    self.experiment_logger.log_progress(episode, step)
-                    break
-
                 step += 1
                 for batch_idx, end in enumerate(episode_ends):
                     if episode_lengths[batch_idx] <= 0 and end:
                         episode_lengths[batch_idx] = step
+
+                if (self.is_episodic and all(episode_ends)) or (not self.is_episodic and updated):
+                    self.experiment_logger.log_progress(episode, np.mean(episode_lengths))
+                    break
 
             self.experiment_logger.checkpoint(episode, checkpoint_freq,
                                               agents=self.agents, environment=env,

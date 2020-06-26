@@ -17,7 +17,6 @@ class A2CAgent():
     # try to make the encoding part separate
     def __init__(self, is_episodic, cfg, actor, critic=None):
         self.is_ac_shared = critic is None
-        self.ac = None
         if self.is_ac_shared:
             self.ac: BaseNetwork = actor
             self.n_actions = self.ac.n_actions
@@ -56,7 +55,7 @@ class A2CAgent():
         return self.batch_actions[-1]
 
     def step(self, env_input: Union[List[torch.Tensor], torch.Tensor]):
-        if self.ac is not None:
+        if self.is_ac_shared:
             probs, estimates = self.ac.forward(env_input)
         else:
             probs = self.actor.forward(env_input)
@@ -131,7 +130,6 @@ class A2CAgent():
         self.batch_value_estimates = []
         self.batch_rewards = []
         self.batch_episode_ends = []
-        self.ac.reset_time()
         if self.is_ac_shared:
             self.ac.reset_time()
         else:
