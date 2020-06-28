@@ -21,7 +21,7 @@ class GridEnv(gym.Env):
         self.timeout = cfg['timeout']
         self.n_agents = cfg.get('n_agents', 1)
         self.agent_keys = cfg.get('agents', ['agent_0'])
-        self.agents = [core.Agent(id=agent, observed_value=.1) for agent in self.agent_keys]
+        self.agents = [core.EnvAgent(id=agent, observed_value=.1) for agent in self.agent_keys]
 
         # ---------------------------------------------------------------------------
         # initializing agents according to arbitrary naming scheme

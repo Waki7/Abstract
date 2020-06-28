@@ -3,5 +3,5 @@ training:
   n_episodes: 2000 #
   timeout: 20 # steps in one episode before time out, unless not episodic
   eval_rewards_window: 20
-  checkpoint_freq: 50
+  checkpoint_freq: 1
 

@@ -60,10 +60,10 @@ class CoreWorld():
     def add_agent(self):
         pass
 
-    def spawn_agents(self, agents: List[core_agents.Agent], locations: List[Iterable[int]]):
+    def spawn_agents(self, agents: List[core_agents.EnvAgent], locations: List[Iterable[int]]):
         [self.spawn_agent(agent, location) for agent, location in zip(agents, locations)]
 
-    def spawn_agent(self, agent: core_agents.Agent, location: Iterable[int]):
+    def spawn_agent(self, agent: core_agents.EnvAgent, location: Iterable[int]):
         self.agent_map[agent.id] = agent
         agent.place(location)
 
@@ -88,7 +88,7 @@ class CoreWorld():
         '''
         pass
 
-    def move_agent(self, agent: core_agents.Agent, action: np.ndarray, illegal_func=None):
+    def move_agent(self, agent: core_agents.EnvAgent, action: np.ndarray, illegal_func=None):
         assert agent.id in self.agent_map, 'agent has not been spawned in world'
         agent = self.agent_map[agent.id]
         location = agent.get_location()
@@ -113,11 +113,12 @@ class CoreWorld():
     def render_world(self):
         self.renderer.reset_drawing()
         for agent in self.agent_map.values():
-            location = self.renderer.convert_location_to_global(location=agent.location, origin_bounds=self.bounds)
-            self.renderer.draw_circle(center=location, radius=3.)
+            location = self.renderer.convert_location_to_pixels(location=agent.location, origin_bounds=self.bounds)
+            # self.rendererconvert_distance_to_pixels()
+            self.renderer.draw_circle(center=location, radius=1.)
         for landmark in self.landmark_map.values():
-            location = self.renderer.convert_location_to_global(location=landmark.location, origin_bounds=self.bounds)
-            self.renderer.draw_diamond(center=location, apothem=10.)
+            location = self.renderer.convert_location_to_pixels(location=landmark.location, origin_bounds=self.bounds)
+            self.renderer.draw_diamond(center=location, apothem=2.)
         return self.renderer.get_drawing()
 
     def get_random_point(self):
@@ -137,7 +138,7 @@ class CoreWorld():
     def get_done(self, agent):
         pass
 
-    def get_agent_pov(self, agent: core_agents.Agent):
+    def get_agent_pov(self, agent: core_agents.EnvAgent):
         assert agent.id in self.agent_map, 'agent has not been spawned in world'
         return self.renderer.get_frame_at_point(agent.location)
 

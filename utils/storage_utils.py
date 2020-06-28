@@ -52,10 +52,11 @@ class ExperimentLogger():
             # env.unwrapped.spec.id
 
         # ----------------------------------------------------------------
-        # create empty notes file
+        # create empty notes file, directory for weights, models, and animations
         # ----------------------------------------------------------------
         notes_file = '{}/notes.txt'.format(self.results_path)
         open(notes_file, 'a').close()
+        [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in ['weights', 'models', 'animations']]
 
         # ----------------------------------------------------------------
         # store any passed in configs
@@ -70,6 +71,7 @@ class ExperimentLogger():
         self.reset_buffers(True)
 
     def create_sub_experiment(self):
+        # todo for different tests and testing results
         pass
 
     def log_progress(self, episode, step):
@@ -122,7 +124,7 @@ class ExperimentLogger():
                 step = self.counts[label]
             self.writer.add_scalar(label, data, global_step=step)
 
-    def checkpoint(self, episode, checkpoint_freq, agents,
+    def checkpoint(self, episode, checkpoint_freq, agent_map,
                    environment: Union[env_wrappers.SubprocVecEnv, gym.Env],
                    render_agent_povs=False):
         if (episode + 1) % checkpoint_freq == 0:
@@ -134,8 +136,12 @@ class ExperimentLogger():
                 animations = environment.render(indices=(0,))
             else:
                 animations = environment.render()
-            animations_folder = '{}/environment_episode_{}.gif'.format(self.results_path, episode)
-            write_gif(animations, animations_folder, fps=2)
+            env_animations_path = '{}/animations/environment_episode_{}.gif'.format(self.results_path, episode)
+            write_gif(animations, env_animations_path, fps=2)
 
-            # if render_agent_povs:
-            #     agent_animations = environment.env_method('render_agent_pov', indices=0)
+            if render_agent_povs:
+                for agent_key in agent_map.keys():
+                    agent_animation = environment.env_method('render_agent_pov', *(agent_key,), indices=0)[0]
+                    agent_animation_path = '{}/animations/agent_{}_episode_{}.gif'.format(self.results_path,
+                                                                                          agent_key, episode)
+                    write_gif(agent_animation, agent_animation_path, fps=2)

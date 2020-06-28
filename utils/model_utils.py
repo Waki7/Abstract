@@ -1,5 +1,6 @@
 from typing import List, Union
 
+import cv2
 import gym.spaces as gym_spaces
 import numpy as np
 import torch
@@ -11,12 +12,14 @@ import settings
 # IMAGES
 # ---------------------------------------------------------------------------
 
-def convert_to_rgb_format(vector: Union[np.ndarray, torch.Tensor]):
+def convert_to_rgb_format(vector: Union[np.ndarray, torch.Tensor], resolution=None):
     image_vector = scale_vector_to_range(vector, 0, 255).astype(np.uint8)
     assert image_vector.shape[0] == 1 or image_vector.shape[0] == 3, 'include the channel dimension'
     if image_vector.shape[0] == 1:
         image_vector = np.repeat(image_vector, repeats=3, axis=0)
     image_vector = np.transpose(image_vector, axes=(1, 2, 0))
+    if resolution is not None:  # resize
+        return cv2.resize(image_vector, dsize=resolution)
     return image_vector
     # return Image.fromarray(image_vector)
 

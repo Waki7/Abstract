@@ -33,6 +33,7 @@ class ManeuverSimple(grid_world.GridEnv):
         self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
         self.n_foreign_enemies = cfg.get('foreign_enemies', [])
         self.agent_fov = cfg.get('agent_fov', 0.1)
+        self.animation_resolution = cfg.get('animation_resolution', (100, 100))
 
         # ---------------------------------------------------------------------------
         # initializations
@@ -190,8 +191,8 @@ class ManeuverSimple(grid_world.GridEnv):
 
     def render(self):
         raw_frames = self.global_render_frames
-        return [model_utils.convert_to_rgb_format(frame) for frame in raw_frames]
+        return [model_utils.convert_to_rgb_format(frame, resolution=self.animation_resolution) for frame in raw_frames]
 
     def render_agent_pov(self, agent_key):
         raw_frames = self.agent_render_frames[agent_key]
-        return [model_utils.convert_to_rgb_format(frame) for frame in raw_frames]
+        return [model_utils.convert_to_rgb_format(frame, resolution=self.animation_resolution) for frame in raw_frames]

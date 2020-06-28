@@ -40,6 +40,7 @@ class BaseController:  # currently implemented as (i)AC
         ##########################################################################################
         self.sample_state = self.env.observation_space.sample()
         self.agents = self.make_agents()
+        self.agent_map = dict(zip(self.agent_keys, self.agents))
         self.experiment_logger = ExperimentLogger()
 
     def make_agents(self):
@@ -101,7 +102,7 @@ class BaseController:  # currently implemented as (i)AC
                     break
 
             self.experiment_logger.checkpoint(episode, checkpoint_freq,
-                                              agents=self.agents, environment=env,
+                                              agent_map=self.agent_map, environment=env,
                                               render_agent_povs=isinstance(self.env, grid_env.GridEnv))
             # only reset the step if the environment is episodic
             self.experiment_logger.add_agent_scalars('batch_episode_length', data=np.mean(episode_lengths),

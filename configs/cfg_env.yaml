@@ -6,7 +6,10 @@ grid:
   timeout: 100
   observations:
     global_resolution: [100, 100]
-    observation_resolution: [49, 49]
+    observation_window: [199, 199]
+    observation_resolution: [19, 19]
+    animation_resolution: [100, 100]
+
 
 
 # ---------------------------------------------------------------------------

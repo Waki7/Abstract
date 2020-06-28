@@ -1,5 +1,6 @@
 from typing import Iterable
 
+import cv2
 import numpy as np
 from gym import spaces
 
@@ -11,6 +12,10 @@ class ObservationRenderer():
     def __init__(self, cfg):
         self.global_resolution = cfg['global_resolution']
 
+        # the default fallback obs_window permits full observation of the world
+        obs_fallback_window = [int((2 * self.global_resolution[0]) - 1), int((2 * self.global_resolution[1]) - 1)]
+
+        self.obs_window = cfg.get('observation_window', obs_fallback_window)
         self.obs_resolution = cfg.get('observation_resolution', self.global_resolution)
         assert model_utils.is_odd(self.obs_resolution[0]) and model_utils.is_odd(
             self.obs_resolution[1]), 'keep resolutions odd for simplicity'
@@ -47,7 +52,7 @@ class ObservationRenderer():
 
     def get_frame_at_point(self, center: Iterable[float]):
         # todo https://shapely.readthedocs.io/en/latest/manual.html#object.intersection
-        frame = np.zeros((self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
+        frame = np.zeros((self.n_channels, self.obs_window[0], self.obs_window[1]))
         frame_center = (self.obs_resolution[0] // 2, self.obs_resolution[1] // 2)
         row_start = int(max(0, center[0] - (frame_center[0] + 1)))
         col_start = int(max(0, center[1] - (frame_center[1] + 1)))
@@ -62,12 +67,18 @@ class ObservationRenderer():
         target_col_end = target_col_start + drawing_slice.shape[-1]
 
         frame[:, target_row_start: target_row_end, target_col_start: target_col_end] = drawing_slice
+        target_size = (self.obs_resolution[0], self.obs_resolution[1])
+        # stupid cv2 needs dimensions in a different order
+        frame = np.transpose(frame, axes=(1, 2, 0))
+        frame = cv2.resize(frame, dsize=target_size)
+        frame = np.transpose(frame, axes=(2, 0, 1)) if len(frame.shape) == 3 else np.expand_dims(frame, axis=0)
+
         return frame
 
     def draw_line(self):
         raise NotImplementedError
 
-    def convert_location_to_global(self, location: Iterable[float], origin_bounds: Iterable[Iterable[float]]):
+    def convert_location_to_pixels(self, location: Iterable[float], origin_bounds: Iterable[Iterable[float]]):
         '''
         If the location is being tracked in a grid, this is converting the location to one for the renderer to use,
         currently in the global resolution
@@ -81,6 +92,21 @@ class ObservationRenderer():
         mapped_y = y_scale * self.global_resolution[0]
         mapped_x = x_scale * self.global_resolution[1]
         return [mapped_y, mapped_x]
+
+    # def convert_distance_to_pixels(self, distance: Iterable[float], origin_bounds: Iterable[Iterable[float]]):
+    #     '''
+    #     If the location is being tracked in a grid, this is converting the location to one for the renderer to use,
+    #     currently in the global resolution
+    #     :param location: Original location being converted
+    #     :param origin_bounds: Original bounds that we will map from, row major, so y then x then for each dimension,
+    #     lower bound first then upper bound
+    #     :return: mapped location from origin bounds to our own global resolution mapping
+    #     '''
+    #     y_scale = (location[0] - origin_bounds[0][0]) / (origin_bounds[0][1] - origin_bounds[0][0])
+    #     x_scale = (location[1] - origin_bounds[1][0]) / (origin_bounds[1][1] - origin_bounds[1][0])
+    #     mapped_y = y_scale * self.global_resolution[0]
+    #     mapped_x = x_scale * self.global_resolution[1]
+    #     return [mapped_y, mapped_x]
 
 
 if __name__ == '__main__':

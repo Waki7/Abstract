@@ -3,9 +3,9 @@ import logging
 import grid_world.env_objects.core_env_objects as core
 
 
-class Agent(core.ActionableItem):
+class EnvAgent(core.ActionableItem):
     def __init__(self, observed_value, id: str, policy=None, location=None, **kwargs):
-        super(Agent, self).__init__(observed_value=observed_value, policy=policy, id=id, location=location, **kwargs)
+        super(EnvAgent, self).__init__(observed_value=observed_value, policy=policy, id=id, location=location, **kwargs)
 
     # def get_destination(self, action: np.ndarray):
     #     return
@@ -14,12 +14,12 @@ class Agent(core.ActionableItem):
     #     return get_action_direction_tuple(action)
 
 
-class Enemy(Agent):
+class Enemy(EnvAgent):
     def __init__(self, observed_value, policy, id: str, location=None, **kwargs):
         super(Enemy, self).__init__(observed_value=observed_value, policy=policy, id=id, location=location, **kwargs)
 
 
-class Friendly(Agent):
+class Friendly(EnvAgent):
     def __init__(self, observed_value, policy, id: str, location=None, **kwargs):
         super(Friendly, self).__init__(observed_value=observed_value, policy=policy, id=id, location=location, **kwargs)
 
