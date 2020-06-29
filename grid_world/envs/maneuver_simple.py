@@ -67,6 +67,8 @@ class ManeuverSimple(grid_world.GridEnv):
         self.agent_action_map = None
         self.t = 0
 
+        frame = self.world.render_world()
+        self.global_render_frames.append(frame)
         agent_obss = self.calc_agent_obs()
         return agent_obss
 

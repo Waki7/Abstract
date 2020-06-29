@@ -53,11 +53,11 @@ class ObservationRenderer():
     def get_frame_at_point(self, center: Iterable[float]):
         # todo https://shapely.readthedocs.io/en/latest/manual.html#object.intersection
         frame = np.zeros((self.n_channels, self.obs_window[0], self.obs_window[1]))
-        frame_center = (self.obs_resolution[0] // 2, self.obs_resolution[1] // 2)
+        frame_center = (self.obs_window[0] // 2, self.obs_window[1] // 2)
         row_start = int(max(0, center[0] - (frame_center[0] + 1)))
         col_start = int(max(0, center[1] - (frame_center[1] + 1)))
-        row_end = int(min(self.obs_resolution[0], frame_center[0] + center[0] + 1))
-        col_end = int(min(self.obs_resolution[1], frame_center[1] + center[1] + 1))
+        row_end = int(min(self.obs_window[0], frame_center[0] + center[0] + 1))
+        col_end = int(min(self.obs_window[1], frame_center[1] + center[1] + 1))
 
         drawing_slice = self.drawing[:, row_start:row_end, col_start:col_end]
 
@@ -72,7 +72,6 @@ class ObservationRenderer():
         frame = np.transpose(frame, axes=(1, 2, 0))
         frame = cv2.resize(frame, dsize=target_size)
         frame = np.transpose(frame, axes=(2, 0, 1)) if len(frame.shape) == 3 else np.expand_dims(frame, axis=0)
-
         return frame
 
     def draw_line(self):

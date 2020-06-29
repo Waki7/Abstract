@@ -21,19 +21,20 @@ CFG = {
 
 def test_gif_rendering():
     cfg = {
-        'global_resolution': [500, 500],
-        'observation_resolution': [5, 5]
+        'global_resolution': [100, 100],
+        'observation_window': [199, 199],
+        'observation_resolution': [99, 99]
     }
     print('---test_gif_rendering---')
     drawer = ObservationRenderer(cfg)
     drawer.reset_drawing()
     # drawer.draw_diamond(center=(87.35, 34.9), apothem=10)
-    drawer.draw_diamond(center=(50., 56.), apothem=50.)
+    drawer.draw_diamond(center=(50., 56.), apothem=2.)
     new_frame1 = drawer.get_drawing()
     new_frame1 = model_utils.convert_to_rgb_format(new_frame1)
 
     drawer.reset_drawing()
-    drawer.draw_diamond(center=(50.7, 56.72), apothem=50.)
+    drawer.draw_diamond(center=(50.7, 56.72), apothem=2.)
     # drawer.draw_circle(center=(10.7, 56.35), radius=50)
     new_frame2 = drawer.get_drawing()
     new_frame2 = model_utils.convert_to_rgb_format(new_frame2)
