@@ -54,17 +54,17 @@ class ObservationRenderer():
         # todo https://shapely.readthedocs.io/en/latest/manual.html#object.intersection
         frame = np.zeros((self.n_channels, self.obs_window[0], self.obs_window[1]))
         frame_center = (self.obs_window[0] // 2, self.obs_window[1] // 2)
-        row_start = int(max(0, center[0] - (frame_center[0] + 1)))
-        col_start = int(max(0, center[1] - (frame_center[1] + 1)))
-        row_end = int(min(self.obs_window[0], frame_center[0] + center[0] + 1))
-        col_end = int(min(self.obs_window[1], frame_center[1] + center[1] + 1))
+        row_start = int(max(0, center[0] - frame_center[0]))
+        col_start = int(max(0, center[1] - frame_center[1]))
+        row_end = int(min(self.global_resolution[0], frame_center[0] + center[0] + 1))
+        col_end = int(min(self.global_resolution[1], frame_center[1] + center[1] + 1))
 
         drawing_slice = self.drawing[:, row_start:row_end, col_start:col_end]
 
         target_row_start = int(max(0, frame_center[0] - center[0]))
         target_col_start = int(max(0, frame_center[1] - center[1]))
-        target_row_end = target_row_start + drawing_slice.shape[-2]
-        target_col_end = target_col_start + drawing_slice.shape[-1]
+        target_row_end = int(min(self.obs_window[0], target_row_start + drawing_slice.shape[-2]))
+        target_col_end = int(min(self.obs_window[1], target_col_start + drawing_slice.shape[-1]))
 
         frame[:, target_row_start: target_row_end, target_col_start: target_col_end] = drawing_slice
         target_size = (self.obs_resolution[0], self.obs_resolution[1])
