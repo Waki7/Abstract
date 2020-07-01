@@ -127,21 +127,26 @@ class ExperimentLogger():
     def checkpoint(self, episode, checkpoint_freq, agent_map,
                    environment: Union[env_wrappers.SubprocVecEnv, gym.Env],
                    render_agent_povs=False):
+        is_batch_env = isinstance(environment, env_wrappers.SubprocVecEnv)
         if (episode + 1) % checkpoint_freq == 0:
             # --- save models
             pass
 
             # --- save animations
-            if isinstance(environment, env_wrappers.SubprocVecEnv):
+            env_animations_path = '{}/animations/environment_episode_{}.gif'.format(self.results_path, episode)
+
+            if is_batch_env:
                 animations = environment.render(indices=(0,))
             else:
                 animations = environment.render()
-            env_animations_path = '{}/animations/environment_episode_{}.gif'.format(self.results_path, episode)
             write_gif(animations, env_animations_path, fps=2)
 
-            if render_agent_povs:
+            if hasattr(environment, 'render_agent_pov'):
                 for agent_key in agent_map.keys():
-                    agent_animation = environment.env_method('render_agent_pov', *(agent_key,), indices=0)
                     agent_animation_path = '{}/animations/agent_{}_episode_{}.gif'.format(self.results_path,
                                                                                           agent_key, episode)
-                    write_gif(agent_animation[0], agent_animation_path, fps=2)
+                    if is_batch_env:
+                        agent_animation = environment.env_method('render_agent_pov', *(agent_key,), indices=0)[0]
+                    else:
+                        agent_animation = environment.render_agent_pov(agent_key)
+                    write_gif(agent_animation, agent_animation_path, fps=2)

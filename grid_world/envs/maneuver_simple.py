@@ -50,7 +50,6 @@ class ManeuverSimple(grid_world.GridEnv):
         self.agent_dones_map = dict(zip(self.agent_keys, [False] * self.n_agents))
         self.agent_action_map = None
         self.t = 0
-        self.reset()
 
     def reset(self):
         # --- get spawning locations

@@ -7,7 +7,7 @@ grid:
   observations:
     global_resolution: [100, 100]
     observation_window: [199, 199]
-    observation_resolution: [19, 19]
+    observation_resolution: [33, 33]
     animation_resolution: [100, 100]
 
 

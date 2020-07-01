@@ -102,8 +102,7 @@ class BaseController:  # currently implemented as (i)AC
                     break
 
             self.experiment_logger.checkpoint(episode, checkpoint_freq,
-                                              agent_map=self.agent_map, environment=env,
-                                              render_agent_povs=isinstance(self.env, grid_env.GridEnv))
+                                              agent_map=self.agent_map, environment=env)
             # only reset the step if the environment is episodic
             self.experiment_logger.add_agent_scalars('batch_episode_length', data=np.mean(episode_lengths),
                                                      step=episode, log=True)
@@ -143,7 +142,9 @@ class BaseController:  # currently implemented as (i)AC
         batched_obs = self.convert_obs_for_agent(obs, is_batch_env)
         if self.n_agents == 1:
             agent = self.agents[0]
-            return agent.step(batched_obs)
+            actions = agent.step(batched_obs)
+            if not is_batch_env:
+                return actions[0]  # TODO, MAYBE MOVE THIS TO AGENT SIDE, WHO SHOULD DECIDE IF BATCH DIM OR NOT
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
 

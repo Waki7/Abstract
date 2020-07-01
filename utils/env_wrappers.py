@@ -84,8 +84,6 @@ class SubprocVecEnv(VecEnv):
         for remote in target_remotes:
             remote.send(('render', None))
         animations = [remote.recv() for remote in target_remotes]
-        if len(target_remotes) == 1:
-            return animations[0]
         return animations
 
     def reset(self):
