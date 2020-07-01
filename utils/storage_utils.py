@@ -136,7 +136,7 @@ class ExperimentLogger():
             env_animations_path = '{}/animations/environment_episode_{}.gif'.format(self.results_path, episode)
 
             if is_batch_env:
-                animations = environment.render(indices=(0,))
+                animations = environment.render(indices=(0,))[0]
             else:
                 animations = environment.render()
             write_gif(animations, env_animations_path, fps=2)

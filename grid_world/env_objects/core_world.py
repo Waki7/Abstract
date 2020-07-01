@@ -116,11 +116,11 @@ class CoreWorld():
             pixel_location = self.renderer.convert_location_to_pixels(location=agent.location,
                                                                       origin_bounds=self.bounds)
             # self.rendererconvert_distance_to_pixels()
-            self.renderer.draw_circle(center=pixel_location, radius=3.)
+            self.renderer.draw_circle(center=pixel_location, radius=4.)
         for landmark in self.landmark_map.values():
             pixel_location = self.renderer.convert_location_to_pixels(location=landmark.location,
                                                                       origin_bounds=self.bounds)
-            self.renderer.draw_diamond(center=pixel_location, apothem=4.)
+            self.renderer.draw_diamond(center=pixel_location, apothem=5.)
         return self.renderer.get_drawing()
 
     def get_random_point(self):
@@ -143,7 +143,7 @@ class CoreWorld():
     def get_agent_pov(self, agent: core_agents.EnvAgent):
         assert agent.id in self.agent_map, 'agent has not been spawned in world'
         pixel_location = self.renderer.convert_location_to_pixels(location=agent.location, origin_bounds=self.bounds)
-        return self.renderer.get_frame_at_point(pixel_location)
+        return self.renderer.get_egocentric_observation(pixel_location)
 
     def log_summary(self):
         logging.debug('\n___________start step {}_______________'.format(self.t))

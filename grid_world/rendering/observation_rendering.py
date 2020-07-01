@@ -1,10 +1,10 @@
 from typing import Iterable
 
-import cv2
 import numpy as np
 from gym import spaces
 
 import grid_world.rendering.boolean_draw_functions as drawing
+import utils.image_utils as image_utils
 import utils.model_utils as model_utils
 
 
@@ -21,6 +21,8 @@ class ObservationRenderer():
             self.obs_resolution[1]), 'keep resolutions odd for simplicity'
 
         self.n_channels = cfg.get('n_channels', 1)
+        self.observation_interpolation = cfg.get('observation_interpolation')
+
         self.drawing = np.zeros((self.n_channels, self.global_resolution[0], self.global_resolution[1]), dtype=np.uint8)
 
     def get_drawing(self):
@@ -67,11 +69,14 @@ class ObservationRenderer():
         target_col_end = int(min(self.obs_window[1], target_col_start + drawing_slice.shape[-1]))
 
         frame[:, target_row_start: target_row_end, target_col_start: target_col_end] = drawing_slice
+        return frame
+
+    def get_egocentric_observation(self, center: Iterable[float]):
+        frame = self.get_frame_at_point(center)
         target_size = (self.obs_resolution[0], self.obs_resolution[1])
         # stupid cv2 needs dimensions in a different order
-        frame = np.transpose(frame, axes=(1, 2, 0))
-        frame = cv2.resize(frame, dsize=target_size)
-        frame = np.transpose(frame, axes=(2, 0, 1)) if len(frame.shape) == 3 else np.expand_dims(frame, axis=0)
+        frame = image_utils.interpolate(frame, target_size=target_size,
+                                        interpolation_method=self.observation_interpolation)
         return frame
 
     def draw_line(self):

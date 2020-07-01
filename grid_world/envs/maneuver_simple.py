@@ -6,7 +6,7 @@ from gym import spaces
 
 import grid_world.env_objects as core
 import grid_world.envs.grid_world as grid_world
-import utils.model_utils as model_utils
+import utils.image_utils as image_utils
 
 
 class ManeuverSimple(grid_world.GridEnv):
@@ -34,6 +34,7 @@ class ManeuverSimple(grid_world.GridEnv):
         self.n_foreign_enemies = cfg.get('foreign_enemies', [])
         self.agent_fov = cfg.get('agent_fov', 0.1)
         self.animation_resolution = cfg.get('animation_resolution', (100, 100))
+        self.render_interpolation = cfg.get('render_interpolation')
 
         # ---------------------------------------------------------------------------
         # initializations
@@ -192,8 +193,10 @@ class ManeuverSimple(grid_world.GridEnv):
 
     def render(self):
         raw_frames = self.global_render_frames
-        return [model_utils.convert_to_rgb_format(frame, resolution=self.animation_resolution) for frame in raw_frames]
+        return [image_utils.convert_to_rgb_format(frame, target_resolution=self.animation_resolution,
+                                                  interpolation=self.render_interpolation) for frame in raw_frames]
 
     def render_agent_pov(self, agent_key):
         raw_frames = self.agent_render_frames[agent_key]
-        return [model_utils.convert_to_rgb_format(frame, resolution=self.animation_resolution) for frame in raw_frames]
+        return [image_utils.convert_to_rgb_format(frame, target_resolution=self.animation_resolution,
+                                                  interpolation=self.render_interpolation) for frame in raw_frames]

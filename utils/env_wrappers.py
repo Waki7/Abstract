@@ -1,13 +1,20 @@
 """
 Modified from OpenAI Baselines code to work with multi-agent envs
 """
+import random
 from multiprocessing import Process, Pipe
 
 import numpy as np
+import torch
 from baselines.common.vec_env import VecEnv, CloudpickleWrapper
 
+import settings
 
-def worker(remote, parent_remote, env_fn_wrapper):
+
+def worker(remote, parent_remote, env_fn_wrapper, seed):
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
     parent_remote.close()
     env = env_fn_wrapper.x()
     while True:
@@ -51,8 +58,10 @@ class SubprocVecEnv(VecEnv):
         self.closed = False
         nenvs = len(env_fns)
         self.remotes, self.work_remotes = zip(*[Pipe() for _ in range(nenvs)])
-        self.ps = [Process(target=worker, args=(work_remote, remote, CloudpickleWrapper(env_fn)))
-                   for (work_remote, remote, env_fn) in zip(self.work_remotes, self.remotes, env_fns)]
+        seeds = np.arange(nenvs) + settings.SEED
+        self.ps = [Process(target=worker,
+                           args=(self.work_remotes[i], self.remotes[i], CloudpickleWrapper(env_fns[i]), seeds[i]))
+                   for i in range(nenvs)]
         for p in self.ps:
             p.daemon = True  # if the main process crashes, we should not cause things to hang
             p.start()

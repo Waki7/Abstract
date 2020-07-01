@@ -1,5 +1,6 @@
 from array2gif import write_gif
 
+import utils.image_utils as image_utils
 from grid_world.rendering.observation_rendering import *
 
 CFG = {
@@ -41,11 +42,11 @@ def test_gif_rendering():
         drawer.draw_diamond(center=diamond_point, apothem=5.)
         drawer.draw_circle(center=circle_point, radius=10.)
         env_frame = drawer.get_drawing()
-        env_frame = model_utils.convert_to_rgb_format(env_frame)
+        env_frame = image_utils.convert_to_rgb_format(env_frame)
         env_frames.append(env_frame)
         print(circle_point)
-        agent_frame = drawer.get_frame_at_point(center=circle_point)
-        agent_frame = model_utils.convert_to_rgb_format(agent_frame)
+        agent_frame = drawer.get_egocentric_observation(center=circle_point)
+        agent_frame = image_utils.convert_to_rgb_format(agent_frame)
         agent_frames.append(agent_frame)
         circle_point = (circle_point[0] + scale * circle_move[0], circle_point[1] + scale * circle_move[1])
         diamond_point = (diamond_point[0] + scale * diamond_move[0], diamond_point[1] + scale * diamond_move[1])
