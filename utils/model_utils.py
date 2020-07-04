@@ -14,11 +14,11 @@ import settings
 def discount_rewards(rewards: torch.Tensor, discount: float, td_step: int = -1) -> torch.Tensor:
     if td_step != -1:
         raise NotImplementedError('currently only implemented monte carlo esimation')
-    prev_reward = torch.zeros(rewards.shape[-1]).to(settings.DEVICE)
-    discounted_reward = torch.zeros_like(rewards).to(settings.DEVICE)
+    prev_reward = torch.zeros(rewards.shape[-1]).to(**settings.ARGS)
+    discounted_reward = torch.zeros_like(rewards).to(**settings.ARGS)
     for episode_idx in range(rewards.shape[0] - 1, -1, -1):
         discounted_reward[episode_idx] = rewards[episode_idx] + (prev_reward * discount)
-        prev_reward = rewards[episode_idx]
+        prev_reward = discounted_reward[episode_idx]
     return discounted_reward
 
 
@@ -94,7 +94,7 @@ def batch_env_observations(observation_list: List[np.ndarray], space: gym_spaces
 
 def list_to_torch_device(env_inputs: Union[List[torch.Tensor], torch.Tensor]):
     # treating as multimodal input
-    env_inputs = [tensor.to(settings.DEVICE).float() for tensor in env_inputs]
+    env_inputs = [tensor.to(**settings.ARGS) for tensor in env_inputs]
     return env_inputs
 
 

@@ -60,7 +60,8 @@ class A2CAgent():
         else:
             probs = self.actor.forward(env_input)
             estimates = self.critic.forward(env_input)
-
+        # print(probs)
+        # print(estimates)
         batch_actions = model_utils.random_choice_prob_batch(self.n_actions,
                                                              probs.detach().cpu().numpy())
         selected_probs = torch.stack([probs[i][action] for i, action in enumerate(batch_actions)])
@@ -86,17 +87,16 @@ class A2CAgent():
             value_estimate_vec = torch.stack(self.batch_value_estimates)
             probs_vec = torch.stack(self.batch_probs)
             selected_prob_vec = torch.stack(self.batch_probs_selected)
-
             discounted_rewards_vec = model_utils.discount_rewards(rewards=reward_vec, discount=self.discount_factor,
                                                                   td_step=self.td_step)
 
             advantage = discounted_rewards_vec - value_estimate_vec
             if advantage.shape[0] > 1:
-                advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-9)  # normalizing the advantage
+                advantage = (advantage - advantage.mean()) / (advantage.std() + 1.e-4)  # normalizing the advantage
 
             action_log_prob = torch.log(selected_prob_vec)
 
-            zero_done_mask = torch.bitwise_not(is_done_vec).float()
+            zero_done_mask = torch.bitwise_not(is_done_vec).to(settings.DTYPE_X)
 
             actor_loss = ((-action_log_prob * advantage.detach()) * zero_done_mask).mean()
 
@@ -113,7 +113,6 @@ class A2CAgent():
 
             self.update_networks()
             self.reset_buffers()
-
         return ret_loss
 
     def update_networks(self):

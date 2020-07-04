@@ -31,6 +31,3 @@ class LSTM(nn.Module):
         context_t = torch.sigmoid((forget_t * prev_context) + (input_t * cell_state_t))
         new_hidden = torch.tanh(context_t * output_t)
         return new_hidden, context_t
-
-    def update(self):
-        return torch.sum(torch.dot(self.th_t1_c, self.th_t1), torch.dot(self.lr_, self.dL_t))

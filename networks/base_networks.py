@@ -1,7 +1,6 @@
 import logging
 from typing import List
 
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -46,8 +45,13 @@ class BaseNetwork(nn.Module):
     def create_optimizer(self):
         lr = self.cfg.get('lr', settings.defaults.LR)
         optimizer = self.cfg.get('optimizer', settings.defaults.OPTIMIZER)
-        self.optimizer = getattr(torch.optim, optimizer)(self.parameters(), lr=lr)
+        # floating point precision, so need to set epislon
+        self.optimizer = getattr(torch.optim, optimizer)(self.parameters(), lr=lr, eps=1.e-4)
         self.to(settings.DEVICE)
+        self.half()  # convert to half precision
+        for layer in self.modules():
+            if isinstance(layer, nn.BatchNorm2d):
+                layer.float()
 
     def add_parameters(self, parameters):
         self.extra_parameters.extend(parameters)
@@ -68,12 +72,12 @@ class BaseNetwork(nn.Module):
         if self.use_lstm:
             if self.hidden_state is None:
                 batch_size = encoding.shape[0]
-                self.hidden_state = torch.zeros((batch_size, self.model_size)).to(settings.DEVICE)
-                self.context = torch.zeros((batch_size, self.model_size)).to(settings.DEVICE)
+                self.hidden_state = torch.zeros((batch_size, self.model_size)).to(**settings.ARGS)
+                self.context = torch.zeros((batch_size, self.model_size)).to(**settings.ARGS)
             self.hidden_state, self.context = self.lstm.forward(x=encoding, hidden=self.hidden_state,
                                                                 context=self.context)
             encoding = self.hidden_state
-        encoding = F.relu(self.linear2(encoding))
+        encoding = self.linear2(encoding)
         return encoding
 
 
@@ -89,13 +93,6 @@ class ActorFCNetwork(BaseNetwork):
         features = F.softmax(encoding, dim=-1)
         return features
 
-    def get_action(self, state):
-        state = torch.from_numpy(state).float().unsqueeze(0)
-        probs = self.forward(state)
-        highest_prob_action = np.random.choice(self.num_actions, p=np.squeeze(probs.detach().numpy()))
-        prob = probs.squeeze(0)[highest_prob_action]
-        return highest_prob_action, prob
-
 
 @register_network
 class CriticFCNetwork(BaseNetwork):
@@ -104,4 +101,5 @@ class CriticFCNetwork(BaseNetwork):
         self.create_optimizer()
 
     def forward(self, features: List[torch.Tensor]) -> torch.Tensor:
-        return self.encode(features)
+        encoding = self.encode(features)
+        return encoding

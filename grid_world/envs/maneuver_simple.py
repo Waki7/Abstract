@@ -32,7 +32,7 @@ class ManeuverSimple(grid_world.GridEnv):
         self.n_landmarks = cfg.get('n_landmarks', 10)
         self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
         self.n_foreign_enemies = cfg.get('foreign_enemies', [])
-        self.agent_fov = cfg.get('agent_fov', 0.1)
+        self.agent_fov = cfg.get('agent_fov', 0.15)
         self.animation_resolution = cfg.get('animation_resolution', (100, 100))
         self.render_interpolation = cfg.get('render_interpolation')
 
@@ -57,7 +57,8 @@ class ManeuverSimple(grid_world.GridEnv):
         landmark_locations = [self.world.get_random_point(), self.world.get_random_point()]
         agent_locations = [self.world.get_random_point() for agent in self.agents]
         # --- spawn the landmarks in the world, this includes placing them in the world
-        self.world.spawn_landmarks([self.target, self.avoid], landmark_locations)
+        # self.world.spawn_landmarks([self.target, self.avoid], landmark_locations)
+        self.world.spawn_landmarks([self.target], landmark_locations)
         self.world.spawn_agents(self.agents, agent_locations)
 
         # --- episodic initializations
@@ -106,6 +107,7 @@ class ManeuverSimple(grid_world.GridEnv):
         else:
             for agent_key in actions.keys():
                 action = actions[agent_key]
+                # TODO REPLACE self.agents[0]
                 self.world.move_agent(self.agents[0], self.action_mapper.encode(action))
 
         frame = self.world.render_world()
@@ -157,11 +159,11 @@ class ManeuverSimple(grid_world.GridEnv):
     def calc_agent_rewards(self):
         reward_map = {}
         for agent in self.agents:
-            reward = -.01
+            reward = -.1
             dist = self.world.get_distance(agent, self.target)
-            out_of_bounds = self.world.is_out_of_bounds(agent)
+            out_of_bounds = self.world.is_object_of_bounds(agent)
             if out_of_bounds:
-                reward -= 1.0
+                reward -= 20.0
             if dist < self.agent_fov:
                 reward += 1.0
             reward_map[agent.id] = reward
@@ -176,7 +178,9 @@ class ManeuverSimple(grid_world.GridEnv):
         for agent in self.agents:
             prev_done = self.agent_dones_map.get(agent.id, False)
             dist = self.world.get_distance(agent, self.target)
-            out_of_bounds = self.world.is_out_of_bounds(agent)
+            out_of_bounds = self.world.is_object_of_bounds(agent)
+            if out_of_bounds:
+                logging.error('agent was at location {}'.format(agent.location))
             done = dist < self.agent_fov or out_of_bounds or prev_done or timed_out
             done_map[agent.id] = done
 

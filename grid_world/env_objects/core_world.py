@@ -74,10 +74,12 @@ class CoreWorld():
         self.landmark_map[landmark.id] = landmark
         landmark.place(location)
 
-    def is_out_of_bounds(self, object: core_objects.GridObject) -> bool:
-        location = object.location
+    def is_out_of_bounds(self, location: Iterable[float]) -> bool:
         return not (self.bounds[0][0] < location[0] < self.bounds[0][1]
                     and self.bounds[1][0] < location[1] < self.bounds[1][1])
+
+    def is_object_of_bounds(self, object: core_objects.GridObject) -> bool:
+        return self.is_out_of_bounds(object.location)
 
     def is_legal_move(self, destination, agent=None):
         '''
@@ -93,9 +95,12 @@ class CoreWorld():
         agent = self.agent_map[agent.id]
         location = agent.get_location()
         new_location = location + (self.dt * action)
+        out_of_bounds = self.is_out_of_bounds(new_location)
         # todo logic for bouncing off and avoiding collisions, add to vector
-        destination = agent.place(new_location)
-        return destination
+        if not out_of_bounds:
+            destination = agent.place(new_location)
+            return destination
+        return location
 
     def step_agents(self):
         pass
@@ -125,8 +130,9 @@ class CoreWorld():
 
     def get_random_point(self):
         granularity = 1000.
-        rand_y = np.random.randint(low=self.bounds[0][0] * granularity, high=self.bounds[0][1] * granularity)
-        rand_x = np.random.randint(low=self.bounds[1][0] * granularity, high=self.bounds[1][1] * granularity)
+        # low is inclusive, high is not, and we don't permit 1.0 to be in bounds
+        rand_y = np.random.randint(low=(self.bounds[0][0] * granularity) + 1., high=self.bounds[0][1] * granularity)
+        rand_x = np.random.randint(low=(self.bounds[1][0] * granularity) + 1., high=self.bounds[1][1] * granularity)
         rand_y = rand_y / granularity
         rand_x = rand_x / granularity
         return np.asarray([rand_y, rand_x])

@@ -4,7 +4,6 @@ import gym
 import numpy as np
 import torch
 
-import grid_world.envs as grid_env
 import settings
 import utils.model_utils as model_utils
 from utils.env_wrappers import SubprocVecEnv
@@ -122,11 +121,13 @@ class BaseController:  # currently implemented as (i)AC
             #     agent_obs = model_utils.list_to_torch_device(agent_obs)
             #     obs_map[agent.id] = obs.get(agent.id, None)
 
-    def convert_env_feedback_for_agent(self, vector: Union[List[float], Dict], is_batch_env):
+    def convert_env_feedback_for_agent(self, rewards: Union[List[float], Dict],
+                                       episode_ends: Union[List[float], Dict], is_batch_env):
         if not is_batch_env:
-            vector = [vector, ]
+            rewards = [rewards, ]
+            episode_ends = [episode_ends, ]
         if self.n_agents == 1:
-            return torch.tensor(vector).to(settings.DEVICE)
+            return torch.tensor(rewards).to(**settings.ARGS), torch.tensor(episode_ends).to(settings.DEVICE)
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
 
@@ -148,11 +149,12 @@ class BaseController:  # currently implemented as (i)AC
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
 
-    def update_agents(self, reward: Union[List[float], Dict],
-                      episode_end: Union[List[bool], Dict],
+    def update_agents(self, rewards: Union[List[float], Dict],
+                      episode_ends: Union[List[bool], Dict],
                       is_batch_env):
-        batch_reward = self.convert_env_feedback_for_agent(reward, is_batch_env)
-        batch_end = self.convert_env_feedback_for_agent(episode_end, is_batch_env)
+        batch_reward, batch_end = self.convert_env_feedback_for_agent(rewards=rewards,
+                                                                      episode_ends=episode_ends,
+                                                                      is_batch_env=is_batch_env)
         if self.n_agents == 1:
             loss = self.agents[0].update_policy(batch_reward, batch_end)
         else:

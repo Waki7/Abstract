@@ -1,24 +1,23 @@
 grid:
   name: 'Grid-v0'
-  update_rate: 1
   n_agents: 1
   bounds: [-1,1]
-  timeout: 100
+  timeout: 50
   render_interpolation: INTER_NEAREST
   observations:
     global_resolution: [100, 100]
     observation_window: [199, 199]
-    observation_resolution: [37, 37]
+    observation_resolution: [11, 11]
     animation_resolution: [100, 100]
-    observation_interpolation: TORCH_AVG
+    observation_interpolation: TORCH_MAX
 #
 #  INTER_NEAREST - a nearest-neighbor interpolation
 #  INTER_LINEAR - a bilinear interpolation (used by default)
 #  INTER_AREA - resampling using pixel area relation. It may be a preferred method for image decimation, as it gives moire’-free results. But when the image is zoomed, it is similar to the INTER_NEAREST method.
 #  INTER_CUBIC - a bicubic interpolation over 4x4 pixel neighborhood
 #  INTER_LANCZOS4 - a Lanczos interpolation over 8x8 pixel neighborhood
-#  TORCH_MAX
-#  TORCH_AVERAGE
+#  TORCH_MAX - adaptive max pooling
+#  TORCH_AVERAGE - adaptive average pooling
 
 
 # ---------------------------------------------------------------------------

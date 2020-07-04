@@ -3,13 +3,14 @@ a2c:
   agent_name: A2CAgent
   actor_network: ActorFCNetwork
   critic_network: CriticFCNetwork
-  discount_factor: .99
+  share_parameters: ['actor_network', 'critic_network']
+  discount_factor: .95
   entropy_coef: .01
   n_threads: 1
   td_step: -1
   actor:
-    lr: .0001
+    lr: .001
     model_size: 40
-    gradient_clip: 1.5
+    gradient_clip: 2.5
     use_lstm: true
 

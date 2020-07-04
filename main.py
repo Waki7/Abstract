@@ -1,7 +1,9 @@
+import logging
+
 import yaml
 
+import grid_world
 from agent_controllers.factory import CONTROLLER_REGISTERY
-from networks.base_networks import *
 
 with open('./configs/cfg_execution.yaml') as f:
     CFG_EXECUTION = yaml.load(f, Loader=yaml.FullLoader)
@@ -40,6 +42,7 @@ def train(algorithm, env_namespace):
 def main():
     # func('a', ('met', 'args'), c='keyword')
     # print(exit(9))
+    a = grid_world
     logging.basicConfig(level=
                         # logging.INFO
                         logging.DEBUG
