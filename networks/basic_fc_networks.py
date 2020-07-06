@@ -8,12 +8,12 @@ import torch.nn.functional as F
 import networks.network_blocks as nets
 import settings
 import utils.model_utils as model_utils
-from networks.factory import register_network
+from networks.net_factory import register_network
 
 
-class BaseNetwork(nn.Module):
+class BaseFCNetwork(nn.Module):
     def __init__(self, in_shapes, out_shapes, cfg={}):
-        super(BaseNetwork, self).__init__()
+        super(BaseFCNetwork, self).__init__()
         self.cfg = cfg
         self.extra_parameters = nn.ParameterList()
         self.in_shapes = in_shapes
@@ -35,7 +35,7 @@ class BaseNetwork(nn.Module):
         ##########################################################################################
         self.linear1 = nn.Linear(self.in_features, self.model_size)
         if self.use_lstm:
-            self.lstm = nets.LSTM(in_features=self.model_size, hidden_features=self.model_size)
+            self.lstm: nets.LSTM = nets.LSTM(in_features=self.model_size, hidden_features=self.model_size)
             self.hidden_state = None
             self.context = None
         self.linear2 = nn.Linear(self.model_size, self.out_features)
@@ -72,8 +72,7 @@ class BaseNetwork(nn.Module):
         if self.use_lstm:
             if self.hidden_state is None:
                 batch_size = encoding.shape[0]
-                self.hidden_state = torch.zeros((batch_size, self.model_size)).to(**settings.ARGS)
-                self.context = torch.zeros((batch_size, self.model_size)).to(**settings.ARGS)
+                self.hidden_state, self.context = self.lstm.get_zero_input(batch_size)
             self.hidden_state, self.context = self.lstm.forward(x=encoding, hidden=self.hidden_state,
                                                                 context=self.context)
             encoding = self.hidden_state
@@ -82,7 +81,7 @@ class BaseNetwork(nn.Module):
 
 
 @register_network
-class ActorFCNetwork(BaseNetwork):
+class ActorFCNetwork(BaseFCNetwork):
     def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
         super().__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
         self.n_actions = self.out_features
@@ -95,7 +94,7 @@ class ActorFCNetwork(BaseNetwork):
 
 
 @register_network
-class CriticFCNetwork(BaseNetwork):
+class CriticFCNetwork(BaseFCNetwork):
     def __init__(self, in_shapes, out_shapes, cfg, **kwargs):
         super().__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
         self.create_optimizer()

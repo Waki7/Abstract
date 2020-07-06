@@ -7,7 +7,7 @@ import torch
 import settings
 import utils.model_utils as model_utils
 from utils.env_wrappers import SubprocVecEnv
-from utils.storage_utils import ExperimentLogger
+from utils.experiment_utils import ExperimentLogger
 
 
 def get_env_func(env_name, env_cfg):
@@ -145,9 +145,10 @@ class BaseController:  # currently implemented as (i)AC
             agent = self.agents[0]
             actions = agent.step(batched_obs)
             if not is_batch_env:
-                return actions[0]  # TODO, MAYBE MOVE THIS TO AGENT SIDE, WHO SHOULD DECIDE IF BATCH DIM OR NOT
+                actions = actions[0]  # TODO, MAYBE MOVE THIS TO AGENT SIDE, WHO SHOULD DECIDE IF BATCH DIM OR NOT
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
+        return actions
 
     def update_agents(self, rewards: Union[List[float], Dict],
                       episode_ends: Union[List[bool], Dict],

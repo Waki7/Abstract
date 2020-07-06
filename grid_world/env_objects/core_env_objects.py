@@ -5,20 +5,29 @@ from typing import Iterable
 
 import numpy as np
 
+import grid_world.rendering.boolean_draw_functions as draw
+
 
 class See(Enum):  # keep nothing as 0
-    GoodLandmark: 0
-    BadLandmark: 1
-    GoodForeignAgent: 2
-    BadForeignAgent: 3
+    good_landmark = 0
+    bad_landmark = 1
+    GoodForeignAgent = 2
+    BadForeignAgent = 3
+
+
+class Shapes(Enum):
+    circle = draw.draw_circle
+    diamond = draw.draw_diamond
+    ring = draw.draw_ring
+    square = None
 
 
 class Actions(Enum):
-    Up: 0
-    Right: 1
-    Down: 2
-    Left: 3
-    Stay: 4
+    up = 0
+    right = 1
+    down = 2
+    left = 3
+    stay = 4
 
 
 DISCRETE_ACTIONS = \
@@ -40,10 +49,12 @@ def get_action_unit_vector(index):
 
 
 class GridObject():
-    def __init__(self, observed_value, id: str, location: np.ndarray = None, **kwargs):
+    def __init__(self, observed_value, id: str, size=None, shape=Shapes.circle, location: np.ndarray = None, **kwargs):
         self.observed_value = observed_value
         self.id = id
         self.location = location
+        self.size = size
+        self.shape = shape
 
     def __str__(self):
         return '{} {}'.format(self.id, self.__class__)

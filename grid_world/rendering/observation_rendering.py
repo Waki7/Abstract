@@ -75,6 +75,7 @@ class ObservationRenderer():
         frame = self.get_frame_at_point(center)
         target_size = (self.obs_resolution[0], self.obs_resolution[1])
         # stupid cv2 needs dimensions in a different order
+        frame_old = np.copy(frame)
         frame = image_utils.interpolate(frame, target_size=target_size,
                                         interpolation_method=self.observation_interpolation)
         return frame

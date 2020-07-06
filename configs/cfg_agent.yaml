@@ -6,11 +6,14 @@ a2c:
   share_parameters: ['actor_network', 'critic_network']
   discount_factor: .95
   entropy_coef: .01
-  n_threads: 1
+  n_threads: 20
   td_step: -1
+
   actor:
-    lr: .001
-    model_size: 40
+    lr: .003
+    model_size: 50
     gradient_clip: 2.5
     use_lstm: true
 
+    state_encoder: MobileNet # None, MobileNet
+    weights_path

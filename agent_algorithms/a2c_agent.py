@@ -1,7 +1,10 @@
 from typing import Union
 
+import numpy as np
+
+import utils.experiment_utils as exp_utils
 from agent_algorithms.factory import register_agent
-from networks.base_networks import *
+from networks.basic_fc_networks import *
 
 if torch.cuda.is_available():
     device = torch.device('cuda')
@@ -18,25 +21,21 @@ class A2CAgent():
     def __init__(self, is_episodic, cfg, actor, critic=None):
         self.is_ac_shared = critic is None
         if self.is_ac_shared:
-            self.ac: BaseNetwork = actor
+            self.ac: BaseFCNetwork = actor
             self.n_actions = self.ac.n_actions
         else:
-            self.actor: BaseNetwork = actor
-            self.critic: BaseNetwork = critic
+            self.actor: BaseFCNetwork = actor
+            self.critic: BaseFCNetwork = critic
             self.n_actions = self.actor.n_actions
 
         ##########################################################################################
         # set cfg parameters
         ##########################################################################################
-        self.update_threshold = cfg.get('update_threshold', -1)
-        self.td_step = cfg.get('td_step', -1)
-        self.discount_factor = cfg.get('discount_factor', settings.defaults.DISCOUNT_FACTOR)
-        self.entropy_coef = cfg.get('entropy_coef', settings.defaults.ENTROPY_COEF)
-        self.supervised_loss = cfg.get('supervised_loss', False)
-        logging.debug(' update_threshold : {}'.format(self.update_threshold))
-        logging.debug(' td_step : {}'.format(self.td_step))
-        logging.debug(' discount_factor : {}'.format(self.discount_factor))
-        logging.debug(' entropy_coef : {}'.format(self.entropy_coef))
+        self.cfg = {}
+        self.update_threshold = exp_utils.copy_config_param(cfg, self.cfg, 'update_threshold', -1)
+        self.td_step = exp_utils.copy_config_param(cfg, self.cfg, 'td_step', -1)
+        self.discount_factor = exp_utils.copy_config_param(cfg, self.cfg, 'discount_factor', settings.defaults.DISCOUNT_FACTOR)
+        self.entropy_coef = exp_utils.copy_config_param(cfg, self.cfg, 'entropy_coef', settings.defaults.ENTROPY_COEF)
 
         self.is_episodic = is_episodic
         self.reward = 0
@@ -60,8 +59,6 @@ class A2CAgent():
         else:
             probs = self.actor.forward(env_input)
             estimates = self.critic.forward(env_input)
-        # print(probs)
-        # print(estimates)
         batch_actions = model_utils.random_choice_prob_batch(self.n_actions,
                                                              probs.detach().cpu().numpy())
         selected_probs = torch.stack([probs[i][action] for i, action in enumerate(batch_actions)])
@@ -99,7 +96,6 @@ class A2CAgent():
             zero_done_mask = torch.bitwise_not(is_done_vec).to(settings.DTYPE_X)
 
             actor_loss = ((-action_log_prob * advantage.detach()) * zero_done_mask).mean()
-
             critic_loss = (F.smooth_l1_loss(input=value_estimate_vec, target=discounted_rewards_vec,
                                             reduction='none') * zero_done_mask).mean()  # .5 * advantage.pow(2).mean()
 
@@ -142,3 +138,9 @@ class A2CAgent():
             return all(batch_episode_end) or td_update
         update = batch_episode_end or np.abs(batch_reward) >= self.update_threshold
         return update
+
+    def save(self, path):
+        # save parameters
+        # save network weights
+        # save pickle s
+        pass

@@ -2,7 +2,7 @@ import utils.model_utils as model_utils
 from agent_algorithms.factory import AGENT_REGISTRY
 from agent_controllers.base_controllers import BaseController
 from agent_controllers.factory import register_controller
-from networks.factory import get_network
+from networks.net_factory import get_network
 
 
 @register_controller

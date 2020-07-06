@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+import settings
+
 
 class LSTM(nn.Module):
     def __init__(self, in_features, hidden_features):
@@ -21,13 +23,18 @@ class LSTM(nn.Module):
         prev_h = hidden
         prev_context = context
 
-        cell_input = torch.cat((prev_x, prev_h), dim=-1)
+        cell_input = torch.cat([prev_x, prev_h], dim=-1)
 
         forget_t = torch.sigmoid(self.w_forget(cell_input))
         input_t = torch.sigmoid(self.w_input(cell_input))
         output_t = torch.sigmoid(self.w_output(cell_input))
 
         cell_state_t = torch.tanh(self.w_cstate(cell_input))
-        context_t = torch.sigmoid((forget_t * prev_context) + (input_t * cell_state_t))
-        new_hidden = torch.tanh(context_t * output_t)
+        context_t = (forget_t * prev_context) + (input_t * cell_state_t)
+        new_hidden = output_t * torch.tanh(context_t)
         return new_hidden, context_t
+
+    def get_zero_input(self, batch_size):
+        hidden_state = torch.zeros((batch_size, self.hidden_features)).to(**settings.ARGS)
+        context = torch.zeros((batch_size, self.hidden_features)).to(**settings.ARGS)
+        return hidden_state, context

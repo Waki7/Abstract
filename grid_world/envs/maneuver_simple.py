@@ -57,8 +57,7 @@ class ManeuverSimple(grid_world.GridEnv):
         landmark_locations = [self.world.get_random_point(), self.world.get_random_point()]
         agent_locations = [self.world.get_random_point() for agent in self.agents]
         # --- spawn the landmarks in the world, this includes placing them in the world
-        # self.world.spawn_landmarks([self.target, self.avoid], landmark_locations)
-        self.world.spawn_landmarks([self.target], landmark_locations)
+        self.world.spawn_landmarks([self.target, self.avoid], landmark_locations)
         self.world.spawn_agents(self.agents, agent_locations)
 
         # --- episodic initializations

@@ -22,6 +22,22 @@ def clean_experiment_folders():
                 print(dir)
 
 
+def copy_config_param(src_cfg, target_cfg, param_name, fallback_value=None):
+    '''
+    will update the target cfg with the param specified from the src cfg, target cfg will be updated by reference,
+    will only return the original param value
+    :param src_cfg:
+    :param target_cfg:
+    :param param_name:
+    :param fallback_value:
+    :return:
+    '''
+    val = src_cfg.get(param_name, fallback_value)
+    logging.debug(' {} : {}'.format(param_name, val))
+    target_cfg[param_name] = val
+    return val
+
+
 class ExperimentLogger():
     def __init__(self):
         self.results_path = ''
@@ -45,10 +61,12 @@ class ExperimentLogger():
             self.results_path = directory
         else:
             time = datetime.now()
-            self.results_path = '{}/{}/{}/{}{}'.format(settings.LOG_DIR, agent_name, env_name, variation,
-                                                       time.strftime("%Y_%m%d_%H%M"))
+            # self.results_path = '{}/{}/{}/{}'.format(settings.LOG_DIR, agent_name, env_name, variation)
+            self.results_path = os.path.join(settings.LOG_DIR, agent_name, env_name, variation,
+                                             time.strftime("%Y_%m%d_%H%M_%S"))
             logging.info(self.results_path)
             self.writer = SummaryWriter(self.results_path)
+            # print(exit(9))
             # env.unwrapped.spec.id
 
         # ----------------------------------------------------------------
@@ -125,8 +143,7 @@ class ExperimentLogger():
             self.writer.add_scalar(label, data, global_step=step)
 
     def checkpoint(self, episode, checkpoint_freq, agent_map,
-                   environment: Union[env_wrappers.SubprocVecEnv, gym.Env],
-                   render_agent_povs=False):
+                   environment: Union[env_wrappers.SubprocVecEnv, gym.Env]):
         is_batch_env = isinstance(environment, env_wrappers.SubprocVecEnv)
         if (episode + 1) % checkpoint_freq == 0:
             # --- save models
@@ -141,10 +158,11 @@ class ExperimentLogger():
                 animations = environment.render()
             write_gif(animations, env_animations_path, fps=2)
 
-            if hasattr(environment, 'render_agent_pov'):
+            if hasattr(environment, 'render_agent_pov') or (is_batch_env and environment.has_attr('render_agent_pov')):
                 for agent_key in agent_map.keys():
                     agent_animation_path = '{}/animations/agent_{}_episode_{}.gif'.format(self.results_path,
                                                                                           agent_key, episode)
+
                     if is_batch_env:
                         agent_animation = environment.env_method('render_agent_pov', *(agent_key,), indices=0)[0]
                     else:

@@ -9,6 +9,15 @@ import utils.model_utils as model_utils
 
 
 def interpolate(image: Union[torch.Tensor, np.ndarray], target_size: tuple, interpolation_method: str):
+    '''
+
+    :param image: expecting shape channel x h x w
+    :param target_size:
+    :param interpolation_method:
+    :return:
+    '''
+    if image.shape[-2:] == target_size:
+        return image
     if interpolation_method.startswith('TORCH'):
         if interpolation_method.endswith('MAX'):
             image = F.adaptive_max_pool2d(input=torch.tensor(image), output_size=target_size).numpy()

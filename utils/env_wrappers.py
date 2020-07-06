@@ -19,6 +19,15 @@ def worker(remote, parent_remote, env_fn_wrapper, seed):
     env = env_fn_wrapper.x()
     while True:
         cmd, data = remote.recv()
+        # 
+        # def step(data):
+        #     pass
+        # def reset(data):
+        #     pass
+        # def reset_pass(data):
+        #     pass
+        # def reset_pass(data):
+        #     pass
         if cmd == 'step':
             ob, reward, done, info = env.step(data)
             remote.send((ob, reward, done, info))
@@ -40,11 +49,13 @@ def worker(remote, parent_remote, env_fn_wrapper, seed):
             method = getattr(env, data[0])
             remote.send(method(*data[1], **data[2]))
         elif cmd == 'get_attr':
-            remote.send(getattr(env, data))
+            remote.send(getattr(env, data[0]))
         elif cmd == 'set_attr':
-            remote.send(setattr(env, data[0], data[1]))
+            remote.send(setattr(env, data[0], *data[1]))
         elif cmd == 'get_unwrapped':
             remote.send(env)
+        elif cmd == 'has_attr':
+            remote.send(hasattr(env, data[0]))
         else:
             raise NotImplementedError("`{}` is not implemented in the worker".format(cmd))
 
@@ -122,7 +133,7 @@ class SubprocVecEnv(VecEnv):
         """Return attribute from vectorized environment (see base class)."""
         target_remotes = self._get_target_remotes(indices)
         for remote in target_remotes:
-            remote.send(('get_attr', attr_name))
+            remote.send(('get_attr', (attr_name,)))
         return [remote.recv() for remote in target_remotes]
 
     def set_attr(self, attr_name, value, indices=None):
@@ -132,6 +143,13 @@ class SubprocVecEnv(VecEnv):
             remote.send(('set_attr', (attr_name, value)))
         for remote in target_remotes:
             remote.recv()
+
+    def has_attr(self, attr_name):
+        """Set attribute inside vectorized environments (see base class)."""
+        target_remotes = self._get_target_remotes([0])
+        for remote in target_remotes:
+            remote.send(('has_attr', (attr_name,)))
+        return target_remotes[0].recv()
 
     def env_method(self, method_name, *method_args, indices=None, **method_kwargs):
         """Call instance methods of vectorized environments."""

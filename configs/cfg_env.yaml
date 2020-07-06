@@ -7,7 +7,7 @@ grid:
   observations:
     global_resolution: [100, 100]
     observation_window: [199, 199]
-    observation_resolution: [11, 11]
+    observation_resolution: [199, 199]
     animation_resolution: [100, 100]
     observation_interpolation: TORCH_MAX
 #

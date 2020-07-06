@@ -1,12 +1,12 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-from networks.base_networks import BaseNetwork
-from networks.factory import register_network
+from networks.basic_fc_networks import BaseFCNetwork
+from networks.net_factory import register_network
 
 
 @register_network
-class GraphActor(BaseNetwork):
+class GraphActor(BaseFCNetwork):
     def __init__(self, n_features, action_nodes, cfg,
                  in_channels=None, in_shapes=None, out_channels=None, out_shapes=None, **kwargs):
         super(GraphActor, self).__init__(cfg)
