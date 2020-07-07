@@ -20,7 +20,6 @@ def get_env_func(env_name, env_cfg):
 class BaseController:  # currently implemented as (i)AC
     # THIS CONTROLLER IS PASSING IN TORCH TENSORS TO THE AGENTS, AND THE ENVIRONMENTS WILL GET NUMPY ARRAYS
     def __init__(self, env_cfg, cfg):
-        self.cfg = cfg
         self.env_cfg = env_cfg
         self.env_name = env_cfg['name']
         self.env = self.make_env()
@@ -139,11 +138,15 @@ class BaseController:  # currently implemented as (i)AC
             return [states], [rewards], [episode_ends], [info]
         return states, rewards, episode_ends, info
 
+    def step_agent(self, agent, batched_obs):
+        actions = agent.step(batched_obs)
+        return actions
+
     def step_agents(self, obs: Union[List[np.ndarray], Dict], is_batch_env):
         batched_obs = self.convert_obs_for_agent(obs, is_batch_env)
         if self.n_agents == 1:
             agent = self.agents[0]
-            actions = agent.step(batched_obs)
+            actions = self.step_agent(agent, batched_obs)
             if not is_batch_env:
                 actions = actions[0]  # TODO, MAYBE MOVE THIS TO AGENT SIDE, WHO SHOULD DECIDE IF BATCH DIM OR NOT
         else:

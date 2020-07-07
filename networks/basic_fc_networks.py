@@ -9,16 +9,12 @@ import networks.network_blocks as nets
 import settings
 import utils.model_utils as model_utils
 from networks.net_factory import register_network
+from networks.network_interface import NetworkInterface
 
 
-class BaseFCNetwork(nn.Module):
+class BaseFCNetwork(NetworkInterface):
     def __init__(self, in_shapes, out_shapes, cfg={}):
-        super(BaseFCNetwork, self).__init__()
-        self.cfg = cfg
-        self.extra_parameters = nn.ParameterList()
-        self.in_shapes = in_shapes
-        self.in_features = model_utils.sum_multi_modal_shapes(in_shapes)
-        self.out_features = model_utils.sum_multi_modal_shapes(out_shapes)
+        super(BaseFCNetwork, self).__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
 
         ##########################################################################################
         # set cfg parameters

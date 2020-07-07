@@ -1,19 +1,25 @@
 a2c:
   controller_name: ACController
   agent_name: A2CAgent
-  actor_network: ActorFCNetwork
-  critic_network: CriticFCNetwork
+
   share_parameters: ['actor_network', 'critic_network']
   discount_factor: .95
   entropy_coef: .01
   n_threads: 20
   td_step: -1
 
+  image_encoder_network: MobileNetV2 # None, MobileNet
+  image_encoder:
+    weights_path: 'networks/weights/mobilenet_v2-b0353104.pth'
+    pretrained: true
+    out_features: 256
+
+  actor_network: ActorFCNetwork
+  critic_network: CriticFCNetwork
   actor:
     lr: .003
     model_size: 50
     gradient_clip: 2.5
     use_lstm: true
 
-    state_encoder: MobileNet # None, MobileNet
-    weights_path
+

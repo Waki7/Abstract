@@ -38,7 +38,7 @@ class ObservationRenderer():
     def get_obs_shape(self):
         high = 1.
         low = 0.
-        return spaces.Box(high=high, low=low, shape=(self.obs_resolution[0], self.obs_resolution[1]))
+        return spaces.Box(high=high, low=low, shape=(self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
 
     def draw_circle(self, center: Iterable[float], radius: float = 5., channel: int = 0):
         self.drawing[channel] = drawing.draw_circle(self.drawing[channel], center=center, radius=radius)
@@ -75,7 +75,6 @@ class ObservationRenderer():
         frame = self.get_frame_at_point(center)
         target_size = (self.obs_resolution[0], self.obs_resolution[1])
         # stupid cv2 needs dimensions in a different order
-        frame_old = np.copy(frame)
         frame = image_utils.interpolate(frame, target_size=target_size,
                                         interpolation_method=self.observation_interpolation)
         return frame
