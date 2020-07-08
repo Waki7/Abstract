@@ -98,6 +98,10 @@ def list_to_torch_device(env_inputs: Union[List[torch.Tensor], torch.Tensor]):
     return env_inputs
 
 
+def get_idxs_of_list(list, idxs):
+    return [list[i] for i in idxs]
+
+
 # ---------------------------------------------------------------------------
 # GEOMETRY
 # ---------------------------------------------------------------------------

@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 
 from networks.net_factory import register_network
@@ -159,3 +160,14 @@ class MobileNetV2(NetworkInterface):
         x = x.mean([2, 3])
         x = self.classifier(x)
         return x
+
+    def load(self, weights_path):
+        new_dict = torch.load(weights_path)
+        original_dict = self.state_dict()
+        weights_to_keep = {}
+        for key in new_dict:
+            if not key.startswith('classifier'):
+                weights_to_keep[key] = new_dict[key]
+            else:
+                weights_to_keep[key] = original_dict[key]
+        self.load_state_dict(weights_to_keep)

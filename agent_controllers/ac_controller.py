@@ -27,7 +27,19 @@ class ACController(BaseController):
                                                              fallback_value={})
         self.image_encoder = None
 
+        self.image_feature_idxs = []
+        self.planning_feature_idxs = []
         super(ACController, self).__init__(env_cfg, cfg)
+
+    def assign_feature_idxs(self, shapes):
+        self.image_feature_idxs = []
+        self.planning_feature_idxs = []
+
+        for idx, shape in enumerate(shapes):
+            if len(shape) == 3:
+                self.image_feature_idxs.append(idx)
+            else:
+                self.planning_feature_idxs.append(idx)
 
     def generate_agent(self, in_shapes, action_shapes, critic_estimates):
         if self.share_parameters:
@@ -54,34 +66,36 @@ class ACController(BaseController):
         return agent
 
     def make_agents(self):
-        in_shapes = model_utils.spaces_to_shapes(self.env.observation_space)
-        print(in_shapes)
+        planner_in_shapes = model_utils.spaces_to_shapes(self.env.observation_space)
+        self.assign_feature_idxs(planner_in_shapes)
         action_shapes = model_utils.spaces_to_shapes(
             self.env.action_space)  # n_actions, can add to output shapes in controller
         critic_estimates = [(1,), ]  # value estimator
         if self.image_encoder_name is not None:
             # TODO fix the shape check for if we add language
-            img_shapes = [shape for shape in in_shapes if len(shape) > 1]
-            print(img_shapes)
-            assert len(img_shapes) == 1, 'not supporting multiple images at the moment'
+            image_encoder_in_shapes = model_utils.get_idxs_of_list(list=planner_in_shapes, idxs=self.image_feature_idxs)
+            assert len(image_encoder_in_shapes) == 1, 'not supporting multiple images at the moment'
             img_encoder_out_shapes = [(self.image_encoder_cfg['out_features'],)]
             self.image_encoder = net_factory.get_network(key=self.image_encoder_name,
-                                                         cfg=self.image_encoder_cfg, in_shapes=img_shapes,
+                                                         cfg=self.image_encoder_cfg,
+                                                         in_shapes=image_encoder_in_shapes,
                                                          out_shapes=img_encoder_out_shapes)
 
-            in_shapes = [shape for shape in in_shapes if len(shape) < 2]
-            in_shapes.extend(img_encoder_out_shapes)
-        print(in_shapes)
-        print(exit(9))
+            planner_in_shapes = model_utils.get_idxs_of_list(list=planner_in_shapes, idxs=self.planning_feature_idxs)
+            planner_in_shapes.extend(img_encoder_out_shapes)
         agents = []
         for i in range(0, self.n_agents):
-            new_agent = self.generate_agent(in_shapes=in_shapes, action_shapes=action_shapes,
+            new_agent = self.generate_agent(in_shapes=planner_in_shapes, action_shapes=action_shapes,
                                             critic_estimates=critic_estimates)
             agents.append(new_agent)
 
         return agents
 
     def step_agent(self, agent, batched_obs):
-        batched_obs = self.state_encoder.forward(batched_obs)
+        if self.image_encoder is not None:
+            image_obs = model_utils.get_idxs_of_list(list=batched_obs, idxs=self.image_feature_idxs)[0]
+            image_embedding = self.image_encoder.forward(image_obs)
+            batched_obs = model_utils.get_idxs_of_list(list=batched_obs, idxs=self.planning_feature_idxs)
+            batched_obs.append(image_embedding)
         actions = agent.step(batched_obs)
         return actions
