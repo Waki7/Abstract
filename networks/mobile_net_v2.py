@@ -1,3 +1,5 @@
+import logging
+
 import torch
 from torch import nn
 
@@ -69,14 +71,15 @@ class MobileNetV2(NetworkInterface):
     '''
     Dummy config
 
-    lr: .003
-    model_size: 50
-    gradient_clip: 2.5
-    use_lstm: true
+    image_encoder:
+        lr: .003
+        gradient_clip: 2.5
 
-    state_encoder: MobileNetV2 # None, MobileNet
-    weights_path:
-    pretrained: true
+        weights_path: 'networks/weights/mobilenet_v2-b0353104.pth'
+        last_block: -1
+        max_block_repeats: 1
+        pretrained: true
+        out_features: 48
 
     '''
 
@@ -94,51 +97,71 @@ class MobileNetV2(NetworkInterface):
         super(MobileNetV2, self).__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
         block = InvertedResidual
         input_channel = 32
-        last_channel = 1280
+        default_last_channel = 1280
 
+        self.in_channels = in_shapes[0][-3]
         out_features = self.out_features  # 1000
-        inverted_residual_setting = cfg.get('inverted_residual_setting', None)
+        self.max_block_repeats = cfg.get('max_block_repeats', 4)
+        self.last_block = cfg.get('last_block', -1)
         width_mult = cfg.get('width_mult', 1.0)
         round_nearest = cfg.get('round_nearest', 8)
 
-        if inverted_residual_setting is None:
-            inverted_residual_setting = [
-                # t, c, n, s
-                [1, 16, 1, 1],
-                [6, 24, 2, 2],
-                [6, 32, 3, 2],
-                [6, 64, 4, 2],
-                [6, 96, 3, 1],
-                [6, 160, 3, 2],
-                [6, 320, 1, 1],
-            ]
-
+        # will initialize with this because that's what the pretrained weights use,
+        # will be pruned to match the configured inverted_residual_setting
+        inverted_residual_setting = [
+            # t, c, n, s
+            [1, 16, 1, 1],
+            [6, 24, 2, 2],
+            [6, 32, 3, 2],
+            [6, 64, 4, 2],
+            [6, 96, 3, 1],
+            [6, 160, 3, 2],
+            [6, 320, 1, 1],
+        ]
         # only check the first element, assuming user knows t,c,n,s are required
         if len(inverted_residual_setting) == 0 or len(inverted_residual_setting[0]) != 4:
             raise ValueError("inverted_residual_setting should be non-empty "
                              "or a 4-element list, got {}".format(inverted_residual_setting))
+        logging.info('inverted residual setting is:\n{}'.format(inverted_residual_setting))
 
+        last_block_num = len(inverted_residual_setting) + 1 + self.last_block
+        self.excluded_weight_names = set()
         # building first layer
         input_channel = _make_divisible(input_channel * width_mult, round_nearest)
-        self.last_channel = _make_divisible(last_channel * max(1.0, width_mult), round_nearest)
-        features = [ConvBNReLU(3, input_channel, stride=2)]
+        self.last_channel = _make_divisible(default_last_channel * max(1.0, width_mult), round_nearest)
+        features = [ConvBNReLU(self.in_channels, input_channel, stride=2)]
         # building inverted residual blocks
-        for t, c, n, s in inverted_residual_setting:
+        for block_num, (t, c, n, s) in enumerate(inverted_residual_setting):
             output_channel = _make_divisible(c * width_mult, round_nearest)
             for i in range(n):
-                stride = s if i == 0 else 1
+                if i == 0:
+                    stride = s
+                else:
+                    stride = 1
                 features.append(block(input_channel, output_channel, stride, expand_ratio=t))
                 input_channel = output_channel
+                if last_block_num == block_num or i > (self.max_block_repeats - 1):
+                    for key in features[-1].state_dict().keys():
+                        self.excluded_weight_names.add('features.{}.{}'.format(len(features) - 1, key))
+        modified_last_channel = default_last_channel
         # building last several layers
-        features.append(ConvBNReLU(input_channel, self.last_channel, kernel_size=1))
+        features.append(ConvBNReLU(input_channel, default_last_channel, kernel_size=1))
+
+        if self.last_block < -1:
+            modified_last_channel = inverted_residual_setting[self.last_block+1][1]  # is the index for out_channels
+            for key in features[-1].state_dict().keys():
+                self.excluded_weight_names.add('features.{}.{}'.format(len(features) - 1, key))
+
         # make it nn.Sequential
         self.features = nn.Sequential(*features)
 
         # building classifier
         self.classifier = nn.Sequential(
             nn.Dropout(0.2),
-            nn.Linear(self.last_channel, out_features),
+            nn.Linear(modified_last_channel, out_features),
         )
+        for key in self.classifier.state_dict().keys():
+            self.excluded_weight_names.add('classifier.{}'.format(key))
 
         # weight initialization
         for m in self.modules():
@@ -162,12 +185,24 @@ class MobileNetV2(NetworkInterface):
         return x
 
     def load(self, weights_path):
-        new_dict = torch.load(weights_path)
-        original_dict = self.state_dict()
+        new_dict :dict= torch.load(weights_path)
+
+        old_dict = self.state_dict()
         weights_to_keep = {}
-        for key in new_dict:
-            if not key.startswith('classifier'):
+        first_key = list(new_dict.keys())[0]
+        first_weight: torch.Tensor = new_dict[first_key]
+
+        assert len(first_weight.shape) == 4 and first_weight.shape[1] == 3, \
+            'expecting first weight to be a convolution weight for 3 channels'
+        if self.in_channels != first_weight.shape[1]:
+            new_dict[first_key] = first_weight.mean(dim=1, keepdim=True)
+
+        key_list = list(new_dict.keys())
+        for key in key_list:
+            if key not in self.excluded_weight_names:
                 weights_to_keep[key] = new_dict[key]
             else:
-                weights_to_keep[key] = original_dict[key]
+                del new_dict[key]
+                del old_dict[key]
+
         self.load_state_dict(weights_to_keep)

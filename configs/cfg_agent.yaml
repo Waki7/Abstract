@@ -5,14 +5,19 @@ a2c:
   share_parameters: ['actor_network', 'critic_network']
   discount_factor: .95
   entropy_coef: .01
-  n_threads: 20
+  n_threads: 2
   td_step: -1
 
   image_encoder_network: MobileNetV2 # None, MobileNet
   image_encoder:
+    lr: .003
+    gradient_clip: 2.5
+
     weights_path: 'networks/weights/mobilenet_v2-b0353104.pth'
+    last_block: -4
+    max_block_repeats: 1
     pretrained: true
-    out_features: 256
+    out_features: 48
 
   actor_network: ActorFCNetwork
   critic_network: CriticFCNetwork

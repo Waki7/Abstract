@@ -20,6 +20,7 @@ def get_env_func(env_name, env_cfg):
 class BaseController:  # currently implemented as (i)AC
     # THIS CONTROLLER IS PASSING IN TORCH TENSORS TO THE AGENTS, AND THE ENVIRONMENTS WILL GET NUMPY ARRAYS
     def __init__(self, env_cfg, cfg):
+        self.cfg = cfg
         self.env_cfg = env_cfg
         self.env_name = env_cfg['name']
         self.env = self.make_env()
@@ -73,10 +74,10 @@ class BaseController:  # currently implemented as (i)AC
         env_cfg = self.env_cfg
         env = SubprocVecEnv([lambda: get_env_func(env_name=env_name, env_cfg=env_cfg) for i in
                              range(n_threads)]) if is_batch_env else self.env
-
         for episode in range(n_episodes):
             step = 0
             states = env.reset()
+
             episode_lengths = [-1] * n_threads
             while True:
                 actions = self.step_agents(states, is_batch_env)
@@ -108,6 +109,7 @@ class BaseController:  # currently implemented as (i)AC
     def convert_obs_for_agent(self, obs, is_batch_env):
         if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one
             obs = [obs, ]
+
         if self.n_agents == 1:
             batched_obs = model_utils.batch_env_observations(obs, self.env.observation_space)
             batched_obs = model_utils.list_to_torch_device(batched_obs)
