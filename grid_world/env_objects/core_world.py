@@ -1,5 +1,5 @@
 import logging
-from typing import List, Iterable
+from typing import List, Iterable, Dict
 
 import numpy as np
 from gym import spaces
@@ -32,8 +32,8 @@ class CoreWorld():
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
-        self.landmark_map = {}
-        self.agent_map = {}
+        self.landmark_map: Dict[str, core_landmarks.Landmark] = {}
+        self.agent_map: Dict[str, core_agents.EnvAgent] = {}
         self.renderer = rendering.ObservationRenderer(cfg=observation_cfg)
 
     def get_world_obs_space(self) -> spaces.Tuple:
@@ -121,7 +121,7 @@ class CoreWorld():
             pixel_location = self.renderer.convert_location_to_pixels(location=agent.location,
                                                                       origin_bounds=self.bounds)
             # self.rendererconvert_distance_to_pixels()
-            self.renderer.draw_circle(center=pixel_location, radius=4.)
+            self.renderer.draw_circle(center=pixel_location, radius=4., value=agent.observed_value)
         for landmark in self.landmark_map.values():
             pixel_location = self.renderer.convert_location_to_pixels(location=landmark.location,
                                                                       origin_bounds=self.bounds)

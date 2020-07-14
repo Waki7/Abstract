@@ -3,8 +3,7 @@ from typing import Iterable
 import numpy as np
 from gym import spaces
 
-import grid_world.rendering.boolean_draw_functions as bool_drawing
-import grid_world.rendering.boolean_draw_functions as color_drawing
+import grid_world.rendering.draw_functions as drawing
 import utils.image_utils as image_utils
 import utils.model_utils as model_utils
 
@@ -41,16 +40,16 @@ class ObservationRenderer():
         low = 0.
         return spaces.Box(high=high, low=low, shape=(self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
 
-    def draw_circle(self, center: Iterable[float], radius: float = 5., channel: int = 0):
-        self.drawing[channel] = drawing.draw_circle(self.drawing[channel], center=center, radius=radius)
+    def draw_circle(self, center: Iterable[float], radius: float = 5., value: float = None):
+        self.drawing = drawing.draw_circle(self.drawing, center=center, radius=radius, value=value)
         return self.drawing
 
-    def draw_ring(self, center: Iterable[float], radius: float = 5., width: float = 5., channel: int = 0):
-        self.drawing[channel] = drawing.draw_ring(self.drawing[channel], center=center, radius=radius, width=width)
+    def draw_ring(self, center: Iterable[float], radius: float = 5., width: float = 5., value: float = None):
+        self.drawing = drawing.draw_ring(self.drawing, center=center, radius=radius, width=width, value=value)
         return self.drawing
 
-    def draw_diamond(self, center: Iterable[float], apothem: float = 5., channel: int = 0):
-        self.drawing[channel] = drawing.draw_diamond(self.drawing[channel], center=center, apothem=apothem)
+    def draw_diamond(self, center: Iterable[float], apothem: float = 5., value: float = None):
+        self.drawing = drawing.draw_diamond(self.drawing, center=center, apothem=apothem, value=value)
         return self.drawing
 
     def get_frame_at_point(self, center: Iterable[float]):

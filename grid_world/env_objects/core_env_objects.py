@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import logging
 from enum import Enum
 from typing import Iterable
 
 import numpy as np
 
-import grid_world.rendering.boolean_draw_functions as draw
+import grid_world.rendering.draw_functions as draw
 
 
 class See(Enum):  # keep nothing as 0
@@ -50,7 +51,13 @@ def get_action_unit_vector(index):
 
 class GridObject():
     def __init__(self, observed_value, id: str, size=None, shape=Shapes.circle, location: np.ndarray = None, **kwargs):
+        if not isinstance(observed_value, tuple):
+            # always keep rgb, if we render in black and white then we can just take the first value
+            observed_value = (observed_value, observed_value, observed_value,)
         self.observed_value = observed_value
+        if not isinstance(self.observed_value[0], int):
+            self.observed_value = [int(val * 255.) for val in self.observed_value]
+            logging.warning('please use 0-255 integer scale for observed values of objects')
         self.id = id
         self.location = location
         self.size = size

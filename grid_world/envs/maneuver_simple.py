@@ -40,8 +40,8 @@ class ManeuverSimple(grid_world.GridEnv):
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
-        self.target = core.GridObject(id='target', observed_value=.4)
-        self.avoid = core.GridObject(id='obstacle', observed_value=.8)
+        self.target = core.GridObject(id='target', observed_value=200)
+        self.avoid = core.GridObject(id='obstacle', observed_value=200)
 
         # ---------------------------------------------------------------------------
         # episodic initializations
