@@ -125,7 +125,7 @@ class CoreWorld():
         for landmark in self.landmark_map.values():
             pixel_location = self.renderer.convert_location_to_pixels(location=landmark.location,
                                                                       origin_bounds=self.bounds)
-            self.renderer.draw_diamond(center=pixel_location, apothem=5.)
+            self.renderer.draw_diamond(center=pixel_location, apothem=5., value=landmark.observed_value)
         return self.renderer.get_drawing()
 
     def get_random_point(self):

@@ -5,7 +5,7 @@ a2c:
   share_parameters: ['actor_network', 'critic_network']
   discount_factor: .95
   entropy_coef: .01
-  n_threads: 20
+  n_threads: 1
   td_step: -1
 
   image_encoder_network:  # None, MobileNetV2
