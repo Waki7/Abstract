@@ -1,4 +1,9 @@
+from typing import Union, Dict, List
+
+import torch
+
 import networks.net_factory as net_factory
+import networks.network_interface as nets
 import utils.experiment_utils as exp_utils
 import utils.model_utils as model_utils
 from agent_algorithms.factory import AGENT_REGISTRY
@@ -25,6 +30,7 @@ class ACController(BaseController):
         self.image_encoder_cfg = exp_utils.copy_config_param(src_cfg=cfg, target_cfg=self.cfg,
                                                              param_name='image_encoder',
                                                              fallback_value={})
+        self.train_image_encoder = self.image_encoder_cfg.get('train')
         self.image_encoder = None
 
         self.image_feature_idxs = []
@@ -75,11 +81,11 @@ class ACController(BaseController):
             # TODO fix the shape check for if we add language
             image_encoder_in_shapes = model_utils.get_idxs_of_list(list=planner_in_shapes, idxs=self.image_feature_idxs)
             assert len(image_encoder_in_shapes) == 1, 'not supporting multiple images at the moment'
-            img_encoder_out_shapes = [(self.image_encoder_cfg['out_features'],)]
-            self.image_encoder = net_factory.get_network(key=self.image_encoder_name,
-                                                         cfg=self.image_encoder_cfg,
-                                                         in_shapes=image_encoder_in_shapes,
-                                                         out_shapes=img_encoder_out_shapes)
+            self.image_encoder: nets.NetworkInterface = net_factory.get_network(key=self.image_encoder_name,
+                                                                                cfg=self.image_encoder_cfg,
+                                                                                in_shapes=image_encoder_in_shapes)
+            img_encoder_out_shapes = self.image_encoder.get_out_shapes()
+            self.image_encoder.train() if self.train_image_encoder else self.image_encoder.eval()
 
             planner_in_shapes = model_utils.get_idxs_of_list(list=planner_in_shapes, idxs=self.planning_feature_idxs)
             planner_in_shapes.extend(img_encoder_out_shapes)
@@ -94,8 +100,35 @@ class ACController(BaseController):
     def step_agent(self, agent, batched_obs):
         if self.image_encoder is not None:
             image_obs = model_utils.get_idxs_of_list(list=batched_obs, idxs=self.image_feature_idxs)[0]
-            image_embedding = self.image_encoder.forward(image_obs)
+            if self.train_image_encoder:
+                image_embedding = self.image_encoder.forward(image_obs)
+            else:
+                with torch.no_grad():
+                    image_embedding = self.image_encoder.forward(image_obs).detach()
             batched_obs = model_utils.get_idxs_of_list(list=batched_obs, idxs=self.planning_feature_idxs)
             batched_obs.append(image_embedding)
         actions = agent.step(batched_obs)
         return actions
+
+    def update_agents(self, rewards: Union[List[float], Dict],
+                      episode_ends: Union[List[bool], Dict],
+                      is_batch_env):
+        batch_reward, batch_end = self.convert_env_feedback_for_agent(rewards=rewards,
+                                                                      episode_ends=episode_ends,
+                                                                      is_batch_env=is_batch_env)
+        if self.n_agents == 1:
+            loss = self.agents[0].update_policy(batch_reward, batch_end)
+            if self.image_encoder is not None and self.train_image_encoder:
+                self.image_encoder.update_parameters()
+        else:
+            raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES FOR THE NEW_STATE')
+            # agent_reward = []
+            # agent_ends = []
+            # agent_state = []
+            #
+            # loss = {}
+            # for key in self.agent_keys:
+            #     loss[key] = (self.agents[key].update_policy(
+            #         reward[key], episode_end[key], new_state[key]
+            #     ))
+        return loss

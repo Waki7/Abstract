@@ -72,7 +72,7 @@ class ExperimentLogger():
         # ----------------------------------------------------------------
         # create empty notes file, directory for weights, models, and animations
         # ----------------------------------------------------------------
-        notes_file = '{}/notes.txt'.format(self.results_path)
+        notes_file = '{}/notes.py'.format(self.results_path)
         open(notes_file, 'a').close()
         [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in ['weights', 'models', 'animations']]
 

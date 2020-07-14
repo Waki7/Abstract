@@ -7,8 +7,8 @@ grid:
   observations:
     global_resolution: [100, 100]
     observation_window: [199, 199]
-    observation_resolution: [199, 199]
-    animation_resolution: [100, 100]
+    observation_resolution: [99, 99]
+    animation_resolution: [99, 99]
     observation_interpolation: TORCH_MAX
 #
 #  INTER_NEAREST - a nearest-neighbor interpolation

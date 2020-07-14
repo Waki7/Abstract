@@ -3,7 +3,8 @@ from typing import Iterable
 import numpy as np
 from gym import spaces
 
-import grid_world.rendering.boolean_draw_functions as drawing
+import grid_world.rendering.boolean_draw_functions as bool_drawing
+import grid_world.rendering.boolean_draw_functions as color_drawing
 import utils.image_utils as image_utils
 import utils.model_utils as model_utils
 
@@ -20,7 +21,7 @@ class ObservationRenderer():
         assert model_utils.is_odd(self.obs_resolution[0]) and model_utils.is_odd(
             self.obs_resolution[1]), 'keep resolutions odd for simplicity'
 
-        self.n_channels = cfg.get('n_channels', 1)
+        self.n_channels = cfg.get('n_channels', 3)
         self.observation_interpolation = cfg.get('observation_interpolation')
 
         self.drawing = np.zeros((self.n_channels, self.global_resolution[0], self.global_resolution[1]), dtype=np.uint8)

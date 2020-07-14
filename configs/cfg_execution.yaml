@@ -2,5 +2,5 @@ training:
   variation: ''
   n_episodes: 10000 #
   eval_rewards_window: 20
-  checkpoint_freq: 1
+  checkpoint_freq: 100
 

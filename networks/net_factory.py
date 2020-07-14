@@ -33,7 +33,7 @@ def try_load_weights(model, cfg):
     return False
 
 
-def get_network(key, cfg, in_shapes, out_shapes) -> base.NetworkInterface:
+def get_network(key, cfg, in_shapes, out_shapes=None) -> base.NetworkInterface:
     model = NETWORK_REGISTERY[key](
         cfg=cfg,
         out_shapes=out_shapes,

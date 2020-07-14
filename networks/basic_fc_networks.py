@@ -7,7 +7,6 @@ import torch.nn.functional as F
 
 import networks.network_blocks as nets
 import settings
-import utils.model_utils as model_utils
 from networks.net_factory import register_network
 from networks.network_interface import NetworkInterface
 
@@ -20,7 +19,6 @@ class BaseFCNetwork(NetworkInterface):
         # set cfg parameters
         ##########################################################################################
         self.model_size = cfg.get('model_size', settings.defaults.MODEL_SIZE)
-        self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
         self.use_lstm = cfg.get('use_lstm', False)
         logging.debug(' model_size : {}'.format(self.model_size))
         logging.debug(' gradient_clip : {}'.format(self.gradient_clip))
@@ -52,11 +50,6 @@ class BaseFCNetwork(NetworkInterface):
     def add_parameters(self, parameters):
         self.extra_parameters.extend(parameters)
         self.create_optimizer()  # recreate optimizer due to neew parameters
-
-    def update_parameters(self):
-        torch.nn.utils.clip_grad_value_(self.parameters(), self.gradient_clip)
-        self.optimizer.step()
-        self.optimizer.zero_grad()
 
     def reset_time(self):
         self.hidden_state = None

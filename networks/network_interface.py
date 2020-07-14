@@ -8,13 +8,15 @@ import utils.model_utils as model_utils
 class NetworkInterface(nn.Module):
     def __init__(self, in_shapes, out_shapes, cfg={}):
         super(NetworkInterface, self).__init__()
-        self.cfg = {}
+        self.cfg = {} if not hasattr(self, 'cfg') else self.cfg
         self.extra_parameters = nn.ParameterList()
         self.in_shapes = in_shapes
+        self.out_shapes = out_shapes
         self.in_features = model_utils.sum_multi_modal_shapes(in_shapes)
         self.out_features = model_utils.sum_multi_modal_shapes(out_shapes)
         self.weights_path = cfg.get('weights_path')
         self.pretrained = cfg.get('pretrained')
+        self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
         self.extra_parameters = nn.ParameterList()
         self.updates_locked = False
 
@@ -46,3 +48,15 @@ class NetworkInterface(nn.Module):
 
     def unlock_updates(self):
         self.updates_locked = False
+
+    def get_in_shapes(self):
+        return self.in_shapes
+
+    def get_out_shapes(self):
+        return self.out_shapes
+
+    def get_out_features(self):
+        return self.out_features
+
+    def get_in_features(self):
+        return self.in_features

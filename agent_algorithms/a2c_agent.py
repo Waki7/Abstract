@@ -3,6 +3,7 @@ from typing import Union
 import numpy as np
 
 import utils.experiment_utils as exp_utils
+import utils.model_utils as model_utils
 from agent_algorithms.factory import register_agent
 from networks.basic_fc_networks import *
 
@@ -34,7 +35,8 @@ class A2CAgent():
         self.cfg = {}
         self.update_threshold = exp_utils.copy_config_param(cfg, self.cfg, 'update_threshold', -1)
         self.td_step = exp_utils.copy_config_param(cfg, self.cfg, 'td_step', -1)
-        self.discount_factor = exp_utils.copy_config_param(cfg, self.cfg, 'discount_factor', settings.defaults.DISCOUNT_FACTOR)
+        self.discount_factor = exp_utils.copy_config_param(cfg, self.cfg, 'discount_factor',
+                                                           settings.defaults.DISCOUNT_FACTOR)
         self.entropy_coef = exp_utils.copy_config_param(cfg, self.cfg, 'entropy_coef', settings.defaults.ENTROPY_COEF)
 
         self.is_episodic = is_episodic

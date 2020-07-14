@@ -72,18 +72,17 @@ class MobileNetV2(NetworkInterface):
     Dummy config
 
     image_encoder:
-        lr: .003
+        lr: .0005
         gradient_clip: 2.5
-
+        train: false # do back prop on encoder
         weights_path: 'networks/weights/mobilenet_v2-b0353104.pth'
-        last_block: -1
-        max_block_repeats: 1
-        pretrained: true
-        out_features: 48
+        last_block: -6 # negative indexing from -8 to -1
+        max_block_repeats: 1 # max number of repeats of residual blocks
+        pretrained: true # load pretrained weights or not
 
     '''
 
-    def __init__(self, in_shapes, out_shapes, cfg={}):
+    def __init__(self, in_shapes, cfg={}, **kwargs):
         """
         MobileNet V2 main class
 
@@ -94,13 +93,13 @@ class MobileNetV2(NetworkInterface):
             round_nearest (int): Round the number of channels in each layer to be a multiple of this number
             Set to 1 to turn off rounding
         """
-        super(MobileNetV2, self).__init__(in_shapes=in_shapes, out_shapes=out_shapes, cfg=cfg)
+        # not calling super init here because we need the out_shapes
+
         block = InvertedResidual
         input_channel = 32
-        default_last_channel = 1280
+        last_channel = 1280
 
         self.in_channels = in_shapes[0][-3]
-        out_features = self.out_features  # 1000
         self.max_block_repeats = cfg.get('max_block_repeats', 4)
         self.last_block = cfg.get('last_block', -1)
         width_mult = cfg.get('width_mult', 1.0)
@@ -110,25 +109,24 @@ class MobileNetV2(NetworkInterface):
         # will be pruned to match the configured inverted_residual_setting
         inverted_residual_setting = [
             # t, c, n, s
-            [1, 16, 1, 1],
-            [6, 24, 2, 2],
-            [6, 32, 3, 2],
-            [6, 64, 4, 2],
-            [6, 96, 3, 1],
-            [6, 160, 3, 2],
-            [6, 320, 1, 1],
+            [1, 16, 1, 1],  # -8
+            [6, 24, 2, 2],  # -7
+            [6, 32, 3, 2],  # -6
+            [6, 64, 4, 2],  # -5
+            [6, 96, 3, 1],  # -4
+            [6, 160, 3, 2],  # -3
+            [6, 320, 1, 1],  # -2
         ]
         # only check the first element, assuming user knows t,c,n,s are required
         if len(inverted_residual_setting) == 0 or len(inverted_residual_setting[0]) != 4:
             raise ValueError("inverted_residual_setting should be non-empty "
                              "or a 4-element list, got {}".format(inverted_residual_setting))
-        logging.info('inverted residual setting is:\n{}'.format(inverted_residual_setting))
+        last_block_idx = len(inverted_residual_setting) + 1 + self.last_block
 
-        last_block_num = len(inverted_residual_setting) + 1 + self.last_block
         self.excluded_weight_names = set()
         # building first layer
         input_channel = _make_divisible(input_channel * width_mult, round_nearest)
-        self.last_channel = _make_divisible(default_last_channel * max(1.0, width_mult), round_nearest)
+        last_channel = _make_divisible(last_channel * max(1.0, width_mult), round_nearest)
         features = [ConvBNReLU(self.in_channels, input_channel, stride=2)]
         # building inverted residual blocks
         for block_num, (t, c, n, s) in enumerate(inverted_residual_setting):
@@ -138,30 +136,31 @@ class MobileNetV2(NetworkInterface):
                     stride = s
                 else:
                     stride = 1
-                features.append(block(input_channel, output_channel, stride, expand_ratio=t))
-                input_channel = output_channel
-                if last_block_num == block_num or i > (self.max_block_repeats - 1):
-                    for key in features[-1].state_dict().keys():
-                        self.excluded_weight_names.add('features.{}.{}'.format(len(features) - 1, key))
-        modified_last_channel = default_last_channel
+                if block_num > last_block_idx or i > (self.max_block_repeats - 1):
+                    logging.info('omitting residual block [{}, {}, {}, {}]'.format(t, c, n, s))
+                    features.append(nn.Identity())
+                else:
+                    logging.info('using residual block [{}, {}, {}, {}]'.format(t, c, n, s))
+                    features.append(block(input_channel, output_channel, stride, expand_ratio=t))
+                    input_channel = output_channel
+
         # building last several layers
-        features.append(ConvBNReLU(input_channel, default_last_channel, kernel_size=1))
+        if self.last_block == -1:
+            features.append(ConvBNReLU(input_channel, last_channel, kernel_size=1))
+        else:
+            last_channel = input_channel
 
-        if self.last_block < -1:
-            modified_last_channel = inverted_residual_setting[self.last_block+1][1]  # is the index for out_channels
-            for key in features[-1].state_dict().keys():
-                self.excluded_weight_names.add('features.{}.{}'.format(len(features) - 1, key))
-
+        # call super now that we have the last channel shape, and also can add the modules now
+        super(MobileNetV2, self).__init__(in_shapes=in_shapes, out_shapes=[(last_channel,)], cfg=cfg)
         # make it nn.Sequential
         self.features = nn.Sequential(*features)
 
+        # not using classifier
         # building classifier
-        self.classifier = nn.Sequential(
-            nn.Dropout(0.2),
-            nn.Linear(modified_last_channel, out_features),
-        )
-        for key in self.classifier.state_dict().keys():
-            self.excluded_weight_names.add('classifier.{}'.format(key))
+        # self.classifier = nn.Sequential(
+        #     nn.Dropout(0.2),
+        #     nn.Linear(altered_last_channel, out_features),
+        # )
 
         # weight initialization
         for m in self.modules():
@@ -181,13 +180,11 @@ class MobileNetV2(NetworkInterface):
     def forward(self, x):
         x = self.features(x)
         x = x.mean([2, 3])
-        x = self.classifier(x)
+        # x = self.classifier(x)
         return x
 
     def load(self, weights_path):
-        new_dict :dict= torch.load(weights_path)
-
-        old_dict = self.state_dict()
+        new_dict: dict = torch.load(weights_path)
         weights_to_keep = {}
         first_key = list(new_dict.keys())[0]
         first_weight: torch.Tensor = new_dict[first_key]
@@ -199,10 +196,7 @@ class MobileNetV2(NetworkInterface):
 
         key_list = list(new_dict.keys())
         for key in key_list:
-            if key not in self.excluded_weight_names:
+            if not key.startswith('classifier'):
                 weights_to_keep[key] = new_dict[key]
-            else:
-                del new_dict[key]
-                del old_dict[key]
-
-        self.load_state_dict(weights_to_keep)
+        self.load_state_dict(weights_to_keep, strict=False)
+        self.create_optimizer()
