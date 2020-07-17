@@ -8,6 +8,7 @@ configs = {
 }
 
 LOG_DIR = 'logs'
+ENCODER_WEIGHTS = 'networks/weights'
 
 grads = {}
 if torch.cuda.is_available():
