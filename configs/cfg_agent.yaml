@@ -5,14 +5,14 @@ a2c:
   share_parameters: ['actor_network', 'critic_network']
   discount_factor: .95
   entropy_coef: .01
-  n_threads: 1
+  n_threads: 10
   td_step: -1
 
-  image_encoder_network:  # None, MobileNetV2
+  image_encoder_network: MobileNetV2 # null, MobileNetV2
   image_encoder:
-    lr: .001
+    lr: .0005
     gradient_clip: 2.5
-    train: false # do back prop on encoder
+    train: true # do back prop on encoder
     weights_path: 'networks/weights/mobilenet_v2-b0353104.pth'
     #      [1, 16, 1, 1],  # -8
     #      [6, 24, 2, 2],  # -7
@@ -28,9 +28,9 @@ a2c:
   actor_network: ActorFCNetwork
   critic_network: CriticFCNetwork
   actor:
-    lr: .001
+    lr: .0005
     model_size: 32
     gradient_clip: 2.5
-    use_lstm: true
+    use_lstm: false
 
 
