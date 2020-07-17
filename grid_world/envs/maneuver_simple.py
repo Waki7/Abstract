@@ -120,12 +120,6 @@ class ManeuverSimple(grid_world.GridEnv):
 
         return agent_obss, agent_rewards, agent_dones, agent_infos
 
-    def initialize_empty_map(self):
-        return dict(zip(self.agent_state_channels, [[], [], [], []]))
-
-    def get_current_state(self):
-        return self.state
-
     def log_summary(self):
         logging.debug('\n___________start step {}_______________'.format(self.t))
 
