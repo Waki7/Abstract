@@ -4,8 +4,10 @@ torchvision
 scipy
 numpy
 tensorflow
-torch
+torch==1.5.1
 opencv-python
 array2gif
 Pillow
 stable-baselines
+
+# for torch use pip install torch===1.5.1 torchvision===0.6.1 -f https://download.pytorch.org/whl/torch_stable.html

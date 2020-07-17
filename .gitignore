@@ -3,3 +3,4 @@ runs
 .idea/*.xml
 .idea/*.iml
 *.pyc
+*.pth
