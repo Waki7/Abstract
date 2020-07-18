@@ -118,7 +118,7 @@ class ACController(BaseController):
                                                                       is_batch_env=is_batch_env)
         if self.n_agents == 1:
             loss = self.agents[0].update_policy(batch_reward, batch_end)
-            if self.image_encoder is not None and self.train_image_encoder:
+            if loss is not None and len(loss) > 0 and self.image_encoder is not None and self.train_image_encoder:
                 self.image_encoder.update_parameters()
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES FOR THE NEW_STATE')

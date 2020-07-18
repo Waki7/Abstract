@@ -6,7 +6,7 @@ import torch
 LOG_DIR = 'logs'
 ENCODER_WEIGHTS = 'networks/weights'
 grads = {}
-print(torch.cuda.is_available())
+# torch.autograd.set_detect_anomaly(True)
 if torch.cuda.is_available():
     DEVICE_NUM = 0
     print('{} gpus available, will be using gpu {}'.format(torch.cuda.device_count(), DEVICE_NUM))

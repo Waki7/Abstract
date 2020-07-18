@@ -7,6 +7,7 @@ from gym import spaces
 import grid_world.env_objects as core
 import grid_world.envs.grid_world as grid_world
 import utils.image_utils as image_utils
+import utils.model_utils as model_utils
 
 
 class ManeuverSimple(grid_world.GridEnv):
@@ -141,6 +142,7 @@ class ManeuverSimple(grid_world.GridEnv):
         for agent in self.agents:
             features = []
             map_obs = self.world.get_agent_pov(agent)
+            map_obs = model_utils.scale_vector_to_range(vector=map_obs, new_max=1.0, new_min=0.0)
             features.append(map_obs)
             obs_map[agent.id] = features
             self.agent_render_frames[agent.id].append(map_obs)

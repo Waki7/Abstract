@@ -61,8 +61,13 @@ class A2CAgent():
         else:
             probs = self.actor.forward(env_input)
             estimates = self.critic.forward(env_input)
-        batch_actions = model_utils.random_choice_prob_batch(self.n_actions,
-                                                             probs.detach().cpu().numpy())
+        try:
+            batch_actions = model_utils.random_choice_prob_batch(self.n_actions,
+                                                                 probs.detach().cpu().numpy())
+        except ValueError as e:
+            logging.error('probs are {}'.format(probs))
+            logging.error('values in input are {}'.format(np.unique(env_input[0].cpu().numpy())))
+            raise e
         selected_probs = torch.stack([probs[i][action] for i, action in enumerate(batch_actions)])
 
         self.batch_actions.append(batch_actions)
@@ -108,7 +113,6 @@ class A2CAgent():
             ac_loss.backward()
             ret_loss['actor_loss'] = actor_loss.detach().cpu().item()
             ret_loss['critic_loss'] = critic_loss.detach().cpu().item()
-
             self.update_networks()
             self.reset_buffers()
         return ret_loss
