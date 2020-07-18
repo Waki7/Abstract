@@ -1,4 +1,3 @@
-import logging
 import random
 
 import numpy as np
@@ -6,15 +5,15 @@ import torch
 
 LOG_DIR = 'logs'
 ENCODER_WEIGHTS = 'networks/weights'
-
 grads = {}
+print(torch.cuda.is_available())
 if torch.cuda.is_available():
-    logging.info('using cpu')
+    DEVICE_NUM = 0
+    print('{} gpus available, will be using gpu {}'.format(torch.cuda.device_count(), DEVICE_NUM))
+    torch.cuda.set_device(DEVICE_NUM)
     DEVICE = torch.device('cuda')
 else:
-    DEVICE_NUM = 0
-    logging.info('{} gpus available, will be using gpu {}'.format(torch.cuda.device_count(), DEVICE_NUM))
-    torch.cuda.set_device(DEVICE_NUM)
+    print('using cpu')
     DEVICE = torch.device('cpu')
 
 DTYPE_LONG = torch.long
