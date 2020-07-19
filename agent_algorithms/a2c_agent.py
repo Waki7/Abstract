@@ -145,8 +145,13 @@ class A2CAgent():
         update = batch_episode_end or np.abs(batch_reward) >= self.update_threshold
         return update
 
-    def save(self, path):
-        # save parameters
-        # save network weights
-        # save pickle s
+    def load(self, path):
         pass
+
+    def save(self, path):
+        if self.is_ac_shared:
+            self.ac.save(path)
+        else:
+            self.actor.save(path)
+            self.critic.save(path)
+

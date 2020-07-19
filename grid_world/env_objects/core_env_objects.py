@@ -7,6 +7,7 @@ from typing import Iterable
 import numpy as np
 
 import grid_world.rendering.draw_functions as draw
+import grid_world.rendering.shapes as render_shapes
 
 
 class See(Enum):  # keep nothing as 0
@@ -50,10 +51,8 @@ def get_action_unit_vector(index):
 
 
 class GridObject():
-    def __init__(self, observed_value, id: str, size=None, shape=Shapes.circle, location: np.ndarray = None, **kwargs):
-        if not isinstance(observed_value, tuple):
-            # always keep rgb, if we render in black and white then we can just take the first value
-            observed_value = (observed_value, observed_value, observed_value,)
+    def __init__(self, id: str, size=None, observed_shape=Shapes.circle, location: np.ndarray = None, **kwargs):
+
         self.observed_value = observed_value
         if not isinstance(self.observed_value[0], int):
             self.observed_value = [int(val * 255.) for val in self.observed_value]
@@ -61,7 +60,7 @@ class GridObject():
         self.id = id
         self.location = location
         self.size = size
-        self.shape = shape
+        self.shape = observed_shape
 
     def __str__(self):
         return '{} {}'.format(self.id, self.__class__)
@@ -77,8 +76,8 @@ class GridObject():
 
 
 class ActionableItem(GridObject):
-    def __init__(self, observed_value, id: str, policy=None, location=None, **kwargs):
-        super(ActionableItem, self).__init__(observed_value=observed_value, id=id, location=location, **kwargs)
+    def __init__(self, observed_shape: render_shapes.Shape, id: str, policy=None, location=None, **kwargs):
+        super(ActionableItem, self).__init__(observed_value=observed_shape, id=id, location=location, **kwargs)
         self.id = id
         self.location = location
         self.policy = policy

@@ -132,3 +132,9 @@ class ACController(BaseController):
             #         reward[key], episode_end[key], new_state[key]
             #     ))
         return loss
+    
+    def load(self):
+        pass
+    
+    def save(self):
+        pass

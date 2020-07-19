@@ -6,6 +6,7 @@ from gym import spaces
 
 import grid_world.env_objects as core
 import grid_world.envs.grid_world as grid_world
+import grid_world.rendering.shapes as render_shapes
 import utils.image_utils as image_utils
 import utils.model_utils as model_utils
 
@@ -29,6 +30,8 @@ class ManeuverSimple(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
+        agent_shape = render_shapes.Circle(radius=4., value=55)
+        self.agents = [core.EnvAgent(id=agent, observed_shape=agent_shape) for agent in self.agent_keys]
         self.n_agents = cfg.get('n_agents', 1)
         self.n_landmarks = cfg.get('n_landmarks', 10)
         self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
@@ -41,8 +44,9 @@ class ManeuverSimple(grid_world.GridEnv):
         # initializations
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
-        self.target = core.GridObject(id='target', observed_value=200)
-        self.avoid = core.GridObject(id='obstacle', observed_value=200)
+        landmark_shape = render_shapes.Diamond(apothem=5., observed_value=200)
+        self.target = core.GridObject(id='target', observed_shape=landmark_shape)
+        self.avoid = core.GridObject(id='obstacle', observed_value=landmark_shape)
 
         # ---------------------------------------------------------------------------
         # episodic initializations

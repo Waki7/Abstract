@@ -60,3 +60,6 @@ class NetworkInterface(nn.Module):
 
     def get_in_features(self):
         return self.in_features
+
+    def save(self, path):
+        torch.save(self.state_dict(), path)

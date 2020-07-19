@@ -3,7 +3,7 @@ from typing import Iterable
 import numpy as np
 from gym import spaces
 
-import grid_world.rendering.draw_functions as drawing
+import grid_world.rendering.shapes as render_shapes
 import utils.image_utils as image_utils
 import utils.model_utils as model_utils
 
@@ -40,16 +40,8 @@ class ObservationRenderer():
         low = 0.
         return spaces.Box(high=high, low=low, shape=(self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
 
-    def draw_circle(self, center: Iterable[float], radius: float = 5., value: float = None):
-        self.drawing = drawing.draw_circle(self.drawing, center=center, radius=radius, value=value)
-        return self.drawing
-
-    def draw_ring(self, center: Iterable[float], radius: float = 5., width: float = 5., value: float = None):
-        self.drawing = drawing.draw_ring(self.drawing, center=center, radius=radius, width=width, value=value)
-        return self.drawing
-
-    def draw_diamond(self, center: Iterable[float], apothem: float = 5., value: float = None):
-        self.drawing = drawing.draw_diamond(self.drawing, center=center, apothem=apothem, value=value)
+    def draw_shape(self, center: Iterable[float], shape: render_shapes.Shape):
+        self.drawing = shape.draw(self.drawing, center=center)
         return self.drawing
 
     def get_frame_at_point(self, center: Iterable[float]):
@@ -78,9 +70,6 @@ class ObservationRenderer():
         frame = image_utils.interpolate(frame, target_size=target_size,
                                         interpolation_method=self.observation_interpolation)
         return frame
-
-    def draw_line(self):
-        raise NotImplementedError
 
     def convert_location_to_pixels(self, location: Iterable[float], origin_bounds: Iterable[Iterable[float]]):
         '''

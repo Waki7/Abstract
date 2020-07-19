@@ -121,11 +121,11 @@ class CoreWorld():
             pixel_location = self.renderer.convert_location_to_pixels(location=agent.location,
                                                                       origin_bounds=self.bounds)
             # self.rendererconvert_distance_to_pixels()
-            self.renderer.draw_circle(center=pixel_location, radius=4., value=agent.observed_value)
+            self.renderer.draw_shape(agent.shape, center=pixel_location)
         for landmark in self.landmark_map.values():
             pixel_location = self.renderer.convert_location_to_pixels(location=landmark.location,
                                                                       origin_bounds=self.bounds)
-            self.renderer.draw_diamond(center=pixel_location, apothem=5., value=landmark.observed_value)
+            self.renderer.draw_shape(agent.shape, center=pixel_location)
         return self.renderer.get_drawing()
 
     def get_random_point(self):
