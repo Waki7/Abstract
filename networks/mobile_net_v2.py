@@ -188,10 +188,10 @@ class MobileNetV2(NetworkInterface):
         weights_to_keep = {}
         first_key = list(new_dict.keys())[0]
         first_weight: torch.Tensor = new_dict[first_key]
-
         assert len(first_weight.shape) == 4 and first_weight.shape[1] == 3, \
             'expecting first weight to be a convolution weight for 3 channels'
         if self.in_channels != first_weight.shape[1]:
+            logging.info('averaging rgb channels to one channel for b/w')
             new_dict[first_key] = first_weight.mean(dim=1, keepdim=True)
 
         key_list = list(new_dict.keys())

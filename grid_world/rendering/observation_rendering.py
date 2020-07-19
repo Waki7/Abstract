@@ -40,7 +40,7 @@ class ObservationRenderer():
         low = 0.
         return spaces.Box(high=high, low=low, shape=(self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
 
-    def draw_shape(self, center: Iterable[float], shape: render_shapes.Shape):
+    def draw_shape(self, shape: render_shapes.Shape, center: Iterable[float]):
         self.drawing = shape.draw(self.drawing, center=center)
         return self.drawing
 

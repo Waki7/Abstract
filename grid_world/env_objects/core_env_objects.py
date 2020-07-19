@@ -17,13 +17,6 @@ class See(Enum):  # keep nothing as 0
     BadForeignAgent = 3
 
 
-class Shapes(Enum):
-    circle = draw.draw_circle
-    diamond = draw.draw_diamond
-    ring = draw.draw_ring
-    square = None
-
-
 class Actions(Enum):
     up = 0
     right = 1
@@ -51,15 +44,9 @@ def get_action_unit_vector(index):
 
 
 class GridObject():
-    def __init__(self, id: str, size=None, observed_shape=Shapes.circle, location: np.ndarray = None, **kwargs):
-
-        self.observed_value = observed_value
-        if not isinstance(self.observed_value[0], int):
-            self.observed_value = [int(val * 255.) for val in self.observed_value]
-            logging.warning('please use 0-255 integer scale for observed values of objects')
+    def __init__(self, id: str, observed_shape: render_shapes.Shape, location: np.ndarray = None, **kwargs):
         self.id = id
         self.location = location
-        self.size = size
         self.shape = observed_shape
 
     def __str__(self):
@@ -77,7 +64,7 @@ class GridObject():
 
 class ActionableItem(GridObject):
     def __init__(self, observed_shape: render_shapes.Shape, id: str, policy=None, location=None, **kwargs):
-        super(ActionableItem, self).__init__(observed_value=observed_shape, id=id, location=location, **kwargs)
+        super(ActionableItem, self).__init__(observed_shape=observed_shape, id=id, location=location, **kwargs)
         self.id = id
         self.location = location
         self.policy = policy

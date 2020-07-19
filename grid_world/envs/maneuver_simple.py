@@ -30,7 +30,7 @@ class ManeuverSimple(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
-        agent_shape = render_shapes.Circle(radius=4., value=55)
+        agent_shape = render_shapes.Circle(radius=4., observed_value=55)
         self.agents = [core.EnvAgent(id=agent, observed_shape=agent_shape) for agent in self.agent_keys]
         self.n_agents = cfg.get('n_agents', 1)
         self.n_landmarks = cfg.get('n_landmarks', 10)
@@ -46,7 +46,7 @@ class ManeuverSimple(grid_world.GridEnv):
         self.object_coordinates = []
         landmark_shape = render_shapes.Diamond(apothem=5., observed_value=200)
         self.target = core.GridObject(id='target', observed_shape=landmark_shape)
-        self.avoid = core.GridObject(id='obstacle', observed_value=landmark_shape)
+        self.avoid = core.GridObject(id='obstacle', observed_shape=landmark_shape)
 
         # ---------------------------------------------------------------------------
         # episodic initializations

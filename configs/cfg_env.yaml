@@ -10,6 +10,7 @@ grid:
     observation_resolution: [99, 99]
     animation_resolution: [99, 99]
     observation_interpolation: TORCH_MAX
+    n_channels: 1
 #
 #  INTER_NEAREST - a nearest-neighbor interpolation
 #  INTER_LINEAR - a bilinear interpolation (used by default)
