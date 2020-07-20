@@ -36,7 +36,7 @@ class ObservationRenderer():
         self.drawing = np.zeros_like(self.drawing)
 
     def get_obs_shape(self):
-        high = 1.
+        high = 255.
         low = 0.
         return spaces.Box(high=high, low=low, shape=(self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
 

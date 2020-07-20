@@ -1,4 +1,4 @@
-from typing import List, Union
+import typing as typ
 
 import gym.spaces as gym_spaces
 import numpy as np
@@ -75,11 +75,24 @@ def spaces_to_shapes(spaces: gym_spaces.Space):
     return shapes
 
 
+def scale_space(state, space):
+    if isinstance(space, gym_spaces.Tuple):
+        return [scale_space(i_state, i_space) for i_state, i_space in zip(state, space.spaces)]
+    if isinstance(space, gym_spaces.Discrete):
+        state = state / space.n
+    elif isinstance(space, gym_spaces.Box):
+        state = (state - space.low) / (space.high - space.low)
+    else:
+        raise NotImplementedError('have not implemented calculation for other spaces yet')
+    return state
+
+
 # ---------------------------------------------------------------------------
 # DATA CONVERSION
 # ---------------------------------------------------------------------------
 
-def batch_env_observations(observation_list: List[np.ndarray], space: gym_spaces.Space):
+def batch_env_observations(observation_list: typ.List[np.ndarray], space: gym_spaces.Space) -> typ.Union[
+    typ.List[torch.Tensor], torch.Tensor]:
     if isinstance(space, gym_spaces.Tuple):
         batched_observation = []
         for obs_idx in range(len(observation_list[0])):
@@ -92,7 +105,7 @@ def batch_env_observations(observation_list: List[np.ndarray], space: gym_spaces
     return batched_observation
 
 
-def list_to_torch_device(env_inputs: Union[List[torch.Tensor], torch.Tensor]):
+def list_to_torch_device(env_inputs: typ.Union[typ.List[torch.Tensor], torch.Tensor]):
     # treating as multimodal input
     env_inputs = [tensor.to(**settings.ARGS) for tensor in env_inputs]
     return env_inputs
@@ -117,7 +130,8 @@ def is_odd(val):
     return val % 2 == 1
 
 
-def scale_vector_to_range(vector: Union[np.ndarray, torch.Tensor], new_min: Union[int, float], new_max: [int, float]):
+def scale_vector_to_range(vector: typ.Union[np.ndarray, torch.Tensor], new_min: typ.Union[int, float],
+                          new_max: [int, float]):
     """Rescale an arrary linearly."""
     minimum, maximum = np.min(vector), np.max(vector)
     m = (new_max - new_min) / (maximum - minimum)

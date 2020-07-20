@@ -1,12 +1,10 @@
 import logging
-from typing import Union
+import typing as typ
 
 import gym
 import numpy as np
-from gym import spaces
 
 import grid_world.env_objects as core
-
 
 class GridEnv(gym.Env):
     def __init__(self, cfg):
@@ -45,19 +43,19 @@ class GridEnv(gym.Env):
         '''
         pass
 
-    def convert_action(self, action: Union[int, np.ndarray]):
+    def convert_action(self, action: typ.Union[int, np.ndarray]):
         '''
         fall back action conversion, u can create an action mapper for more particular behavior
         todo consider how design this vs action mapper, which is better, or both is good?
         :param action:
         :return:
         '''
-        if isinstance(self.action_space, spaces.Discrete):
+        if isinstance(self.action_space, gym.spaces.Discrete):
             return core.get_action_unit_vector(action)
-        if isinstance(self.action_space, spaces.MultiDiscrete):
+        if isinstance(self.action_space, gym.spaces.MultiDiscrete):
             # todo zero center, assuming the action will be 0 (backward), 1 (stay), 2 (forward) for each component
             raise NotImplementedError('no implementation for MultiDiscrete')
-        if isinstance(self.action_space, spaces.Box):
+        if isinstance(self.action_space, gym.spaces.Box):
             raise NotImplementedError('no implementation for continuous actions')
         raise NotImplementedError
 
@@ -67,13 +65,13 @@ class GridEnv(gym.Env):
     def render(self):
         raise NotImplementedError
 
-    def get_spaces(self):
+    def get_spaces(self) -> typ.Tuple[gym.Space, gym.Space]:
         return self.observation_space, self.action_space
 
-    def get_obs_space(self):
+    def get_obs_space(self) -> gym.Space:
         raise NotImplementedError
 
-    def get_action_space(self):
+    def get_action_space(self) -> gym.Space:
         raise NotImplementedError
 
     def log_summary(self):

@@ -1,8 +1,8 @@
 import logging
-from typing import Union, Dict, List
+import typing as typ
 
 import numpy as np
-from gym import spaces
+import gym
 
 import grid_world.env_objects as core
 import grid_world.envs.grid_world as grid_world
@@ -81,19 +81,19 @@ class ManeuverSimple(grid_world.GridEnv):
         obs_spaces = []
         world_view_spaces = self.world.get_world_obs_space().spaces
         obs_spaces.extend(world_view_spaces)
-        return spaces.Tuple(obs_spaces)
+        return gym.spaces.Tuple(obs_spaces)
 
     def get_action_space(self):
-        action_spaces: List[spaces.Space] = []
-        action_spaces.append(spaces.Discrete(len(core.core_objects.DISCRETE_ACTIONS)))
+        action_spaces: typ.List[gym.spaces.Space] = []
+        action_spaces.append(gym.spaces.Discrete(len(core.core_objects.DISCRETE_ACTIONS)))
         logging.info('total of {} actions available'.format(action_spaces[-1].n))
-        action_space = spaces.Tuple(action_spaces)
+        action_space = gym.spaces.Tuple(action_spaces)
         return action_space
 
     def add_agent(self):
         pass
 
-    def step(self, actions: Union[Dict, np.long]):
+    def step(self, actions: typ.Union[typ.Dict, np.long]):
         """
         Args:
             actions (Dict or np.long): an action done by the agent, encoded into its channel,
@@ -146,7 +146,6 @@ class ManeuverSimple(grid_world.GridEnv):
         for agent in self.agents:
             features = []
             map_obs = self.world.get_agent_pov(agent)
-            map_obs = model_utils.scale_vector_to_range(vector=map_obs, new_max=1.0, new_min=0.0)
             features.append(map_obs)
             obs_map[agent.id] = features
             self.agent_render_frames[agent.id].append(map_obs)

@@ -2,8 +2,12 @@ import logging
 
 import yaml
 
-import grid_world
+
+import grid_world.env_factory as env_factory
+import grid_world.encoder_trainers as enc_trainers
+from networks.net_factory import get_network
 from agent_controllers.factory import CONTROLLER_REGISTERY
+import utils.model_utils as model_utils
 
 with open('./configs/cfg_execution.yaml') as f:
     CFG_EXECUTION = yaml.load(f, Loader=yaml.FullLoader)
@@ -18,12 +22,15 @@ with open('./configs/cfg_network.yaml') as f:
     CFG_NETWORK = yaml.load(f, Loader=yaml.FullLoader)
 
 
-def train(algorithm, env_namespace):
+def train_state_encoder(network, env_namespace):
     env_cfg = CFG_ENV[env_namespace]
-    algorithm_cfg = CFG_AGENT[algorithm]
-    trainer = CONTROLLER_REGISTERY[algorithm_cfg['controller_name']](env_cfg, algorithm_cfg)
-    trainer.teach_agents(CFG_EXECUTION['training'])
 
+    trainer: enc_trainers.StateEncodingProtocol = env_factory.get_state_trainer(env_cfg)
+    obs_space = trainer.get_in_spaces()
+    out_space = trainer.get_out_spaces()
+    in_shapes = model_utils.spaces_to_shapes(obs_space)
+    out_shapes = model_utils.spaces_to_shapes(out_space)
+    get_network()
 
 # def func2(a, b, c=1):
 #     print('funct2, {}'.format(a))
@@ -42,12 +49,11 @@ def train(algorithm, env_namespace):
 def main():
     # func('a', ('met', 'args'), c='keyword')
     # print(exit(9))
-    a = grid_world
     logging.basicConfig(level=
                         # logging.INFO
                         logging.DEBUG
                         )
-    train('a2c', 'grid')
+    train_state_encoder('a2c', 'grid')
 
 
 if __name__ == "__main__":

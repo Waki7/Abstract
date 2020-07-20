@@ -112,6 +112,7 @@ class BaseController:  # currently implemented as (i)AC
 
         if self.n_agents == 1:
             batched_obs = model_utils.batch_env_observations(obs, self.env.observation_space)
+            batched_obs = model_utils.scale_space(state=batched_obs, space=self.env.observation_space)
             batched_obs = model_utils.list_to_torch_device(batched_obs)
             return batched_obs
         else:

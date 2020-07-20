@@ -1,12 +1,12 @@
 import logging
 import os
-from typing import Dict
+import typing as typ
 
 import torch
 
 import networks.network_interface as base
 
-NETWORK_REGISTERY: Dict[str, base.NetworkInterface] = {}
+NETWORK_REGISTERY: typ.Dict[str, base.NetworkInterface] = {}
 IMAGE_ENCODER = {}
 
 
