@@ -15,22 +15,27 @@ from agent_controllers.factory import register_controller
 class ACController(BaseController):
     def __init__(self, env_cfg, cfg):
         self.cfg = {}
-        self.ac_name = exp_utils.copy_config_param(src_cfg=cfg, target_cfg=self.cfg, param_name='ac_network')
-        self.actor_name = exp_utils.copy_config_param(src_cfg=cfg, target_cfg=self.cfg, param_name='actor_network')
-        self.critic_name = exp_utils.copy_config_param(src_cfg=cfg, target_cfg=self.cfg, param_name='critic_network')
-        self.image_encoder_name = exp_utils.copy_config_param(src_cfg=cfg, target_cfg=self.cfg,
-                                                              param_name='image_encoder_network', fallback_value=None)
-
         self.ac_cfg = exp_utils.copy_config_param(src_cfg=cfg, target_cfg=self.cfg, param_name='ac',
                                                   fallback_value=cfg['actor'])
-        self.share_parameters = self.ac_name is not None
+        self.share_parameters = 'critic' not in cfg
+        print(self.share_parameters)
+        print(exit(9))
         self.actor_cfg = self.ac_cfg
         self.critic_cfg = exp_utils.copy_config_param(src_cfg=cfg, target_cfg=self.cfg, param_name='critic',
                                                       fallback_value=self.ac_cfg)
         self.image_encoder_cfg = exp_utils.copy_config_param(src_cfg=cfg, target_cfg=self.cfg,
                                                              param_name='image_encoder',
                                                              fallback_value={})
+
+        self.ac_name = self.ac_cfg.get('name', '')
+        self.actor_name = self.actor_cfg.get('name', '')
+        self.critic_name = self.critic_cfg.get('name', '')
+
+        self.image_encoder_name = self.image_encoder_cfg.get('name', '')
+
         self.train_image_encoder = self.image_encoder_cfg.get('train')
+
+
         self.image_encoder = None
 
         self.image_feature_idxs = []
@@ -102,6 +107,7 @@ class ACController(BaseController):
             image_obs = model_utils.get_idxs_of_list(list=batched_obs, idxs=self.image_feature_idxs)[0]
             if self.train_image_encoder:
                 image_embedding = self.image_encoder.forward(image_obs)
+
             else:
                 with torch.no_grad():
                     image_embedding = self.image_encoder.forward(image_obs).detach()

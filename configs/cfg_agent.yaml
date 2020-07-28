@@ -4,11 +4,11 @@ a2c:
   share_parameters: ['actor_network', 'critic_network']
   discount_factor: .95
   entropy_coef: .01
-  n_threads: 30
+  n_threads: 15
   td_step: -1
 
-  image_encoder_network: MobileNetV2 # null, MobileNetV2,
   image_encoder:
+    name: MobileNetV2
     lr: .001
     gradient_clip: 2.5
     train: true # do back prop on encoder

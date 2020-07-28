@@ -76,7 +76,7 @@ class BaseController:  # currently implemented as (i)AC
                              range(n_threads)]) if is_batch_env else self.env
         for episode in range(n_episodes):
             step = 0
-            states = env.reset()
+            states = self.reset_env(env, is_batch_env)
 
             episode_lengths = [-1] * n_threads
             while True:
@@ -106,10 +106,7 @@ class BaseController:  # currently implemented as (i)AC
             self.experiment_logger.add_agent_scalars('batch_episode_length', data=np.mean(episode_lengths),
                                                      step=episode, log=True)
 
-    def convert_obs_for_agent(self, obs, is_batch_env):
-        if not is_batch_env:  # agents will always expect a batch dimension, so make batch of one
-            obs = [obs, ]
-
+    def convert_obs_for_agent(self, obs):
         if self.n_agents == 1:
             batched_obs = model_utils.batch_env_observations(obs, self.env.observation_space)
             batched_obs = model_utils.scale_space(state=batched_obs, space=self.env.observation_space)
@@ -133,6 +130,11 @@ class BaseController:  # currently implemented as (i)AC
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')
 
+    def reset_env(self, env, is_batch_env: Union[SubprocVecEnv, gym.Env]):
+        if not is_batch_env:
+            return [env.reset()]
+        return env.reset()
+
     def step_env(self, env, actions, is_batch_env):
         states, rewards, episode_ends, info = env.step(actions)
         if self.n_agents > 1:
@@ -146,7 +148,7 @@ class BaseController:  # currently implemented as (i)AC
         return actions
 
     def step_agents(self, obs: Union[List[np.ndarray], Dict], is_batch_env):
-        batched_obs = self.convert_obs_for_agent(obs, is_batch_env)
+        batched_obs = self.convert_obs_for_agent(obs)
         if self.n_agents == 1:
             agent = self.agents[0]
             actions = self.step_agent(agent, batched_obs)

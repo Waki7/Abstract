@@ -6,7 +6,6 @@ from typing import Iterable
 
 import numpy as np
 
-import grid_world.rendering.draw_functions as draw
 import grid_world.rendering.shapes as render_shapes
 
 
