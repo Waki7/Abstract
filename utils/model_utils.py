@@ -62,17 +62,16 @@ def sum_multi_modal_shapes(shapes):
     return total_features
 
 
-def spaces_to_shapes(spaces: gym_spaces.Space):
-    shapes = []
-    for space in spaces:
-        if isinstance(space, gym_spaces.Discrete):
-            shapes.append((space.n,))
-        elif isinstance(space, gym_spaces.Box):
-            shape = space.shape
-            shapes.append(shape)
-        else:
-            raise NotImplementedError('have not implemented calculation for other spaces yet')
-    return shapes
+def spaces_to_shapes(space: gym_spaces.Space) -> typ.Union[typ.Tuple, typ.List[typ.Tuple]]:
+    if isinstance(space, gym_spaces.Tuple):
+        shapes = [spaces_to_shapes(spce) for spce in space]
+        return shapes
+    elif isinstance(space, gym_spaces.Discrete):
+        return space.n,
+    elif isinstance(space, gym_spaces.Box):
+        return space.shape
+    else:
+        raise NotImplementedError('have not implemented calculation for other spaces yet')
 
 
 def scale_space(state, space):

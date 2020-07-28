@@ -1,14 +1,13 @@
 import logging
 import typing as typ
 
-import numpy as np
 import gym
+import numpy as np
 
 import grid_world.env_objects as core
 import grid_world.envs.grid_world as grid_world
 import grid_world.rendering.shapes as render_shapes
 import utils.image_utils as image_utils
-import utils.model_utils as model_utils
 
 
 class ManeuverSimple(grid_world.GridEnv):
@@ -33,9 +32,9 @@ class ManeuverSimple(grid_world.GridEnv):
         agent_shape = render_shapes.Circle(radius=4., observed_value=55)
         self.agents = [core.EnvAgent(id=agent, observed_shape=agent_shape) for agent in self.agent_keys]
         self.n_agents = cfg.get('n_agents', 1)
-        self.n_landmarks = cfg.get('n_landmarks', 10)
-        self.n_foreign_friendlies = cfg.get('foreign_friendlies', [])
-        self.n_foreign_enemies = cfg.get('foreign_enemies', [])
+        self.n_landmarks = cfg.get('n_landmarks', 2)
+        self.n_foreign_friendlies = cfg.get('n_foreign_friendlies', 0)
+        self.n_foreign_enemies = cfg.get('n_foreign_enemies', 0)
         self.agent_fov = cfg.get('agent_fov', 0.15)
         self.animation_resolution = cfg.get('animation_resolution', (100, 100))
         self.render_interpolation = cfg.get('render_interpolation')
