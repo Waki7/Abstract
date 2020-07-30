@@ -6,12 +6,12 @@ from typing import Iterable, Union
 
 import gym
 import numpy as np
-import yaml
 from array2gif import write_gif
 from tensorboardX import SummaryWriter
 
 import settings
 import utils.env_wrappers as env_wrappers
+import utils.storage_utils as storage_utils
 
 
 def clean_experiment_folders():
@@ -70,21 +70,20 @@ class ExperimentLogger():
             # env.unwrapped.spec.id
 
         # ----------------------------------------------------------------
-        # create empty notes file, directory for weights, models, and animations
+        # create empty notes file, directory for trained_weights, models, and animations
         # ----------------------------------------------------------------
         notes_file = '{}/notes.txt'.format(self.results_path)
         open(notes_file, 'a').close()
-        [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in ['weights', 'models', 'animations']]
+        [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in ['trained_weights', 'models', 'animations']]
 
         # ----------------------------------------------------------------
         # store any passed in configs
         # ----------------------------------------------------------------
         if agent_cfg is not None:
-            with open('{}/agent.yaml'.format(self.results_path), 'w') as file:
-                yaml.dump(agent_cfg, file)
+            storage_utils.save_config(agent_cfg, '{}/agent.yaml'.format(self.results_path))
+
         if env_cfg is not None:
-            with open('{}/env.yaml'.format(self.results_path), 'w') as file:
-                yaml.dump(env_cfg, file)
+            storage_utils.save_config(env_cfg, '{}/env.yaml'.format(self.results_path))
 
         self.reset_buffers(True)
 

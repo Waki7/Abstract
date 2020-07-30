@@ -1,8 +1,11 @@
+import os
+
 import torch
 import torch.nn as nn
 
 import settings
 import utils.model_utils as model_utils
+import utils.storage_utils as storage_utils
 
 
 class NetworkInterface(nn.Module):
@@ -14,11 +17,13 @@ class NetworkInterface(nn.Module):
         self.out_shapes = out_shapes
         self.in_features = model_utils.sum_multi_modal_shapes(in_shapes)
         self.out_features = model_utils.sum_multi_modal_shapes(out_shapes)
-        self.weights_path = cfg.get('weights_path')
         self.pretrained = cfg.get('pretrained')
         self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
         self.extra_parameters = nn.ParameterList()
         self.updates_locked = False
+
+        self.WEIGHTS_FILENAME = 'model.pth'
+        self.CONFIG_FILENAME = 'config.yaml'
 
         self.optimizer = None  # call create_optimizer at end of your implementation's init
 
@@ -61,5 +66,18 @@ class NetworkInterface(nn.Module):
     def get_in_features(self):
         return self.in_features
 
-    def save(self, path):
-        torch.save(self.state_dict(), path)
+    def get_weights_filename(self, model_folder):
+        return os.path.join(model_folder, self.WEIGHTS_FILENAME)
+
+    def get_config_filename(self, model_folder):
+        return os.path.join(model_folder, self.CONFIG_FILENAME)
+
+    def store_weights(self, model_folder):
+        torch.save(self.state_dict(), self.get_weights_filename(model_folder))
+
+    def store_config(self, model_folder):
+        storage_utils.save_config(self.cfg, self.get_config_filename(model_folder))
+
+    def save(self, model_folder):
+        self.store_config(model_folder)
+        self.store_config(model_folder)
