@@ -3,7 +3,7 @@ image_encoder:
     lr: .001
     gradient_clip: 2.5
     train: true # do back prop on encoder
-    weights_path: 'networks/weights/mobilenet_v2-b0353104.pth' # ''
+    model_folder: 'networks/trained_weights/MobileNetV2/original/' # ''
     #      [1, 16, 1, 1],  # -8
     #      [6, 24, 2, 2],  # -7
     #      [6, 32, 3, 2],  # -6
@@ -13,4 +13,4 @@ image_encoder:
     #      [6, 320, 1, 1],  # -2
     last_block: -7 # negative indexing from -8 to -1
     max_block_repeats: 4 # max number of repeats of residual blocks
-    pretrained: true # load pretrained weights or not
+    pretrained: true # load pretrained trained_weights or not

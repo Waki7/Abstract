@@ -48,30 +48,48 @@ def random_choice_prob_batch(n: int, batch_ps: np.ndarray) -> np.ndarray:
 # ---------------------------------------------------------------------------
 # SPACES AND SHAPES
 # ---------------------------------------------------------------------------
+def get_activation_for_space(space: gym_spaces.Space, in_features):
+    out_features = sum_multi_modal_shapes(space_to_shapes(space))
+    if isinstance(space, gym_spaces.Tuple):
+        assert all([isinstance(space, type(space[0])) for space in space])
+        space = space.spaces[0]
+    if isinstance(space, gym_spaces.Discrete):
+        return torch.nn.Sequential(
+            torch.nn.Linear(in_features=in_features, out_features=out_features),
+            torch.nn.Softmax()
+        )
+    if isinstance(space, gym_spaces.Box):
+        return torch.nn.Linear(in_features=in_features, out_features=out_features)
+
+
 def sum_multi_modal_shapes(shapes):
     total_features = 0
     for shape in shapes:
-        if isinstance(shapes, int):
+        if isinstance(shape, int):
             total_features += shape
         elif isinstance(shape, float):
             total_features += int(shape)
         elif isinstance(shape, tuple) or isinstance(shape, np.ndarray) or isinstance(shape, list):
             total_features += np.prod(shape)
         else:
-            raise NotImplementedError('type of shape is not supported, feel free to add it.')
+            raise NotImplementedError('type of shape {} is not supported, feel free to add it.'.format(type(shape)))
     return total_features
 
 
-def spaces_to_shapes(space: gym_spaces.Space) -> typ.Union[typ.Tuple, typ.List[typ.Tuple]]:
+def space_to_shapes(space: gym_spaces.Space) -> typ.Union[typ.Tuple, typ.List[typ.Tuple]]:
+    def space_to_shape(space):
+        if isinstance(space, gym_spaces.Discrete):
+            return space.n,
+        elif isinstance(space, gym_spaces.Box):
+            return space.shape
+        else:
+            raise NotImplementedError('have not implemented calculation for other spaces yet')
+
     if isinstance(space, gym_spaces.Tuple):
-        shapes = [spaces_to_shapes(spce) for spce in space]
+        shapes = [space_to_shape(spce) for spce in space.spaces]
         return shapes
-    elif isinstance(space, gym_spaces.Discrete):
-        return space.n,
-    elif isinstance(space, gym_spaces.Box):
-        return space.shape
     else:
-        raise NotImplementedError('have not implemented calculation for other spaces yet')
+        return [space_to_shape(space)]
 
 
 def scale_space(state, space):

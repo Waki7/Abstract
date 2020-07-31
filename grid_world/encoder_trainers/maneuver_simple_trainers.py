@@ -5,7 +5,8 @@ import grid_world.encoder_trainers as enc_trainers
 import grid_world.envs as envs
 
 import utils.model_utils as model_utils
-
+import torch
+import torch.nn.functional as F
 
 class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
     def __init__(self, cfg):
@@ -29,6 +30,9 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         return gym.spaces.Box(low=np.min(lower_bounds), high=np.max(upper_bounds), shape=(n_total_objects, n_dim))
 
+    def get_classifier(self):
+        pass
+
     def generate_batch(self):
         inputs = []
         for i in range(0, 100):
@@ -40,8 +44,16 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
         return batched_obs
 
     def train(self, network):
+        network_features = network.get_out_features()
+        out_space = self.get_out_spaces()
+
+        classifier = model_utils.get_activation_for_space(out_space, in_features=network_features)
+        network.pretrain(classifier)
+
         for i in range(0, 10):
             new_batch = self.generate_batch()
             out = network.forward(new_batch[0])
+            critic_loss = (F.smooth_l1_loss(input=out, target=discounted_rewards_vec,
+                                            reduction='none') * zero_done_mask).mean()  # .5 * advantage.pow(2).mean()
             print(out.shape)
             print(exit(9))

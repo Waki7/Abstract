@@ -6,6 +6,7 @@ import torch.nn as nn
 import settings
 import utils.model_utils as model_utils
 import utils.storage_utils as storage_utils
+from networks.network_trainer import NetworkTrainer
 
 
 class NetworkInterface(nn.Module):
@@ -18,41 +19,16 @@ class NetworkInterface(nn.Module):
         self.in_features = model_utils.sum_multi_modal_shapes(in_shapes)
         self.out_features = model_utils.sum_multi_modal_shapes(out_shapes)
         self.pretrained = cfg.get('pretrained')
-        self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
-        self.extra_parameters = nn.ParameterList()
-        self.updates_locked = False
 
-        self.WEIGHTS_FILENAME = 'model.pth'
         self.CONFIG_FILENAME = 'config.yaml'
+        self.WEIGHTS_FILENAME = 'model.pth'
 
-        self.optimizer = None  # call create_optimizer at end of your implementation's init
+        self.trainer = NetworkTrainer(self.cfg)
+        self.temp_classifier = nn.Identity()
 
     def create_optimizer(self):
-        lr = self.cfg.get('lr', settings.defaults.LR)
-        optimizer = self.cfg.get('optimizer', settings.defaults.OPTIMIZER)
-        # floating point precision, so need to set epislon
-        self.optimizer = getattr(torch.optim, optimizer)(self.parameters(), lr=lr, eps=1.e-4)
-        self.to(settings.DEVICE)
-        self.half()  # convert to half precision
-        for layer in self.modules():
-            if isinstance(layer, nn.BatchNorm2d):
-                layer.float()
-
-    def add_parameters(self, parameters):
-        self.extra_parameters.extend(parameters)
-        self.create_optimizer()  # recreate optimizer due to neew parameters
-
-    def update_parameters(self, override_lock=False):
-        if (not self.updates_locked) or override_lock:
-            torch.nn.utils.clip_grad_value_(self.parameters(), self.gradient_clip)
-            self.optimizer.step()
-            self.optimizer.zero_grad()
-
-    def lock_updates(self):
-        self.updates_locked = True
-
-    def unlock_updates(self):
-        self.updates_locked = False
+        self.trainer.create_optimizer(self)
+        return self.trainer
 
     def get_in_shapes(self):
         return self.in_shapes
@@ -66,18 +42,32 @@ class NetworkInterface(nn.Module):
     def get_in_features(self):
         return self.in_features
 
-    def get_weights_filename(self, model_folder):
-        return os.path.join(model_folder, self.WEIGHTS_FILENAME)
-
     def get_config_filename(self, model_folder):
         return os.path.join(model_folder, self.CONFIG_FILENAME)
-
-    def store_weights(self, model_folder):
-        torch.save(self.state_dict(), self.get_weights_filename(model_folder))
 
     def store_config(self, model_folder):
         storage_utils.save_config(self.cfg, self.get_config_filename(model_folder))
 
+    def load_config(self, model_folder):
+        return storage_utils.load_config(self.get_config_filename(model_folder))
+
+    def get_weights_filename(self, model_folder):
+        return os.path.join(model_folder, self.WEIGHTS_FILENAME)
+
+    def store_weights(self, model_folder):
+        torch.save(self.state_dict(), self.get_weights_filename(model_folder))
+
+    def load(self, model_folder):
+        self.cfg = self.load_config(model_folder)
+        self.load_state_dict(torch.load(self.get_weights_filename(model_folder), map_location=settings.DEVICE))
+
     def save(self, model_folder):
+        self.temp_classifier = nn.Identity()
+        self.store_optimizer(model_folder)
+        self.store_weights(model_folder)
         self.store_config(model_folder)
-        self.store_config(model_folder)
+
+    def pretrain(self, layer):
+        self.temp_classifier = layer
+        self.trainer.add_layer(layer)
+

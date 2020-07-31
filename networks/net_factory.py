@@ -15,21 +15,23 @@ def register_network(network):
     return network
 
 
-def try_load_weights(model, cfg):
+def try_load_weights(model: base.NetworkInterface, cfg):
     if cfg.get('pretrained', False):
-        if hasattr(model, 'weights_path'):
-            weights_path = model.weights_path
-            if os.path.exists(model.weights_path):
+        if 'model_folder' in cfg:
+            model_folder = cfg['model_folder']
+            if os.path.exists(model_folder):
                 if hasattr(model, 'load'):  # override if model has some special loading functionality
-                    model.load(model.weights_path)
+                    model.load(model_folder)
                 else:
+                    logging.warning('using torch load instead of classes implementation')
+                    weights_path = model.get_weights_filename(model_folder)
                     state_dict = torch.load(weights_path)
                     model.load_state_dict(state_dict)
                 return True
             else:
-                logging.error('path {} could not be found, cannot load pretrained weights'.format(weights_path))
+                logging.error('path {} could not be found, cannot load pretrained trained_weights'.format(model_folder))
         else:
-            logging.warning('path was not specified by model, cannot load pretrained weights')
+            logging.warning('path was not specified by config, cannot load pretrained trained_weights')
     return False
 
 

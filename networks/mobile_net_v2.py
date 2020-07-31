@@ -1,8 +1,10 @@
 import logging
+import os
 
 import torch
 from torch import nn
 
+import utils.storage_utils as storage_utils
 from networks.net_factory import register_network
 from networks.network_interface import NetworkInterface
 
@@ -75,10 +77,10 @@ class MobileNetV2(NetworkInterface):
         lr: .0005
         gradient_clip: 2.5
         train: false # do back prop on encoder
-        weights_path: 'networks/weights/mobilenet_v2-b0353104.pth'
+        weights_path: 'networks/trained_weights/model.pth'
         last_block: -6 # negative indexing from -8 to -1
         max_block_repeats: 1 # max number of repeats of residual blocks
-        pretrained: true # load pretrained weights or not
+        pretrained: true # load pretrained trained_weights or not
 
     '''
 
@@ -105,7 +107,7 @@ class MobileNetV2(NetworkInterface):
         width_mult = cfg.get('width_mult', 1.0)
         round_nearest = cfg.get('round_nearest', 8)
 
-        # will initialize with this because that's what the pretrained weights use,
+        # will initialize with this because that's what the pretrained trained_weights use,
         # will be pruned to match the configured inverted_residual_setting
         inverted_residual_setting = [
             # t, c, n, s
@@ -143,7 +145,7 @@ class MobileNetV2(NetworkInterface):
                     logging.info('using residual block [{}, {}, {}, {}]'.format(t, c, n, s))
                     features.append(block(input_channel, output_channel, stride, expand_ratio=t))
                     input_channel = output_channel
-
+        logging.info('\n\n')
         # building last several layers
         if self.last_block == -1:
             features.append(ConvBNReLU(input_channel, last_channel, kernel_size=1))
@@ -175,15 +177,19 @@ class MobileNetV2(NetworkInterface):
                 nn.init.normal_(m.weight, 0, 0.01)
                 nn.init.zeros_(m.bias)
 
-        self.create_optimizer()
-
     def forward(self, x):
         x = self.features(x)
         x = x.mean([2, 3])
-        # x = self.classifier(x)
         return x
 
-    def load(self, weights_path):
+    def load(self, model_folder):
+        config_path = self.get_config_filename(model_folder)
+        if os.path.exists(config_path):
+            cfg = storage_utils.load_config(config_path)
+            if self.last_block > cfg['last_block'] or self.max_block_repeats > cfg['max_block_repeats']:
+                logging.warning('you are loading weights which have not been pretrained with the rest of the model')
+
+        weights_path = self.get_weights_filename(model_folder)
         new_dict: dict = torch.load(weights_path)
         weights_to_keep = {}
         first_key = list(new_dict.keys())[0]
