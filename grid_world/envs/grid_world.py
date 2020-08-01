@@ -6,6 +6,7 @@ import numpy as np
 
 import grid_world.env_objects as core
 
+
 class GridEnv(gym.Env):
     def __init__(self, cfg):
         '''
@@ -23,8 +24,8 @@ class GridEnv(gym.Env):
         # initializing agents according to arbitrary naming scheme
         # ---------------------------------------------------------------------------
         self.world = core.CoreWorld(cfg)
-        self.action_space = self.get_action_space()
-        self.observation_space = self.get_obs_space()
+        self.action_space = self.calc_action_space()
+        self.observation_space = self.calc_observation_space()
 
         # ---------------------------------------------------------------------------
         # episodic initializations
@@ -68,10 +69,16 @@ class GridEnv(gym.Env):
     def get_spaces(self) -> typ.Tuple[gym.Space, gym.Space]:
         return self.observation_space, self.action_space
 
-    def get_obs_space(self) -> gym.Space:
+    def get_observation_space(self):
+        return self.observation_space
+
+    def get_action_space(self):
+        return self.action_space
+
+    def calc_observation_space(self) -> gym.Space:
         raise NotImplementedError
 
-    def get_action_space(self) -> gym.Space:
+    def calc_action_space(self) -> gym.Space:
         raise NotImplementedError
 
     def log_summary(self):

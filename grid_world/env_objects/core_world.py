@@ -57,8 +57,11 @@ class CoreWorld():
     def reset_world(self):
         self.renderer.reset_drawing()
 
-    def add_agent(self):
-        pass
+    def get_object_coordinates(self):
+        # ORDER MATTERS HERE, CONSISTENT WITH SPAWNING ORDER
+        agent_coordinates = [agent.location for agent in self.agent_map.values()]
+        landmark_coordinates = [landmark.location for landmark in self.landmark_map.values()]
+        return agent_coordinates + landmark_coordinates
 
     def spawn_agents(self, agents: List[core_agents.EnvAgent], locations: List[Iterable[int]]):
         [self.spawn_agent(agent, location) for agent, location in zip(agents, locations)]

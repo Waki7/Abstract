@@ -58,13 +58,13 @@ class ManeuverMulti(grid_world.GridEnv):
         agent_obss = self.calc_agent_obs()
         return agent_obss
 
-    def get_obs_space(self):
+    def calc_observation_space(self):
         obs_spaces = []
         world_view_spaces = self.world.get_world_obs_space().spaces
         obs_spaces.extend(world_view_spaces)
         return spaces.Tuple(obs_spaces)
 
-    def get_action_space(self):
+    def calc_action_space(self):
         action_spaces: List[spaces.Space] = []
         action_spaces.append(spaces.Discrete(len(core.core_objects.DISCRETE_ACTIONS)))
         logging.info('total of {} actions available'.format(action_spaces[-1].n))

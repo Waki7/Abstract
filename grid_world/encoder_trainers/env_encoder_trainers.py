@@ -12,7 +12,7 @@ class EnvEncoderTrainer:
     def get_in_spaces(self) -> gym.Space:
         raise NotImplementedError
 
-    def get_out_spaces(self) -> gym.Space:
+    def calc_out_space(self) -> gym.Space:
         raise NotImplementedError
 
     def generate_batch(self):
