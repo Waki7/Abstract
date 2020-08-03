@@ -1,3 +1,7 @@
-class Agent():
-    def __init__(self):
-        pass
+class Agent:
+
+    def load(self, path):
+        raise NotImplementedError
+
+    def save(self, path):
+        raise NotImplementedError

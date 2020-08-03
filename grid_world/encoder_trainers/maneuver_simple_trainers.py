@@ -39,7 +39,7 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         return gym.spaces.Box(low=np.min(lower_bounds), high=np.max(upper_bounds), shape=(n_total_objects, n_dim))
 
-    def generate_batch(self):
+    def generate_batch(self) -> torch.Tensor:
         inputs = []
         y_trues = []
         for i in range(0, 100):
@@ -49,10 +49,11 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
             y_trues.append(coordinates)
 
         batched_obs = model_utils.batch_env_observations(inputs, self.in_space)
-        batched_obs = model_utils.scale_space(state=batched_obs, space=self.env.observation_space)
+        batched_obs = model_utils.scale_space(state=batched_obs, space=self.in_space)
         batched_obs = model_utils.list_to_torch_device(batched_obs)[0]
 
         y_trues = np.stack(y_trues)
+        y_trues = model_utils.scale_space(state=y_trues, space=self.out_space)
         y_trues = torch.tensor(y_trues).to(**settings.ARGS)
 
         return batched_obs, y_trues
@@ -63,13 +64,13 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         net_trainer = network.create_optimizer()
 
-        classifier = torch.nn.Linear(in_features=network.get_out_features(), out_features=self.y_shape)
+        classifier = \
+            torch.nn.Sequential(torch.nn.Linear(in_features=network.get_out_features(), out_features=self.y_shape))
         network.pretrain(classifier)
 
-        for i in range(0, 10):
+        for i in range(0, 1000):
             new_batch, y_true = self.generate_batch()
             out = classifier.forward(network.forward(new_batch))
-
             critic_loss = F.smooth_l1_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
             critic_loss.backward()
             net_trainer.update_parameters()

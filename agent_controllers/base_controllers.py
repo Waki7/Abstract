@@ -106,7 +106,7 @@ class BaseController:  # currently implemented as (i)AC
             self.experiment_logger.add_agent_scalars('batch_episode_length', data=np.mean(episode_lengths),
                                                      step=episode, log=True)
 
-    def convert_obs_for_agent(self, obs):
+    def convert_obs_for_agent(self, obs: Union[List[np.ndarray], Dict]):
         if self.n_agents == 1:
             batched_obs = model_utils.batch_env_observations(obs, self.env.observation_space)
             batched_obs = model_utils.scale_space(state=batched_obs, space=self.env.observation_space)

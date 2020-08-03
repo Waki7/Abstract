@@ -4,6 +4,7 @@ import numpy as np
 
 import utils.experiment_utils as exp_utils
 import utils.model_utils as model_utils
+from agent_algorithms.base_agents import Agent
 from agent_algorithms.factory import register_agent
 from networks.basic_fc_networks import *
 
@@ -16,18 +17,20 @@ args = {'device': device, 'dtype': type}
 
 
 @register_agent
-class A2CAgent():
+class A2CAgent(Agent):
     # this agent can work with environments x, y, z (life and gym envs)
     # try to make the encoding part separate
     def __init__(self, is_episodic, cfg, actor, critic=None):
         self.is_ac_shared = critic is None
         if self.is_ac_shared:
-            self.ac: BaseFCNetwork = actor
+            self.ac: NetworkInterface = actor
             self.n_actions = self.ac.n_actions
+            self.network_trainers = [self.ac.create_optimizer()]
         else:
-            self.actor: BaseFCNetwork = actor
-            self.critic: BaseFCNetwork = critic
+            self.actor: NetworkInterface = actor
+            self.critic: NetworkInterface = critic
             self.n_actions = self.actor.n_actions
+            self.network_trainers = [self.actor.create_optimizer(), self.critic.create_optimizer()]
 
         ##########################################################################################
         # set cfg parameters
@@ -118,11 +121,8 @@ class A2CAgent():
         return ret_loss
 
     def update_networks(self):
-        if self.is_ac_shared:
-            self.ac.update_parameters()
-        else:
-            self.actor.update_parameters()
-            self.critic.update_parameters()
+        for network_trainer in self.network_trainers:
+            network_trainer.update_parameters()
 
     def reset_buffers(self):
         self.batch_actions = []
@@ -154,4 +154,3 @@ class A2CAgent():
         else:
             self.actor.save(path)
             self.critic.save(path)
-

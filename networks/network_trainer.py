@@ -20,7 +20,7 @@ class NetworkTrainer():
         lr = self.cfg.get('lr', settings.defaults.LR)
         optimizer = self.cfg.get('optimizer', settings.defaults.OPTIMIZER)
         # floating point precision, so need to set epislon
-        return getattr(torch.optim, optimizer)(parameters, lr=lr)
+        return getattr(torch.optim, optimizer)(parameters, lr=lr, eps=1.e-4)
 
     def add_network(self, network: nn.Module):
         self.params = list(network.parameters())

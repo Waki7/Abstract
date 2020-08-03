@@ -4,7 +4,7 @@ import numpy as np
 import torch
 
 LOG_DIR = 'logs'
-ENCODER_WEIGHTS = 'networks/weights'
+ENCODER_WEIGHTS = 'networks/trained_weights'
 grads = {}
 # torch.autograd.set_detect_anomaly(True)
 if torch.cuda.is_available():
@@ -24,6 +24,16 @@ SEED = 23
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 random.seed(SEED)
+
+
+def device_init(module: torch.nn.Module):
+    module.to(DEVICE)
+    if DTYPE_X == torch.half:
+        module.half()  # convert to half precision
+        for module in module.modules():
+            module: torch.nn.Module
+            if isinstance(module, torch.nn.BatchNorm2d):
+                module.float()
 
 
 def save_grad(name):

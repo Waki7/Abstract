@@ -92,13 +92,18 @@ def space_to_shapes(space: gym_spaces.Space) -> typ.Union[typ.Tuple, typ.List[ty
         return [space_to_shape(space)]
 
 
-def scale_space(state, space):
+def scale_space(state: np.ndarray, space):
     if isinstance(space, gym_spaces.Tuple):
         return [scale_space(i_state, i_space) for i_state, i_space in zip(state, space.spaces)]
     if isinstance(space, gym_spaces.Discrete):
         state = state / space.n
     elif isinstance(space, gym_spaces.Box):
-        state = (state - space.low) / (space.high - space.low)
+        if space.low.shape[-1] == state.shape[-1]:
+            state = (state - space.low) / (space.high - space.low)
+        else:
+            low = np.expand_dims(space.low.flatten(), axis=0)
+            high = np.expand_dims(space.high.flatten(), axis=0)
+            state = (state - low) / (high - low)
     else:
         raise NotImplementedError('have not implemented calculation for other spaces yet')
     return state
@@ -109,14 +114,14 @@ def scale_space(state, space):
 # ---------------------------------------------------------------------------
 
 def batch_env_observations(observation_list: typ.List[np.ndarray], space: gym_spaces.Space) -> typ.Union[
-    typ.List[torch.Tensor], torch.Tensor]:
+    typ.List[np.ndarray], np.ndarray]:
     if isinstance(space, gym_spaces.Tuple):
         batched_observation = []
         for obs_idx in range(len(observation_list[0])):
-            obss = torch.stack([torch.tensor(obs_batch[obs_idx]) for obs_batch in observation_list])
+            obss = np.stack([obs_batch[obs_idx] for obs_batch in observation_list])
             batched_observation.append(obss)
     elif isinstance(space, gym_spaces.Box):
-        batched_observation = torch.stack([torch.tensor(obs_batch) for obs_batch in observation_list])
+        batched_observation = np.stack([obs_batch for obs_batch in observation_list])
     else:
         raise NotImplementedError
     return batched_observation
@@ -124,7 +129,7 @@ def batch_env_observations(observation_list: typ.List[np.ndarray], space: gym_sp
 
 def list_to_torch_device(env_inputs: typ.Union[typ.List[torch.Tensor], torch.Tensor]):
     # treating as multimodal input
-    env_inputs = [tensor.to(**settings.ARGS) for tensor in env_inputs]
+    env_inputs = [torch.tensor(tensor).to(**settings.ARGS) for tensor in env_inputs]
     return env_inputs
 
 

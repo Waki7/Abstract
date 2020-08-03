@@ -1,6 +1,6 @@
 image_encoder:
     name: MobileNetV2
-    lr: .0001
+    lr: .001
     gradient_clip: 2.5
     train: true # do back prop on encoder
     model_folder: 'networks/trained_weights/MobileNetV2/original/' # ''

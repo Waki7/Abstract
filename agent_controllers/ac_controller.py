@@ -77,9 +77,9 @@ class ACController(BaseController):
         return agent
 
     def make_agents(self):
-        planner_in_shapes = model_utils.spaces_to_shapes(self.env.observation_space)
+        planner_in_shapes = model_utils.space_to_shapes(self.env.observation_space)
         self.assign_feature_idxs(planner_in_shapes)
-        action_shapes = model_utils.spaces_to_shapes(
+        action_shapes = model_utils.space_to_shapes(
             self.env.action_space)  # n_actions, can add to output shapes in controller
         critic_estimates = [(1,), ]  # value estimator
         if self.image_encoder_name is not None:
