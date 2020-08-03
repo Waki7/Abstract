@@ -1,3 +1,4 @@
+import logging
 import os
 
 import torch
@@ -12,6 +13,12 @@ from networks.network_trainer import NetworkTrainer
 class NetworkInterface(nn.Module):
     def __init__(self, in_shapes, out_shapes, cfg={}):
         super(NetworkInterface, self).__init__()
+        if isinstance(in_shapes, tuple):
+            in_shapes = [in_shapes, ]
+            logging.warning('please pass in your shapes as a list of tuples as if the network input is multi modal')
+        if isinstance(out_shapes, tuple):
+            out_shapes = [out_shapes, ]
+            logging.warning('please pass in your shapes as a list of tuples as if the netowrk output is multi modal')
         self.cfg = {} if not hasattr(self, 'cfg') else self.cfg
         self.extra_parameters = nn.ParameterList()
         self.in_shapes = in_shapes
@@ -27,8 +34,15 @@ class NetworkInterface(nn.Module):
         self.temp_classifier = nn.Identity()
 
     def create_optimizer(self):
-        self.trainer.create_optimizer(self)
+        self.trainer.add_network(self)
         return self.trainer
+
+    def forward(self, *input):
+        raise NotImplementedError
+
+    def pretrain(self, layer):
+        self.temp_classifier = layer
+        self.trainer.add_layer_to_optimizer(layer)
 
     def get_in_shapes(self):
         return self.in_shapes
@@ -66,8 +80,4 @@ class NetworkInterface(nn.Module):
         self.store_optimizer(model_folder)
         self.store_weights(model_folder)
         self.store_config(model_folder)
-
-    def pretrain(self, layer):
-        self.temp_classifier = layer
-        self.trainer.add_layer(layer)
 

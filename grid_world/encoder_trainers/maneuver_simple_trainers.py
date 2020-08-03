@@ -1,11 +1,12 @@
-import typing as typ
-
 import gym
 import numpy as np
+import torch
 import torch.nn.functional as F
 
 import grid_world.encoder_trainers as enc_trainers
 import grid_world.envs as envs
+import networks.network_interface as nets
+import settings
 import utils.model_utils as model_utils
 
 
@@ -13,6 +14,7 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
     def __init__(self, cfg):
         super().__init__(cfg)
         self.env: envs.ManeuverSimple
+        self.in_space = self.get_in_spaces()
         self.out_space = self.calc_out_space()
         self.y_shape = np.prod(self.out_space.shape)
 
@@ -41,29 +43,36 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
         inputs = []
         y_trues = []
         for i in range(0, 100):
-            state: typ.List[np.ndarray] = self.env.reset()
+            state: np.ndarray = self.env.reset()
             inputs.append(state)
-            coordinates = np.asarray(self.env.get_object_coordinates())
+            coordinates = np.asarray(self.env.get_object_coordinates()).flatten()
+            y_trues.append(coordinates)
 
-        batched_obs = model_utils.list_to_torch_device(inputs)
-        batched_obs = model_utils.batch_env_observations(batched_obs, self.env.observation_space)
+        batched_obs = model_utils.batch_env_observations(inputs, self.in_space)
         batched_obs = model_utils.scale_space(state=batched_obs, space=self.env.observation_space)
+        batched_obs = model_utils.list_to_torch_device(batched_obs)[0]
 
+        y_trues = np.stack(y_trues)
+        y_trues = torch.tensor(y_trues).to(**settings.ARGS)
 
+        return batched_obs, y_trues
 
-        return batched_obs, y_true
-
-    def train(self, network):
-        network_features = network.get_out_features()
+    def train(self, network: nets.NetworkInterface):
         out_space = self.calc_out_space()
+        assert isinstance(out_space, gym.spaces.Box), 'assuming we are predicting coordinates'
 
-        classifier = model_utils.get_activation_for_space(out_space, in_features=network_features)
+        net_trainer = network.create_optimizer()
+
+        classifier = torch.nn.Linear(in_features=network.get_out_features(), out_features=self.y_shape)
         network.pretrain(classifier)
 
         for i in range(0, 10):
-            new_batch = self.generate_batch()
-            out = network.forward(new_batch[0])
-            critic_loss = (F.smooth_l1_loss(input=out, target=discounted_rewards_vec,
-                                            reduction='none') * zero_done_mask).mean()  # .5 * advantage.pow(2).mean()
-            print(out.shape)
-            print(exit(9))
+            new_batch, y_true = self.generate_batch()
+            out = classifier.forward(network.forward(new_batch))
+
+            critic_loss = F.smooth_l1_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
+            critic_loss.backward()
+            net_trainer.update_parameters()
+            print(i)
+            print(critic_loss)
+            print('----')

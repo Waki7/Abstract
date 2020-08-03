@@ -96,7 +96,8 @@ class MobileNetV2(NetworkInterface):
             Set to 1 to turn off rounding
         """
         # not calling super init here because we need the out_shapes
-
+        assert isinstance(in_shapes, list) and len(in_shapes) == 1, \
+            '{} is not a multimodal network'.format(self.__class__)
         block = InvertedResidual
         input_channel = 32
         last_channel = 1280
@@ -205,4 +206,3 @@ class MobileNetV2(NetworkInterface):
             if not key.startswith('classifier'):
                 weights_to_keep[key] = new_dict[key]
         self.load_state_dict(weights_to_keep, strict=False)
-        self.create_optimizer()

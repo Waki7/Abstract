@@ -1,4 +1,5 @@
 import os
+import typing as typ
 
 import torch
 import torch.nn as nn
@@ -13,17 +14,23 @@ class NetworkTrainer():
         self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
         self.OPTIMIZER_FILENAME = 'optimizer.pth'
         self.optimizer = None
+        self.params = None
 
-    def create_optimizer(self, network: nn.Module):
+    def init_optimizer(self, parameters: typ.Iterator[torch.nn.Parameter]) -> torch.optim.Optimizer:
         lr = self.cfg.get('lr', settings.defaults.LR)
         optimizer = self.cfg.get('optimizer', settings.defaults.OPTIMIZER)
         # floating point precision, so need to set epislon
-        self.optimizer: torch.optim.Optimizer = getattr(torch.optim, optimizer)(network.parameters(), lr=lr, eps=1.e-4)
+        return getattr(torch.optim, optimizer)(parameters, lr=lr)
+
+    def add_network(self, network: nn.Module):
+        self.params = list(network.parameters())
+        self.optimizer: torch.optim.Optimizer = self.init_optimizer(self.params)
         settings.device_init(network)
 
-    def add_layer(self, layer: nn.Module):
+    def add_layer_to_optimizer(self, layer: nn.Module):
+        self.params = list(layer.parameters()) + list(self.params)
+        self.optimizer = self.init_optimizer(self.params)
         settings.device_init(layer)
-        self.optimizer.param_groups.append({'params': layer.parameters()})
 
     def lock_updates(self):
         self.updates_locked = True
@@ -33,7 +40,7 @@ class NetworkTrainer():
 
     def update_parameters(self, override_lock=False):
         if (not self.updates_locked) or override_lock:
-            torch.nn.utils.clip_grad_value_(self.optimizer.param_groups, self.gradient_clip)
+            torch.nn.utils.clip_grad_value_(self.params, self.gradient_clip)
             self.optimizer.step()
             self.optimizer.zero_grad()
 
