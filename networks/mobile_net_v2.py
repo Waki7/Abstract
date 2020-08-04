@@ -183,14 +183,14 @@ class MobileNetV2(NetworkInterface):
         x = x.mean([2, 3])
         return x
 
-    def load(self, model_folder):
-        config_path = self.get_config_filename(model_folder)
+    def load(self, load_folder):
+        config_path = self.get_config_filename(load_folder)
         if os.path.exists(config_path):
             cfg = storage_utils.load_config(config_path)
             if self.last_block > cfg['last_block'] or self.max_block_repeats > cfg['max_block_repeats']:
                 logging.warning('you are loading weights which have not been pretrained with the rest of the model')
 
-        weights_path = self.get_weights_filename(model_folder)
+        weights_path = self.get_weights_filename(load_folder)
         new_dict: dict = torch.load(weights_path)
         weights_to_keep = {}
         first_key = list(new_dict.keys())[0]

@@ -71,13 +71,13 @@ class NetworkInterface(nn.Module):
     def store_weights(self, model_folder):
         torch.save(self.state_dict(), self.get_weights_filename(model_folder))
 
-    def load(self, model_folder):
-        self.cfg = self.load_config(model_folder)
-        self.load_state_dict(torch.load(self.get_weights_filename(model_folder), map_location=settings.DEVICE))
+    def load(self, load_folder):
+        self.cfg = self.load_config(load_folder)
+        self.load_state_dict(torch.load(self.get_weights_filename(load_folder), map_location=settings.DEVICE))
 
-    def save(self, model_folder):
+    def save(self, save_folder):
         self.temp_classifier = nn.Identity()
-        self.store_optimizer(model_folder)
-        self.store_weights(model_folder)
-        self.store_config(model_folder)
+        self.store_optimizer(save_folder)
+        self.store_weights(save_folder)
+        self.store_config(save_folder)
 

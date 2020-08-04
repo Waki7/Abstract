@@ -39,10 +39,10 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         return gym.spaces.Box(low=np.min(lower_bounds), high=np.max(upper_bounds), shape=(n_total_objects, n_dim))
 
-    def generate_batch(self) -> torch.Tensor:
+    def generate_batch(self, batch_size=100) -> torch.Tensor:
         inputs = []
         y_trues = []
-        for i in range(0, 100):
+        for i in range(0, batch_size):
             state: np.ndarray = self.env.reset()
             inputs.append(state)
             coordinates = np.asarray(self.env.get_object_coordinates()).flatten()
@@ -58,22 +58,37 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         return batched_obs, y_trues
 
-    def train(self, network: nets.NetworkInterface):
+    def validate(self, network):
+        new_batch, y_true = self.generate_batch(1)
+        with torch.no_grad():
+            out = network.forward(new_batch)
+        print('expected {}'.format(y_true))
+        print('actual prediction {}'.format(out))
+        print('average_diff {}'.format(torch.abs(out-y_true).mean()))
+
+    def train(self, encoder: nets.NetworkInterface, training_cfg):
+        checkpoint_freq = training_cfg['checkpoint_freq']
         out_space = self.calc_out_space()
         assert isinstance(out_space, gym.spaces.Box), 'assuming we are predicting coordinates'
 
-        net_trainer = network.create_optimizer()
+        net_trainer = encoder.create_optimizer()
 
-        classifier = \
-            torch.nn.Sequential(torch.nn.Linear(in_features=network.get_out_features(), out_features=self.y_shape))
-        network.pretrain(classifier)
+        predictor = \
+            torch.nn.Linear(in_features=encoder.get_out_features(), out_features=self.y_shape)
+        encoder.pretrain(predictor)
+        full_network = torch.nn.Sequential(encoder, predictor)
 
         for i in range(0, 1000):
             new_batch, y_true = self.generate_batch()
-            out = classifier.forward(network.forward(new_batch))
+            out = full_network.forward(new_batch)
             critic_loss = F.smooth_l1_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
+            # critic_loss = F.mse_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
+            # mse_loss = (out - y_true).pow(2).mean()
             critic_loss.backward()
             net_trainer.update_parameters()
+            if ((i + 1) % checkpoint_freq) == 0:
+                self.validate(full_network)
             print(i)
             print(critic_loss)
+            # print(mse_loss)
             print('----')

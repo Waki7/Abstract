@@ -4,3 +4,6 @@ training:
   eval_rewards_window: 20
   checkpoint_freq: 1
 
+
+encoder_training:
+  checkpoint_freq: 10

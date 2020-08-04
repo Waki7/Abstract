@@ -17,8 +17,8 @@ def register_network(network):
 
 def try_load_weights(model: base.NetworkInterface, cfg):
     if cfg.get('pretrained', False):
-        if 'model_folder' in cfg:
-            model_folder = cfg['model_folder']
+        if 'load_folder' in cfg:
+            model_folder = cfg['load_folder']
             if os.path.exists(model_folder):
                 if hasattr(model, 'load'):  # override if model has some special loading functionality
                     model.load(model_folder)

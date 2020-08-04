@@ -33,7 +33,7 @@ def train_state_encoder(network_namespace, env_namespace):
     out_shapes = model_utils.space_to_shapes(out_space)
     network: base.NetworkInterface = get_network(network_cfg['name'], network_cfg, in_shapes, out_shapes=out_shapes)
 
-    trainer.train(network)
+    trainer.train(network, CFG_EXECUTION['encoder_training'])
 
 
 # def func2(a, b, c=1):
@@ -57,7 +57,7 @@ def main():
                         # logging.INFO
                         logging.DEBUG
                         )
-    train_state_encoder('image_encoder', 'grid')
+    train_state_encoder('mobile', 'grid')
 
 
 if __name__ == "__main__":
