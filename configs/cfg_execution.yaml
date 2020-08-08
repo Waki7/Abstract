@@ -6,4 +6,4 @@ training:
 
 
 encoder_training:
-  checkpoint_freq: 10
+  checkpoint_freq: 1

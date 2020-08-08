@@ -7,12 +7,13 @@ import grid_world.encoder_trainers as enc_trainers
 import grid_world.envs as envs
 import networks.network_interface as nets
 import settings
+import utils.experiment_utils as experiment_utils
 import utils.model_utils as model_utils
 
 
 class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
-    def __init__(self, cfg):
-        super().__init__(cfg)
+    def __init__(self, env_cfg):
+        super().__init__(env_cfg)
         self.env: envs.ManeuverSimple
         self.in_space = self.get_in_spaces()
         self.out_space = self.calc_out_space()
@@ -39,7 +40,7 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         return gym.spaces.Box(low=np.min(lower_bounds), high=np.max(upper_bounds), shape=(n_total_objects, n_dim))
 
-    def generate_batch(self, batch_size=100) -> torch.Tensor:
+    def generate_batch(self, batch_size=75) -> torch.Tensor:
         inputs = []
         y_trues = []
         for i in range(0, batch_size):
@@ -58,15 +59,17 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         return batched_obs, y_trues
 
-    def validate(self, network):
-        new_batch, y_true = self.generate_batch(1)
+    def mean_abs_diff(self, network) -> float:
+        new_batch, y_true = self.generate_batch()
         with torch.no_grad():
             out = network.forward(new_batch)
-        print('expected {}'.format(y_true))
-        print('actual prediction {}'.format(out))
-        print('average_diff {}'.format(torch.abs(out-y_true).mean()))
+        return torch.abs(out - y_true).mean().cpu().item()
 
     def train(self, encoder: nets.NetworkInterface, training_cfg):
+        logger = experiment_utils.ExperimentLogger()
+        logger.create_experiment(algo_name=encoder.__class__.__name__, env_name=self.env_cfg['name'],
+                                 training_cfg=training_cfg)
+
         checkpoint_freq = training_cfg['checkpoint_freq']
         out_space = self.calc_out_space()
         assert isinstance(out_space, gym.spaces.Box), 'assuming we are predicting coordinates'
@@ -87,8 +90,9 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
             critic_loss.backward()
             net_trainer.update_parameters()
             if ((i + 1) % checkpoint_freq) == 0:
-                self.validate(full_network)
+                mean_abs_diff = self.mean_abs_diff(full_network)
+                logger.add_agent_scalars(label='means_abs_diff', data=mean_abs_diff, log=True)
             print(i)
-            print(critic_loss)
+            # print(critic_loss)
             # print(mse_loss)
-            print('----')
+            # print('----')

@@ -5,12 +5,12 @@ IMAGE_ENCODERS = {}
 SPEECH_ENCODERS = {}
 
 
-def get_state_trainer(cfg):
-    env_id = cfg.get('name', None)
+def get_state_trainer(env_cfg):
+    env_id = env_cfg.get('name', None)
     state_encoder = STATE_ENCODERS.get(env_id, None)
     if state_encoder is None:
         raise NotImplementedError('state trainer is not implemented for this environment')
-    return state_encoder(cfg)
+    return state_encoder(env_cfg)
 
 
 def register(id, entry_point, state_trainer=None, image_encoder=None, speech_encoder=None):

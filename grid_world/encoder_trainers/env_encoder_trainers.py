@@ -1,13 +1,13 @@
-import typing as typ
-import grid_world.envs as envs
-
 import gym
+
+import grid_world.envs as envs
 
 
 class EnvEncoderTrainer:
-    def __init__(self, cfg: dict):
-        env: envs.GridEnv = gym.make(cfg['name'], cfg=cfg)
+    def __init__(self, env_cfg: dict):
+        env: envs.GridEnv = gym.make(env_cfg['name'], cfg=env_cfg)
         self.env = env
+        self.env_cfg = env_cfg
 
     def get_in_spaces(self) -> gym.Space:
         raise NotImplementedError

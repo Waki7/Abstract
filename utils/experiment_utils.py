@@ -6,9 +6,11 @@ from typing import Iterable, Union
 
 import gym
 import numpy as np
+import torch
 from array2gif import write_gif
 from tensorboardX import SummaryWriter
 
+import agent_algorithms as agnts
 import settings
 import utils.env_wrappers as env_wrappers
 import utils.storage_utils as storage_utils
@@ -53,7 +55,19 @@ class ExperimentLogger():
         if reset_count:
             self.counts = {}
 
-    def create_experiment(self, agent_name, env_name, training_cfg, directory='', agent_cfg=None, env_cfg=None):
+    def get_naming(self, algo):
+        algo_name = algo.__class__.__name__
+        if isinstance(algo, agnts.Agent):
+            root_dir = agnts.Agent.__name__
+        elif isinstance(algo, torch.nn.Module):
+            root_dir = torch.nn.Module.__name__
+        else:
+            logging.info("didn't find appropriate base class, will store log results one directory higher in {}".format(
+                settings.LOG_DIR))
+        return root_dir, algo_name
+
+    def create_experiment(self, algo: object, env_name, training_cfg, directory='', agent_cfg=None, env_cfg=None):
+        root_dir, algo_name = self.get_naming(algo)
         variation = training_cfg.get('variation', '')
         training = directory == ''
         if not training:
@@ -62,7 +76,7 @@ class ExperimentLogger():
         else:
             time = datetime.now()
             # self.results_path = '{}/{}/{}/{}'.format(settings.LOG_DIR, agent_name, env_name, variation)
-            self.results_path = os.path.join(settings.LOG_DIR, agent_name, env_name, variation,
+            self.results_path = os.path.join(settings.LOG_DIR, algo_name, env_name, variation,
                                              time.strftime("%Y_%m%d_%H%M_%S"))
             logging.info(self.results_path)
             self.writer = SummaryWriter(self.results_path)
@@ -121,7 +135,8 @@ class ExperimentLogger():
                                    track_mean=track_mean, track_sum=track_sum,
                                    log=log)
 
-    def add_agent_scalars(self, label, data, step=-1, track_mean=False, track_sum=False, log=False):
+    def add_agent_scalars(self, label: str, data: Union[float, Iterable[float]],
+                          step: int = -1, track_mean: bool = False, track_sum: bool = False, log: bool = False):
         if data is None:
             return
         if isinstance(data, Iterable):
