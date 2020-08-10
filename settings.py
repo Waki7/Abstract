@@ -6,15 +6,32 @@ import torch
 LOG_DIR = 'logs'
 ENCODER_WEIGHTS = 'networks/trained_weights'
 grads = {}
+
+
 # torch.autograd.set_detect_anomaly(True)
+# torch.backends.cudnn.deterministic = True
+# torch.backends.cudnn.benchmark = False
+
+
+
+
+def to_cuda(tensor):
+    return tensor.cuda()
+
+
+def to_cpu(tensor):
+    return tensor.cpu()
+
 
 if torch.cuda.is_available():
     DEVICE_NUM = 0
+    to_device = to_cuda
     print('{} gpus available, will be using gpu {}'.format(torch.cuda.device_count(), DEVICE_NUM))
-    torch.cuda.set_device(DEVICE_NUM)
-    DEVICE = torch.device('cuda')
+    DEVICE = torch.device('cuda:{}'.format(DEVICE_NUM))
+    torch.cuda.set_device(DEVICE)
 else:
     print('using cpu')
+    to_device = to_cpu
     DEVICE = torch.device('cpu')
 
 DTYPE_LONG = torch.long
@@ -25,16 +42,6 @@ SEED = 23
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 random.seed(SEED)
-
-
-def device_init(module: torch.nn.Module):
-    module.to(DEVICE)
-    if DTYPE_X == torch.half:
-        module.half()  # convert to half precision
-        for module in module.modules():
-            module: torch.nn.Module
-            if isinstance(module, torch.nn.BatchNorm2d):
-                module.float()
 
 
 def save_grad(name):

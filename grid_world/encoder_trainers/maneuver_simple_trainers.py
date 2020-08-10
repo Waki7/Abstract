@@ -1,3 +1,5 @@
+import typing as typ
+
 import gym
 import numpy as np
 import torch
@@ -40,7 +42,7 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         return gym.spaces.Box(low=np.min(lower_bounds), high=np.max(upper_bounds), shape=(n_total_objects, n_dim))
 
-    def generate_batch(self, batch_size=75) -> torch.Tensor:
+    def generate_batch(self, batch_size=75) -> typ.Tuple[torch.Tensor, torch.Tensor]:
         inputs = []
         y_trues = []
         for i in range(0, batch_size):
@@ -55,7 +57,7 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         y_trues = np.stack(y_trues)
         y_trues = model_utils.scale_space(state=y_trues, space=self.out_space)
-        y_trues = torch.tensor(y_trues).to(**settings.ARGS)
+        y_trues = model_utils.to_tensor_args(torch.tensor(y_trues))
 
         return batched_obs, y_trues
 
@@ -67,10 +69,11 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
     def train(self, encoder: nets.NetworkInterface, training_cfg):
         logger = experiment_utils.ExperimentLogger()
-        logger.create_experiment(algo_name=encoder.__class__.__name__, env_name=self.env_cfg['name'],
+        logger.create_experiment(algo=encoder, env_name=self.env_cfg['name'],
                                  training_cfg=training_cfg)
 
         checkpoint_freq = training_cfg['checkpoint_freq']
+        batch_size = training_cfg['batch_size']
         out_space = self.calc_out_space()
         assert isinstance(out_space, gym.spaces.Box), 'assuming we are predicting coordinates'
 
@@ -82,8 +85,9 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
         full_network = torch.nn.Sequential(encoder, predictor)
 
         for i in range(0, 1000):
-            new_batch, y_true = self.generate_batch()
-            out = full_network.forward(new_batch)
+            new_batch, y_true = self.generate_batch(batch_size=batch_size)
+            out = encoder.forward(new_batch)
+            out = predictor(out)
             critic_loss = F.smooth_l1_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
             # critic_loss = F.mse_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
             # mse_loss = (out - y_true).pow(2).mean()

@@ -1,3 +1,4 @@
+import inspect
 import logging
 import os
 import re
@@ -6,11 +7,11 @@ from typing import Iterable, Union
 
 import gym
 import numpy as np
-import torch
 from array2gif import write_gif
 from tensorboardX import SummaryWriter
 
 import agent_algorithms as agnts
+import networks as nets
 import settings
 import utils.env_wrappers as env_wrappers
 import utils.storage_utils as storage_utils
@@ -40,6 +41,19 @@ def copy_config_param(src_cfg, target_cfg, param_name, fallback_value=None):
     return val
 
 
+def get_experiment_naming(algo):
+    algo_name = algo.__class__.__name__
+    if isinstance(algo, agnts.Agent):
+        root_dir = agnts.Agent.__name__
+    elif isinstance(algo, nets.NetworkInterface):
+        root_dir = nets.NetworkInterface.__name__
+    else:
+        root_dir = inspect.getmro(algo)[-2]
+        logging.info("didn't find expected base class, will store log results directory for {},"
+                     " the top parent class after object".format(root_dir))
+    return root_dir, algo_name
+
+
 class ExperimentLogger():
     def __init__(self):
         self.results_path = ''
@@ -55,19 +69,8 @@ class ExperimentLogger():
         if reset_count:
             self.counts = {}
 
-    def get_naming(self, algo):
-        algo_name = algo.__class__.__name__
-        if isinstance(algo, agnts.Agent):
-            root_dir = agnts.Agent.__name__
-        elif isinstance(algo, torch.nn.Module):
-            root_dir = torch.nn.Module.__name__
-        else:
-            logging.info("didn't find appropriate base class, will store log results one directory higher in {}".format(
-                settings.LOG_DIR))
-        return root_dir, algo_name
-
     def create_experiment(self, algo: object, env_name, training_cfg, directory='', agent_cfg=None, env_cfg=None):
-        root_dir, algo_name = self.get_naming(algo)
+        root_dir, algo_name = get_experiment_naming(algo)
         variation = training_cfg.get('variation', '')
         training = directory == ''
         if not training:
@@ -75,13 +78,10 @@ class ExperimentLogger():
             self.results_path = directory
         else:
             time = datetime.now()
-            # self.results_path = '{}/{}/{}/{}'.format(settings.LOG_DIR, agent_name, env_name, variation)
-            self.results_path = os.path.join(settings.LOG_DIR, algo_name, env_name, variation,
+            self.results_path = os.path.join(settings.LOG_DIR, root_dir, algo_name, env_name, variation,
                                              time.strftime("%Y_%m%d_%H%M_%S"))
             logging.info(self.results_path)
             self.writer = SummaryWriter(self.results_path)
-            # print(exit(9))
-            # env.unwrapped.spec.id
 
         # ----------------------------------------------------------------
         # create empty notes file, directory for trained_weights, models, and animations

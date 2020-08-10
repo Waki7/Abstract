@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 
 import settings
+import utils.model_utils as model_utils
 
 
 class NetworkTrainer():
@@ -25,12 +26,12 @@ class NetworkTrainer():
     def add_network(self, network: nn.Module):
         self.params = list(network.parameters())
         self.optimizer: torch.optim.Optimizer = self.init_optimizer(self.params)
-        settings.device_init(network)
+        model_utils.module_dtype_init(network)
 
     def add_layer_to_optimizer(self, layer: nn.Module):
         self.params = list(layer.parameters()) + list(self.params)
         self.optimizer = self.init_optimizer(self.params)
-        settings.device_init(layer)
+        model_utils.module_dtype_init(layer)
 
     def lock_updates(self):
         self.updates_locked = True

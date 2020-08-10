@@ -14,8 +14,8 @@ import settings
 def discount_rewards(rewards: torch.Tensor, discount: float, td_step: int = -1) -> torch.Tensor:
     if td_step != -1:
         raise NotImplementedError('currently only implemented monte carlo esimation')
-    prev_reward = torch.zeros(rewards.shape[-1]).to(**settings.ARGS)
-    discounted_reward = torch.zeros_like(rewards).to(**settings.ARGS)
+    prev_reward = settings.to_device(torch.zeros(rewards.shape[-1]))
+    discounted_reward = to_tensor_args(torch.zeros_like(rewards))
     for episode_idx in range(rewards.shape[0] - 1, -1, -1):
         discounted_reward[episode_idx] = rewards[episode_idx] + (prev_reward * discount)
         prev_reward = discounted_reward[episode_idx]
@@ -99,6 +99,7 @@ def scale_space(state: np.ndarray, space):
         state = state / space.n
     elif isinstance(space, gym_spaces.Box):
         if space.low.shape[-1] == state.shape[-1]:
+
             state = (state - space.low) / (space.high - space.low)
         else:
             low = np.expand_dims(space.low.flatten(), axis=0)
@@ -127,9 +128,24 @@ def batch_env_observations(observation_list: typ.List[np.ndarray], space: gym_sp
     return batched_observation
 
 
+def module_dtype_init(module: torch.nn.Module):
+    settings.to_device(module)
+    if settings.DTYPE_X == torch.half:
+        module.half()  # convert to half precision
+        for module in module.modules():
+            module: torch.nn.Module
+            if isinstance(module, torch.nn.BatchNorm2d):
+                module.float()
+    return module
+
+
+def to_tensor_args(tensor: torch.Tensor):
+    return settings.to_device(torch.tensor(tensor).to(settings.DTYPE_X))
+
+
 def list_to_torch_device(env_inputs: typ.Union[typ.List[torch.Tensor], torch.Tensor]):
     # treating as multimodal input
-    env_inputs = [torch.tensor(tensor).to(**settings.ARGS) for tensor in env_inputs]
+    env_inputs = [to_tensor_args(tensor) for tensor in env_inputs]
     return env_inputs
 
 

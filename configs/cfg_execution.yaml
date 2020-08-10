@@ -7,3 +7,4 @@ training:
 
 encoder_training:
   checkpoint_freq: 1
+  batch_size: 300

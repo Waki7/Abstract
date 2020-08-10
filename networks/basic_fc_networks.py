@@ -36,17 +36,6 @@ class BaseFCNetwork(NetworkInterface):
 
         self.optimizer = None  # call create_optimizer at end of your implementation's init
 
-    def create_optimizer(self):
-        lr = self.cfg.get('lr', settings.defaults.LR)
-        optimizer = self.cfg.get('optimizer', settings.defaults.OPTIMIZER)
-        # floating point precision, so need to set epislon
-        self.optimizer = getattr(torch.optim, optimizer)(self.parameters(), lr=lr, eps=1.e-4)
-        self.to(settings.DEVICE)
-        self.half()  # convert to half precision
-        for layer in self.modules():
-            if isinstance(layer, nn.BatchNorm2d):
-                layer.float()
-
     def add_parameters(self, parameters):
         self.extra_parameters.extend(parameters)
         self.create_optimizer()  # recreate optimizer due to neew parameters

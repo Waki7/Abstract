@@ -8,13 +8,6 @@ from agent_algorithms.base_agents import Agent
 from agent_algorithms.factory import register_agent
 from networks.basic_fc_networks import *
 
-if torch.cuda.is_available():
-    device = torch.device('cuda')
-else:
-    device = torch.device('cpu')
-type = torch.float
-args = {'device': device, 'dtype': type}
-
 
 @register_agent
 class A2CAgent(Agent):
