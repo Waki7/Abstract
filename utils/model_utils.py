@@ -15,7 +15,7 @@ def discount_rewards(rewards: torch.Tensor, discount: float, td_step: int = -1) 
     if td_step != -1:
         raise NotImplementedError('currently only implemented monte carlo esimation')
     prev_reward = settings.to_device(torch.zeros(rewards.shape[-1]))
-    discounted_reward = to_tensor_args(torch.zeros_like(rewards))
+    discounted_reward = torch.zeros_like(rewards).to(**settings.ARGS)
     for episode_idx in range(rewards.shape[0] - 1, -1, -1):
         discounted_reward[episode_idx] = rewards[episode_idx] + (prev_reward * discount)
         prev_reward = discounted_reward[episode_idx]
@@ -139,13 +139,9 @@ def module_dtype_init(module: torch.nn.Module):
     return module
 
 
-def to_tensor_args(tensor: torch.Tensor):
-    return settings.to_device(torch.tensor(tensor).to(settings.DTYPE_X))
-
-
-def list_to_torch_device(env_inputs: typ.Union[typ.List[torch.Tensor], torch.Tensor]):
+def nd_list_to_torch(env_inputs: typ.Union[typ.List[np.ndarray], np.ndarray]):
     # treating as multimodal input
-    env_inputs = [to_tensor_args(tensor) for tensor in env_inputs]
+    env_inputs = [torch.tensor(tensor).to(**settings.ARGS) for tensor in env_inputs]
     return env_inputs
 
 

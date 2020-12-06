@@ -110,7 +110,7 @@ class BaseController:  # currently implemented as (i)AC
         if self.n_agents == 1:
             batched_obs = model_utils.batch_env_observations(obs, self.env.observation_space)
             batched_obs = model_utils.scale_space(state=batched_obs, space=self.env.observation_space)
-            batched_obs = model_utils.list_to_torch_device(batched_obs)
+            batched_obs = model_utils.nd_list_to_torch(batched_obs)
             return batched_obs
         else:
             raise NotImplementedError('NEED TO UPDATE ENVIRONMENT OBSERVATION SPACES TO HAVE DICT FOR MULTIAGENT')

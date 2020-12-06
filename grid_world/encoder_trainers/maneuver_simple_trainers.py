@@ -53,11 +53,14 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         batched_obs = model_utils.batch_env_observations(inputs, self.in_space)
         batched_obs = model_utils.scale_space(state=batched_obs, space=self.in_space)
-        batched_obs = model_utils.list_to_torch_device(batched_obs)[0]
-
+        batched_obs = model_utils.nd_list_to_torch(batched_obs)[0]
+        # for i in range(0, 99):
+        #     first = batched_obs[:, 0, 0, i]
+        #     print(np.unique(first.cpu().numpy()))
+        # print(exit(9))
         y_trues = np.stack(y_trues)
         y_trues = model_utils.scale_space(state=y_trues, space=self.out_space)
-        y_trues = model_utils.to_tensor_args(torch.tensor(y_trues))
+        y_trues = torch.tensor(y_trues).to(**settings.ARGS)
 
         return batched_obs, y_trues
 
@@ -68,7 +71,7 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
         return torch.abs(out - y_true).mean().cpu().item()
 
     def train(self, encoder: nets.NetworkInterface, training_cfg):
-        logger = experiment_utils.ExperimentLogger()
+        logger: experiment_utils.ExperimentLogger = experiment_utils.ExperimentLogger()
         logger.create_experiment(algo=encoder, env_name=self.env_cfg['name'],
                                  training_cfg=training_cfg)
 
@@ -91,11 +94,15 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
             critic_loss = F.smooth_l1_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
             # critic_loss = F.mse_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
             # mse_loss = (out - y_true).pow(2).mean()
-            critic_loss.backward()
+            critic_loss.backward(retain_graph=True)
             net_trainer.update_parameters()
             if ((i + 1) % checkpoint_freq) == 0:
                 mean_abs_diff = self.mean_abs_diff(full_network)
-                logger.add_agent_scalars(label='means_abs_diff', data=mean_abs_diff, log=True)
+                print('------')
+                print(y_true)
+                print(out)
+                print('------')
+                logger.add_agent_scalars(label=self.LoggingMetrics.mean_abs_diff, data=mean_abs_diff, log=True)
             print(i)
             # print(critic_loss)
             # print(mse_loss)

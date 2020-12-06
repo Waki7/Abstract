@@ -7,12 +7,9 @@ LOG_DIR = 'logs'
 ENCODER_WEIGHTS = 'networks/trained_weights'
 grads = {}
 
-
 # torch.autograd.set_detect_anomaly(True)
 # torch.backends.cudnn.deterministic = True
 # torch.backends.cudnn.benchmark = False
-
-
 
 
 def to_cuda(tensor):

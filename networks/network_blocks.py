@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-import utils.model_utils as model_utils
+import settings
 
 
 class LSTM(nn.Module):
@@ -35,6 +35,6 @@ class LSTM(nn.Module):
         return new_hidden, context_t
 
     def get_zero_input(self, batch_size):
-        hidden_state = model_utils.to_tensor_args(torch.zeros((batch_size, self.hidden_features)))
-        context = model_utils.to_tensor_args(torch.zeros((batch_size, self.hidden_features)))
+        hidden_state = torch.zeros((batch_size, self.hidden_features)).to(**settings.ARGS)
+        context = torch.zeros((batch_size, self.hidden_features)).to(**settings.ARGS)
         return hidden_state, context
