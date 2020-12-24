@@ -6,14 +6,14 @@ import torch.nn as nn
 
 import settings
 import utils.model_utils as model_utils
+from utils.paths import Networks
 
 
-class NetworkTrainer():
+class NetworkTrainer(object):
     def __init__(self, cfg):
         self.cfg = cfg
         self.updates_locked = False
         self.gradient_clip = cfg.get('gradient_clip', settings.defaults.GRADIENT_CLIP)
-        self.OPTIMIZER_FILENAME = 'optimizer.pth'
         self.optimizer = None
         self.params = None
 
@@ -46,7 +46,7 @@ class NetworkTrainer():
             self.optimizer.zero_grad()
 
     def get_optimizer_filename(self, model_folder):
-        return os.path.join(model_folder, self.OPTIMIZER_FILENAME)
+        return os.path.join(model_folder, Networks.OPTIMIZER_FILENAME)
 
     def load(self, model_folder):
         pass

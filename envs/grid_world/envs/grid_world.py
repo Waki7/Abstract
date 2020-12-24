@@ -4,7 +4,7 @@ import typing as typ
 import gym
 import numpy as np
 
-import grid_world.env_objects as core
+from envs import grid_world as core
 
 
 class GridEnv(gym.Env):

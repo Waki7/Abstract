@@ -3,7 +3,7 @@ from typing import Iterable
 import numpy as np
 from gym import spaces
 
-import grid_world.rendering.shapes as render_shapes
+from envs import grid_world as render_shapes
 import utils.image_utils as image_utils
 import utils.model_utils as model_utils
 

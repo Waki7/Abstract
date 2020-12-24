@@ -29,14 +29,14 @@ def try_load_weights(model: base.NetworkInterface, cfg):
                     model.load_state_dict(state_dict)
                 return True
             else:
-                logging.error('path {} could not be found, cannot load pretrained trained_weights'.format(model_folder))
+                logging.error('path {} could not be found, cannot load pretrained blueprint_weights'.format(model_folder))
         else:
-            logging.warning('path was not specified by config, cannot load pretrained trained_weights')
+            logging.warning('path was not specified by config, cannot load pretrained blueprint_weights')
     return False
 
 
-def get_network(key, cfg, in_shapes, out_shapes=None) -> base.NetworkInterface:
-    model = NETWORK_REGISTERY[key](
+def get_network(cfg, in_shapes, out_shapes=None) -> base.NetworkInterface:
+    model = NETWORK_REGISTERY[cfg['class_name']](
         cfg=cfg,
         out_shapes=out_shapes,
         in_shapes=in_shapes,

@@ -4,8 +4,7 @@ from typing import Union, Dict, List
 import numpy as np
 from gym import spaces
 
-import grid_world.env_objects as core
-import grid_world.envs.grid_world as grid_world
+from envs import grid_world as core, grid_world as grid_world
 
 
 class ManeuverMulti(grid_world.GridEnv):

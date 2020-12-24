@@ -5,8 +5,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-import grid_world.encoder_trainers as enc_trainers
-import grid_world.envs as envs
+import controllers.visual.encoder_trainers as enc_trainers
+from envs import grid_world as envs
 import networks.network_interface as nets
 import settings
 import utils.experiment_utils as experiment_utils
@@ -92,6 +92,7 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
             out = encoder.forward(new_batch)
             out = predictor(out)
             critic_loss = F.smooth_l1_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
+            logger.add_agent_scalars(label=self.LoggingMetrics.loss, data=critic_loss.cpu().item(), log=True)
             # critic_loss = F.mse_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
             # mse_loss = (out - y_true).pow(2).mean()
             critic_loss.backward(retain_graph=True)

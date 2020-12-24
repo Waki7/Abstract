@@ -4,9 +4,7 @@ import typing as typ
 import gym
 import numpy as np
 
-import grid_world.env_objects as core
-import grid_world.envs.grid_world as grid_world
-import grid_world.rendering.shapes as render_shapes
+from envs import grid_world as core, grid_world as grid_world, grid_world as render_shapes
 import utils.image_utils as image_utils
 
 

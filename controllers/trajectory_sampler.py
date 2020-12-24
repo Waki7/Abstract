@@ -1,0 +1,2 @@
+class TrajectorySampler(object):
+    pass

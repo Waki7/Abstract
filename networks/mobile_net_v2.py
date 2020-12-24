@@ -77,10 +77,10 @@ class MobileNetV2(NetworkInterface):
         lr: .0005
         gradient_clip: 2.5
         train: false # do back prop on encoder
-        weights_path: 'networks/trained_weights/model.pth'
+        weights_path: 'networks/blueprint_weights/model.pth'
         last_block: -6 # negative indexing from -8 to -1
         max_block_repeats: 1 # max number of repeats of residual blocks
-        pretrained: true # load pretrained trained_weights or not
+        pretrained: true # load pretrained blueprint_weights or not
 
     '''
 
@@ -108,7 +108,7 @@ class MobileNetV2(NetworkInterface):
         width_mult = cfg.get('width_mult', 1.0)
         round_nearest = cfg.get('round_nearest', 8)
 
-        # will initialize with this because that's what the pretrained trained_weights use,
+        # will initialize with this because that's what the pretrained blueprint_weights use,
         # will be pruned to match the configured inverted_residual_setting
         inverted_residual_setting = [
             # t, c, n, s

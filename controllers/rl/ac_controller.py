@@ -7,8 +7,8 @@ import networks.network_interface as nets
 import utils.experiment_utils as exp_utils
 import utils.model_utils as model_utils
 from agent_algorithms.factory import AGENT_REGISTRY
-from agent_controllers.base_controllers import BaseController
-from agent_controllers.factory import register_controller
+from controllers.rl.base_controllers import BaseController
+from controllers.rl.factory import register_controller
 
 
 @register_controller
@@ -35,7 +35,6 @@ class ACController(BaseController):
 
         self.train_image_encoder = self.image_encoder_cfg.get('train')
 
-
         self.image_encoder = None
 
         self.image_feature_idxs = []
@@ -54,20 +53,17 @@ class ACController(BaseController):
 
     def generate_agent(self, in_shapes, action_shapes, critic_estimates):
         if self.share_parameters:
-            ac_network = net_factory.get_network(key=self.ac_name,
-                                                 in_shapes=in_shapes,
+            ac_network = net_factory.get_network(in_shapes=in_shapes,
                                                  out_shapes=action_shapes,
                                                  cfg=self.ac_cfg)
             agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
                                                     self.cfg,
                                                     ac_network)
         else:
-            actor_network = net_factory.get_network(key=self.actor_name,
-                                                    in_shapes=in_shapes,
+            actor_network = net_factory.get_network(in_shapes=in_shapes,
                                                     out_shapes=action_shapes,
                                                     cfg=self.actor_cfg)
-            critic_network = net_factory.get_network(key=self.critic_name,
-                                                     in_shapes=in_shapes,
+            critic_network = net_factory.get_network(in_shapes=in_shapes,
                                                      out_shapes=critic_estimates,
                                                      cfg=self.critic_cfg)
             agent = AGENT_REGISTRY[self.agent_name](self.is_episodic,
@@ -86,8 +82,7 @@ class ACController(BaseController):
             # TODO fix the shape check for if we add language
             image_encoder_in_shapes = model_utils.get_idxs_of_list(list=planner_in_shapes, idxs=self.image_feature_idxs)
             assert len(image_encoder_in_shapes) == 1, 'not supporting multiple images at the moment'
-            self.image_encoder: nets.NetworkInterface = net_factory.get_network(key=self.image_encoder_name,
-                                                                                cfg=self.image_encoder_cfg,
+            self.image_encoder: nets.NetworkInterface = net_factory.get_network(cfg=self.image_encoder_cfg,
                                                                                 in_shapes=image_encoder_in_shapes)
             img_encoder_out_shapes = self.image_encoder.get_out_shapes()
             self.image_encoder.train() if self.train_image_encoder else self.image_encoder.eval()
@@ -138,9 +133,9 @@ class ACController(BaseController):
             #         reward[key], episode_end[key], new_state[key]
             #     ))
         return loss
-    
+
     def load(self):
         pass
-    
+
     def save(self):
         pass

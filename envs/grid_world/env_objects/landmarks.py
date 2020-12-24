@@ -1,4 +1,4 @@
-import grid_world.env_objects.core_env_objects as core
+from envs import grid_world as core
 
 
 class Landmark(core.GridObject):

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import logging
 from enum import Enum
 from typing import Iterable
 
 import numpy as np
 
-import grid_world.rendering.shapes as render_shapes
+from envs import grid_world as render_shapes
 
 
 class See(Enum):  # keep nothing as 0

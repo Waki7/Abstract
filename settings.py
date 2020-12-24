@@ -3,9 +3,6 @@ import random
 import numpy as np
 import torch
 
-LOG_DIR = 'logs'
-ENCODER_WEIGHTS = 'networks/trained_weights'
-grads = {}
 
 # torch.autograd.set_detect_anomaly(True)
 # torch.backends.cudnn.deterministic = True

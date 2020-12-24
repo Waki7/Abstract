@@ -2,8 +2,8 @@ import inspect
 import logging
 import os
 import re
+import typing as tp
 from datetime import datetime
-from typing import Iterable, Union
 
 import gym
 import numpy as np
@@ -12,13 +12,13 @@ from tensorboardX import SummaryWriter
 
 import agent_algorithms as agnts
 import networks as nets
-import settings
 import utils.env_wrappers as env_wrappers
 import utils.storage_utils as storage_utils
+from utils.paths import Directories
 
 
 def clean_experiment_folders():
-    experiment_folder = settings.LOG_DIR
+    experiment_folder = Directories.LOG_DIR
     for subdir, dirs, files in os.walk(experiment_folder):
         for dir in dirs:
             if re.match('\d\d\d\d-\d\d', dir):
@@ -78,17 +78,17 @@ class ExperimentLogger():
             self.results_path = directory
         else:
             time = datetime.now()
-            self.results_path = os.path.join(settings.LOG_DIR, root_dir, algo_name, env_name, variation,
+            self.results_path = os.path.join(Directories.LOG_DIR, root_dir, algo_name, env_name, variation,
                                              time.strftime("%Y_%m%d_%H%M_%S"))
             logging.info(self.results_path)
             self.writer = SummaryWriter(self.results_path)
 
         # ----------------------------------------------------------------
-        # create empty notes file, directory for trained_weights, models, and animations
+        # create empty notes file, directory for blueprint_weights, models, and animations
         # ----------------------------------------------------------------
         notes_file = '{}/notes.txt'.format(self.results_path)
         open(notes_file, 'a').close()
-        [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in ['trained_weights', 'models', 'animations']]
+        [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in ['blueprint_weights', 'models', 'animations']]
 
         # ----------------------------------------------------------------
         # store any passed in configs
@@ -135,11 +135,11 @@ class ExperimentLogger():
                                    track_mean=track_mean, track_sum=track_sum,
                                    log=log)
 
-    def add_agent_scalars(self, label: str, data: Union[float, Iterable[float]],
+    def add_agent_scalars(self, label: str, data: tp.Union[float, tp.Iterable[float]],
                           step: int = -1, track_mean: bool = False, track_sum: bool = False, log: bool = False):
         if data is None:
             return
-        if isinstance(data, Iterable):
+        if isinstance(data, tp.Iterable):
             data = np.mean(data)
 
         if track_mean:
@@ -156,8 +156,12 @@ class ExperimentLogger():
                 step = self.counts[label]
             self.writer.add_scalar(label, data, global_step=step)
 
+    # def custom_checkpoint(self, checkpoint_freq, func: tp.Callable[[str, ], None]):
+    #     pass
+    #     func(self.)
+
     def checkpoint(self, episode, checkpoint_freq, agent_map,
-                   environment: Union[env_wrappers.SubprocVecEnv, gym.Env]):
+                   environment: tp.Union[env_wrappers.SubprocVecEnv, gym.Env]):
         is_batch_env = isinstance(environment, env_wrappers.SubprocVecEnv)
         if (episode + 1) % checkpoint_freq == 0:
             # --- save models

@@ -4,10 +4,8 @@ from typing import List, Iterable, Dict
 import numpy as np
 from gym import spaces
 
-import grid_world.env_objects.core_env_objects as core_objects
-import grid_world.env_objects.env_agents as core_agents
-import grid_world.env_objects.landmarks as core_landmarks
-import grid_world.rendering.observation_rendering as rendering
+from envs import grid_world as core_objects, grid_world as core_agents, grid_world as core_landmarks
+import envs.grid_world.rendering.observation_rendering as rendering
 import utils.model_utils as model_utils
 
 

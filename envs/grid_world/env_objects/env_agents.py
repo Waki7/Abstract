@@ -1,7 +1,7 @@
 import logging
 
-import grid_world.env_objects.core_env_objects as core
-import grid_world.rendering.shapes as render_shapes
+from envs import grid_world as core, grid_world as render_shapes
+
 
 class EnvAgent(core.ActionableItem):
     def __init__(self, observed_shape: render_shapes.Shape, id: str, policy=None, location=None, **kwargs):

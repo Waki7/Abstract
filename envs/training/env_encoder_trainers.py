@@ -1,11 +1,13 @@
 import gym
 
-import grid_world.envs as envs
 
+class EnvEncoderTrainer(object):
+    class LoggingMetrics(object):
+        mean_abs_diff = 'img_encoder/mean_abs_diff'
+        loss = 'img_encoder/loss'
 
-class EnvEncoderTrainer:
     def __init__(self, env_cfg: dict):
-        env: envs.GridEnv = gym.make(env_cfg['name'], cfg=env_cfg)
+        env: gym.Env = gym.make(env_cfg['name'], cfg=env_cfg)
         self.env = env
         self.env_cfg = env_cfg
 

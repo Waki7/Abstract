@@ -2,7 +2,7 @@
 #
 # import utils.model_utils as model_utils
 # from agent_algorithms.factory import AGENT_REGISTRY
-# from agent_controllers.factory import register_controller
+# from controllers.factory import register_controller
 # from networks.factory import get_network
 # from utils.storage_utils import ExperimentLogger
 #

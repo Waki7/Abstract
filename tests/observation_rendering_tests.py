@@ -1,7 +1,6 @@
 from array2gif import write_gif
 
-import utils.image_utils as image_utils
-from grid_world.rendering.observation_rendering import *
+from envs.grid_world.rendering.observation_rendering import *
 
 CFG = {
     'global_resolution': [5, 5],

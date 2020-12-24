@@ -2,8 +2,8 @@ import logging
 
 import yaml
 
-import grid_world
-from agent_controllers.factory import CONTROLLER_REGISTERY
+from envs import grid_world
+from controllers.rl.factory import CONTROLLER_REGISTERY
 
 with open('./configs/cfg_execution.yaml') as f:
     CFG_EXECUTION = yaml.load(f, Loader=yaml.FullLoader)
