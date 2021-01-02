@@ -72,7 +72,8 @@ def sum_multi_modal_shapes(shapes):
         elif isinstance(shape, tuple) or isinstance(shape, np.ndarray) or isinstance(shape, list):
             total_features += np.prod(shape)
         else:
-            raise NotImplementedError('type of shape {} is not supported, feel free to add it.'.format(type(shape)))
+            raise NotImplementedError(
+                'type of shape {} is not supported, feel free to add it.'.format(type(shape)))
     return total_features
 
 
@@ -114,8 +115,9 @@ def scale_space(state: np.ndarray, space):
 # DATA CONVERSION
 # ---------------------------------------------------------------------------
 
-def batch_env_observations(observation_list: typ.List[np.ndarray], space: gym_spaces.Space) -> typ.Union[
-    typ.List[np.ndarray], np.ndarray]:
+def batch_env_observations(observation_list: typ.List[np.ndarray], space: gym_spaces.Space) -> \
+        typ.Union[
+            typ.List[np.ndarray], np.ndarray]:
     if isinstance(space, gym_spaces.Tuple):
         batched_observation = []
         for obs_idx in range(len(observation_list[0])):
@@ -158,13 +160,19 @@ def get_euclidean_distance(point1: np.ndarray, point2: np.ndarray):
 
 
 # ---------------------------------------------------------------------------
-# NUMERIC PROPERTIES
+# NUMERIC PROPERTIES & EVALUATION METRICS
 # ---------------------------------------------------------------------------
+
+def mean_abs_diff(self, y_pred, y_true) -> float:
+    return torch.abs(out - y_true).mean().cpu().item()
+
+
 def is_odd(val):
     return val % 2 == 1
 
 
-def scale_vector_to_range(vector: typ.Union[np.ndarray, torch.Tensor], new_min: typ.Union[int, float],
+def scale_vector_to_range(vector: typ.Union[np.ndarray, torch.Tensor],
+                          new_min: typ.Union[int, float],
                           new_max: [int, float]):
     """Rescale an arrary linearly."""
     minimum, maximum = np.min(vector), np.max(vector)

@@ -190,7 +190,7 @@ class MobileNetV2(NetworkInterface):
             if self.last_block > cfg['last_block'] or self.max_block_repeats > cfg['max_block_repeats']:
                 logging.warning('you are loading weights which have not been pretrained with the rest of the model')
 
-        weights_path = self.get_weights_filename(load_folder)
+        weights_path = self.get_weights_filepath(load_folder)
         new_dict: dict = torch.load(weights_path)
         weights_to_keep = {}
         first_key = list(new_dict.keys())[0]

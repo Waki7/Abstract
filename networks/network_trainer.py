@@ -45,15 +45,10 @@ class NetworkTrainer(object):
             self.optimizer.step()
             self.optimizer.zero_grad()
 
-    def get_optimizer_filename(self, model_folder):
-        return os.path.join(model_folder, Networks.OPTIMIZER_FILENAME)
-
-    def load(self, model_folder):
-        pass
-        # model.load_state_dict(torch.load(PATH, map_location=device))
-
     def store_optimizer(self, model_folder):
-        torch.save(self.optimizer.state_dict(), self.get_optimizer_filename(model_folder))
+        # todo, maybe load optimizer?
+        optimizer_filename = os.path.join(model_folder, Networks.OPTIMIZER_FILENAME)
+        torch.save(self.optimizer.state_dict(), optimizer_filename)
 
     def save(self, model_folder):
         self.store_optimizer(model_folder)

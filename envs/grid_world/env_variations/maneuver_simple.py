@@ -4,11 +4,16 @@ import typing as typ
 import gym
 import numpy as np
 
-from envs import grid_world as core, grid_world as grid_world, grid_world as render_shapes
+import envs.grid_world.env_core as core
+import envs.grid_world.env_core.core_env_objects as env_objects
+import envs.grid_world.env_core.env_agents as env_agents
+import envs.grid_world.rendering.shapes as render_shapes
 import utils.image_utils as image_utils
+from envs.grid_world.env_core.action_mapper import ActionMapper
+from envs.grid_world.env_variations.grid_world import GridEnv
 
 
-class ManeuverSimple(grid_world.GridEnv):
+class ManeuverSimple(GridEnv):
     def __init__(self, cfg):
         '''
         This environment is an episodic task with discrete actions and a single agent
@@ -19,16 +24,18 @@ class ManeuverSimple(grid_world.GridEnv):
 
         self.is_discrete_actions = True
         world_action_space = self.world.get_world_action_space()
-        self.action_mapper = core.ActionMapper(in_space=self.action_space,
-                                               out_space=world_action_space,
-                                               encode_func=core.get_action_unit_vector)
+        self.action_mapper = ActionMapper(in_space=self.action_space,
+                                          out_space=world_action_space,
+                                          encode_func=
+                                          env_objects.get_action_unit_vector)
         self.cfg = cfg
 
         # ---------------------------------------------------------------------------
         # set parameters from config
         # ---------------------------------------------------------------------------
         agent_shape = render_shapes.Circle(radius=4., observed_value=55)
-        self.agents = [core.EnvAgent(id=agent, observed_shape=agent_shape) for agent in self.agent_keys]
+        self.agents = [env_agents.EnvAgent(id=agent, observed_shape=agent_shape)
+                       for agent in self.agent_keys]
         self.n_agents = cfg.get('n_agents', 1)
         self.n_landmarks = cfg.get('n_landmarks', 2)
         self.n_foreign_friendlies = cfg.get('n_foreign_friendlies', 0)
@@ -42,30 +49,39 @@ class ManeuverSimple(grid_world.GridEnv):
         # ---------------------------------------------------------------------------
         self.object_coordinates = []
         landmark_shape = render_shapes.Diamond(apothem=5., observed_value=200)
-        self.target = core.GridObject(id='target', observed_shape=landmark_shape)
-        self.avoid = core.GridObject(id='obstacle', observed_shape=landmark_shape)
+        self.target = env_objects.GridObject(id='target',
+                                             observed_shape=landmark_shape)
+        self.avoid = env_objects.GridObject(id='obstacle',
+                                            observed_shape=landmark_shape)
 
         # ---------------------------------------------------------------------------
         # episodic initializations
         # ---------------------------------------------------------------------------
         self.global_render_frames = []
-        self.agent_render_frames = dict(zip(self.agent_keys, [[]] * self.n_agents))
-        self.agent_dones_map = dict(zip(self.agent_keys, [False] * self.n_agents))
+        self.agent_render_frames = dict(
+            zip(self.agent_keys, [[]] * self.n_agents))
+        self.agent_dones_map = dict(
+            zip(self.agent_keys, [False] * self.n_agents))
         self.agent_action_map = None
         self.t = 0
 
     def reset(self):
         # --- get spawning locations
-        landmark_locations = [self.world.get_random_point(), self.world.get_random_point()]
-        agent_locations = [self.world.get_random_point() for agent in self.agents]
+        landmark_locations = [self.world.get_random_point(),
+                              self.world.get_random_point()]
+        agent_locations = [self.world.get_random_point() for agent in
+                           self.agents]
         # --- spawn the landmarks in the world, this includes placing them in the world
-        self.world.spawn_landmarks([self.target, self.avoid], landmark_locations)
+        self.world.spawn_landmarks([self.target, self.avoid],
+                                   landmark_locations)
         self.world.spawn_agents(self.agents, agent_locations)
 
         # --- episodic initializations
         self.global_render_frames = []
-        self.agent_render_frames = dict(zip(self.agent_keys, [[]] * self.n_agents))
-        self.agent_dones_map = dict(zip(self.agent_keys, [False] * self.n_agents))
+        self.agent_render_frames = dict(
+            zip(self.agent_keys, [[]] * self.n_agents))
+        self.agent_dones_map = dict(
+            zip(self.agent_keys, [False] * self.n_agents))
         self.agent_action_map = None
         self.t = 0
 
@@ -86,8 +102,10 @@ class ManeuverSimple(grid_world.GridEnv):
 
     def calc_action_space(self):
         action_spaces: typ.List[gym.spaces.Space] = []
-        action_spaces.append(gym.spaces.Discrete(len(core.core_objects.DISCRETE_ACTIONS)))
-        logging.info('total of {} actions available'.format(action_spaces[-1].n))
+        action_spaces.append(
+            gym.spaces.Discrete(len(core.core_objects.DISCRETE_ACTIONS)))
+        logging.info(
+            'total of {} actions available'.format(action_spaces[-1].n))
         action_space = gym.spaces.Tuple(action_spaces)
         return action_space
 
@@ -113,7 +131,8 @@ class ManeuverSimple(grid_world.GridEnv):
             for agent_key in actions.keys():
                 action = actions[agent_key]
                 # TODO REPLACE self.agents[0]
-                self.world.move_agent(self.agents[0], self.action_mapper.encode(action))
+                self.world.move_agent(self.agents[0],
+                                      self.action_mapper.encode(action))
 
         frame = self.world.render_world()
         self.global_render_frames.append(frame)
@@ -127,15 +146,18 @@ class ManeuverSimple(grid_world.GridEnv):
         return agent_obss, agent_rewards, agent_dones, agent_infos
 
     def log_summary(self):
-        logging.debug('\n___________start step {}_______________'.format(self.t))
+        logging.debug(
+            '\n___________start step {}_______________'.format(self.t))
 
         if self.agent_action_map:
-            logging.debug('agent\' latest prediction : ' + str(self.agent_action_map))
+            logging.debug(
+                'agent\' latest prediction : ' + str(self.agent_action_map))
         logging.debug('Env State for agent at timestep ' + str(self.t))
         for channel in self.state_map:
             val = self.state_map[channel]
             if len(val) > 0:
-                logging.debug('channel {}: {}, '.format(channel, str(self.state_map[channel])))
+                logging.debug('channel {}: {}, '.format(channel, str(
+                    self.state_map[channel])))
         # agent.log_predictions()
         logging.debug('env reward is : ' + str(self.current_reward))
         for object_id in self.objects.keys():
@@ -196,10 +218,14 @@ class ManeuverSimple(grid_world.GridEnv):
 
     def render(self):
         raw_frames = self.global_render_frames
-        return [image_utils.convert_to_rgb_format(frame, target_resolution=self.animation_resolution,
-                                                  interpolation=self.render_interpolation) for frame in raw_frames]
+        return [image_utils.convert_to_rgb_format(frame,
+                                                  target_resolution=self.animation_resolution,
+                                                  interpolation=self.render_interpolation)
+                for frame in raw_frames]
 
     def render_agent_pov(self, agent_key):
         raw_frames = self.agent_render_frames[agent_key]
-        return [image_utils.convert_to_rgb_format(frame, target_resolution=self.animation_resolution,
-                                                  interpolation=self.render_interpolation) for frame in raw_frames]
+        return [image_utils.convert_to_rgb_format(frame,
+                                                  target_resolution=self.animation_resolution,
+                                                  interpolation=self.render_interpolation)
+                for frame in raw_frames]

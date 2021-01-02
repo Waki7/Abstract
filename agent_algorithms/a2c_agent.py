@@ -11,7 +11,7 @@ from networks.basic_fc_networks import *
 
 @register_agent
 class A2CAgent(Agent):
-    # this agent can work with environments x, y, z (life and gym envs)
+    # this agent can work with environments x, y, z (life and gym env_variations)
     # try to make the encoding part separate
     def __init__(self, is_episodic, cfg, actor, critic=None):
         self.is_ac_shared = critic is None

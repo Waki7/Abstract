@@ -24,7 +24,7 @@ def try_load_weights(model: base.NetworkInterface, cfg):
                     model.load(model_folder)
                 else:
                     logging.warning('using torch load instead of classes implementation')
-                    weights_path = model.get_weights_filename(model_folder)
+                    weights_path = model.get_weights_filepath(model_folder)
                     state_dict = torch.load(weights_path, map_location=torch.device('cpu'))
                     model.load_state_dict(state_dict)
                 return True

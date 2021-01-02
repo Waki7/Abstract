@@ -1,7 +1,7 @@
 import gym
 
 
-class EnvEncoderTrainer(object):
+class EnvEncodingTask(object):
     class LoggingMetrics(object):
         mean_abs_diff = 'img_encoder/mean_abs_diff'
         loss = 'img_encoder/loss'
@@ -17,5 +17,5 @@ class EnvEncoderTrainer(object):
     def calc_out_space(self) -> gym.Space:
         raise NotImplementedError
 
-    def generate_batch(self):
+    def generate_batch(self, batch_size = 1):
         self.env.reset()

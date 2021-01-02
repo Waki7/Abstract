@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import *
 
 import torch
 import torch.nn as nn
@@ -30,19 +31,20 @@ class NetworkInterface(nn.Module):
         self.CONFIG_FILENAME = 'config.yaml'
         self.WEIGHTS_FILENAME = 'model.pth'
 
-        self.trainer = NetworkTrainer(self.cfg)
-        self.temp_classifier = nn.Identity()
+        self.trainer: Optional[NetworkTrainer] = None
+        self.temp_predictor = nn.Identity()
 
-    def create_optimizer(self):
+    def create_optimizer(self) -> NetworkTrainer:
+        self.trainer = NetworkTrainer(self.cfg)
         self.trainer.add_network(self)
         return self.trainer
 
     def forward(self, *input):
         raise NotImplementedError
 
-    def pretrain(self, layer):
-        self.temp_classifier = layer
-        self.trainer.add_layer_to_optimizer(layer)
+    def add_temp_predictor(self, predictor):
+        self.temp_predictor = predictor
+        self.trainer.add_layer_to_optimizer(predictor)
 
     def get_in_shapes(self):
         return self.in_shapes
@@ -56,28 +58,29 @@ class NetworkInterface(nn.Module):
     def get_in_features(self):
         return self.in_features
 
+    # loading and saving
+
     def get_config_filename(self, model_folder):
         return os.path.join(model_folder, self.CONFIG_FILENAME)
 
-    def store_config(self, model_folder):
-        storage_utils.save_config(self.cfg, self.get_config_filename(model_folder))
+    def store_config(self, model_dir_path):
+        storage_utils.save_config(self.cfg, self.get_config_filename(model_dir_path))
 
-    def load_config(self, model_folder):
-        return storage_utils.load_config(self.get_config_filename(model_folder))
+    def load_config(self, model_dir_path):
+        return storage_utils.load_config(self.get_config_filename(model_dir_path))
 
-    def get_weights_filename(self, model_folder):
-        return os.path.join(model_folder, self.WEIGHTS_FILENAME)
+    def get_weights_filepath(self, model_dir_path):
+        return os.path.join(model_dir_path, self.WEIGHTS_FILENAME)
 
     def store_weights(self, model_folder):
-        torch.save(self.state_dict(), self.get_weights_filename(model_folder))
+        torch.save(self.state_dict(), self.get_weights_filepath(model_folder))
 
     def load(self, load_folder):
         self.cfg = self.load_config(load_folder)
-        self.load_state_dict(torch.load(self.get_weights_filename(load_folder), map_location=settings.DEVICE))
+        self.load_state_dict(torch.load(self.get_weights_filepath(load_folder), map_location=settings.DEVICE))
 
     def save(self, save_folder):
-        self.temp_classifier = nn.Identity()
-        self.store_optimizer(save_folder)
+        self.temp_predictor = nn.Identity()
+        self.trainer.store_optimizer(save_folder)
         self.store_weights(save_folder)
         self.store_config(save_folder)
-

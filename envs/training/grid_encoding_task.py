@@ -5,18 +5,18 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-import controllers.visual.encoder_trainers as enc_trainers
-from envs import grid_world as envs
 import networks.network_interface as nets
 import settings
 import utils.experiment_utils as experiment_utils
 import utils.model_utils as model_utils
+from envs import grid_world as envs
+from envs.training.base_env_encoding_task import EnvEncodingTask
 
 
-class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
+class GridEncodingTask(EnvEncodingTask):
     def __init__(self, env_cfg):
         super().__init__(env_cfg)
-        self.env: envs.ManeuverSimple
+        self.env: envs.ManeuverSimple = None
         self.in_space = self.get_in_spaces()
         self.out_space = self.calc_out_space()
         self.y_shape = np.prod(self.out_space.shape)
@@ -40,19 +40,24 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
         lower_bounds = [interval[0] for interval in bounds]
         upper_bounds = [interval[1] for interval in bounds]
 
-        return gym.spaces.Box(low=np.min(lower_bounds), high=np.max(upper_bounds), shape=(n_total_objects, n_dim))
+        return gym.spaces.Box(low=np.min(lower_bounds),
+                              high=np.max(upper_bounds),
+                              shape=(n_total_objects, n_dim))
 
-    def generate_batch(self, batch_size=75) -> typ.Tuple[torch.Tensor, torch.Tensor]:
+    def generate_batch(self, batch_size=75) -> typ.Tuple[
+        torch.Tensor, torch.Tensor]:
         inputs = []
         y_trues = []
         for i in range(0, batch_size):
             state: np.ndarray = self.env.reset()
             inputs.append(state)
-            coordinates = np.asarray(self.env.get_object_coordinates()).flatten()
+            coordinates = np.asarray(
+                self.env.get_object_coordinates()).flatten()
             y_trues.append(coordinates)
 
         batched_obs = model_utils.batch_env_observations(inputs, self.in_space)
-        batched_obs = model_utils.scale_space(state=batched_obs, space=self.in_space)
+        batched_obs = model_utils.scale_space(state=batched_obs,
+                                              space=self.in_space)
         batched_obs = model_utils.nd_list_to_torch(batched_obs)[0]
         # for i in range(0, 99):
         #     first = batched_obs[:, 0, 0, i]
@@ -64,12 +69,6 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
 
         return batched_obs, y_trues
 
-    def mean_abs_diff(self, network) -> float:
-        new_batch, y_true = self.generate_batch()
-        with torch.no_grad():
-            out = network.forward(new_batch)
-        return torch.abs(out - y_true).mean().cpu().item()
-
     def train(self, encoder: nets.NetworkInterface, training_cfg):
         logger: experiment_utils.ExperimentLogger = experiment_utils.ExperimentLogger()
         logger.create_experiment(algo=encoder, env_name=self.env_cfg['name'],
@@ -78,21 +77,25 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
         checkpoint_freq = training_cfg['checkpoint_freq']
         batch_size = training_cfg['batch_size']
         out_space = self.calc_out_space()
-        assert isinstance(out_space, gym.spaces.Box), 'assuming we are predicting coordinates'
+        assert isinstance(out_space,
+                          gym.spaces.Box), 'assuming we are predicting coordinates'
 
         net_trainer = encoder.create_optimizer()
 
         predictor = \
-            torch.nn.Linear(in_features=encoder.get_out_features(), out_features=self.y_shape)
-        encoder.pretrain(predictor)
+            torch.nn.Linear(in_features=encoder.get_out_features(),
+                            out_features=self.y_shape)
+        encoder.add_temp_predictor(predictor)
         full_network = torch.nn.Sequential(encoder, predictor)
 
         for i in range(0, 1000):
             new_batch, y_true = self.generate_batch(batch_size=batch_size)
             out = encoder.forward(new_batch)
             out = predictor(out)
-            critic_loss = F.smooth_l1_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
-            logger.add_agent_scalars(label=self.LoggingMetrics.loss, data=critic_loss.cpu().item(), log=True)
+            critic_loss = F.smooth_l1_loss(input=out, target=y_true,
+                                           reduction='mean')  # .5 * advantage.pow(2).mean()
+            logger.add_agent_scalars(label=self.LoggingMetrics.loss,
+                                     data=critic_loss.cpu().item(), log=True)
             # critic_loss = F.mse_loss(input=out, target=y_true, reduction='mean')  # .5 * advantage.pow(2).mean()
             # mse_loss = (out - y_true).pow(2).mean()
             critic_loss.backward(retain_graph=True)
@@ -103,7 +106,9 @@ class StateEncodingProtocol(enc_trainers.EnvEncoderTrainer):
                 print(y_true)
                 print(out)
                 print('------')
-                logger.add_agent_scalars(label=self.LoggingMetrics.mean_abs_diff, data=mean_abs_diff, log=True)
+                logger.add_agent_scalars(
+                    label=self.LoggingMetrics.mean_abs_diff, data=mean_abs_diff,
+                    log=True)
             print(i)
             # print(critic_loss)
             # print(mse_loss)

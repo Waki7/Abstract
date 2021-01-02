@@ -2,8 +2,8 @@ import inspect
 import logging
 import os
 import re
-import typing as tp
 from datetime import datetime
+from typing import *
 
 import gym
 import numpy as np
@@ -46,7 +46,7 @@ def get_experiment_naming(algo):
     if isinstance(algo, agnts.Agent):
         root_dir = agnts.Agent.__name__
     elif isinstance(algo, nets.NetworkInterface):
-        root_dir = nets.NetworkInterface.__name__
+        root_dir = 'EncodingTasks'
     else:
         root_dir = inspect.getmro(algo)[-2]
         logging.info("didn't find expected base class, will store log results directory for {},"
@@ -54,9 +54,12 @@ def get_experiment_naming(algo):
     return root_dir, algo_name
 
 
-class ExperimentLogger():
-    def __init__(self):
-        self.results_path = ''
+class ExperimentLogger(object):
+    def __init__(self, dir_to_continue: str = None):
+        self.continuation = dir_to_continue is not None
+        self.experiment_root: Optional[str] = None if dir_to_continue is None else dir_to_continue
+        self.run_dir: Optional[str] = None
+
         self.writer = None
         self.progress_values_sum = {}
         self.progress_values_mean = {}
@@ -69,35 +72,43 @@ class ExperimentLogger():
         if reset_count:
             self.counts = {}
 
-    def create_experiment(self, algo: object, env_name, training_cfg, directory='', agent_cfg=None, env_cfg=None):
-        root_dir, algo_name = get_experiment_naming(algo)
-        variation = training_cfg.get('variation', '')
-        training = directory == ''
-        if not training:
-            # todo add a testing directory to this
-            self.results_path = directory
-        else:
+    @property
+    def results_path(self):
+        return os.path.join(self.experiment_root, self.run_dir)
+
+    def create_experiment(self, algo: object, run_dir, config_dict: Dict[str, Dict] = {}):
+        '''
+
+        :param algo: either pass in a string for the variation of algorithm to make experiment under
+                    or pass in an object and we will either map a naming if we have it, or
+                    use the class name
+        :param run_dir: just the iteration of experimentation to record, so for first training use
+                        something like 'training'
+        :param config_dict: dictionary of configs to store in the folder
+        :return:
+        '''
+        if self.results_path is not None:
+            root_dir, algo_name = get_experiment_naming(algo)
             time = datetime.now()
-            self.results_path = os.path.join(Directories.LOG_DIR, root_dir, algo_name, env_name, variation,
-                                             time.strftime("%Y_%m%d_%H%M_%S"))
-            logging.info(self.results_path)
-            self.writer = SummaryWriter(self.results_path)
+            self.experiment_root = os.path.join(Directories.LOG_DIR, root_dir, algo_name,
+                                                time.strftime("%Y_%m%d_%H%M_%S"))
+            self.run_dir = run_dir
+        logging.info(self.results_path)
+        self.writer = SummaryWriter(self.results_path)
 
         # ----------------------------------------------------------------
-        # create empty notes file, directory for blueprint_weights, models, and animations
+        # create empty notes file, directory for weights, models, and animations
         # ----------------------------------------------------------------
         notes_file = '{}/notes.txt'.format(self.results_path)
         open(notes_file, 'a').close()
-        [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in ['blueprint_weights', 'models', 'animations']]
+        [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in
+         ['weights', 'models', 'animations']]
 
         # ----------------------------------------------------------------
         # store any passed in configs
         # ----------------------------------------------------------------
-        if agent_cfg is not None:
-            storage_utils.save_config(agent_cfg, '{}/agent.yaml'.format(self.results_path))
-
-        if env_cfg is not None:
-            storage_utils.save_config(env_cfg, '{}/env.yaml'.format(self.results_path))
+        for name, config, in config_dict.items():
+            storage_utils.save_config(cfg=config, dir=self.results_path, filename=name)
 
         self.reset_buffers(True)
 
@@ -135,11 +146,12 @@ class ExperimentLogger():
                                    track_mean=track_mean, track_sum=track_sum,
                                    log=log)
 
-    def add_agent_scalars(self, label: str, data: tp.Union[float, tp.Iterable[float]],
-                          step: int = -1, track_mean: bool = False, track_sum: bool = False, log: bool = False):
+    def add_agent_scalars(self, label: str, data: Union[float, Iterable[float]],
+                          step: int = -1, track_mean: bool = False, track_sum: bool = False,
+                          log: bool = False):
         if data is None:
             return
-        if isinstance(data, tp.Iterable):
+        if isinstance(data, Iterable):
             data = np.mean(data)
 
         if track_mean:
@@ -161,14 +173,15 @@ class ExperimentLogger():
     #     func(self.)
 
     def checkpoint(self, episode, checkpoint_freq, agent_map,
-                   environment: tp.Union[env_wrappers.SubprocVecEnv, gym.Env]):
+                   environment: Union[env_wrappers.SubprocVecEnv, gym.Env]):
         is_batch_env = isinstance(environment, env_wrappers.SubprocVecEnv)
         if (episode + 1) % checkpoint_freq == 0:
             # --- save models
             pass
 
             # --- save animations
-            env_animations_path = '{}/animations/environment_episode_{}.gif'.format(self.results_path, episode)
+            env_animations_path = '{}/animations/environment_episode_{}.gif'.format(
+                self.results_path, episode)
 
             if is_batch_env:
                 animations = environment.render(indices=(0,))[0]
@@ -176,13 +189,16 @@ class ExperimentLogger():
                 animations = environment.render()
             write_gif(animations, env_animations_path, fps=2)
 
-            if hasattr(environment, 'render_agent_pov') or (is_batch_env and environment.has_attr('render_agent_pov')):
+            if hasattr(environment, 'render_agent_pov') or (
+                    is_batch_env and environment.has_attr('render_agent_pov')):
                 for agent_key in agent_map.keys():
-                    agent_animation_path = '{}/animations/agent_{}_episode_{}.gif'.format(self.results_path,
-                                                                                          agent_key, episode)
+                    agent_animation_path = '{}/animations/agent_{}_episode_{}.gif'.format(
+                        self.results_path,
+                        agent_key, episode)
 
                     if is_batch_env:
-                        agent_animation = environment.env_method('render_agent_pov', *(agent_key,), indices=0)[0]
+                        agent_animation = \
+                            environment.env_method('render_agent_pov', *(agent_key,), indices=0)[0]
                     else:
                         agent_animation = environment.render_agent_pov(agent_key)
                     write_gif(agent_animation, agent_animation_path, fps=2)

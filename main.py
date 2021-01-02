@@ -14,7 +14,7 @@ with open('./configs/cfg_env.yaml') as f:
 with open('./configs/cfg_agent.yaml') as f:
     CFG_AGENT = yaml.load(f, Loader=yaml.FullLoader)
 
-with open('./configs/cfg_network.yaml') as f:
+with open('./configs/cfg_encoders.yaml') as f:
     CFG_NETWORK = yaml.load(f, Loader=yaml.FullLoader)
 
 
