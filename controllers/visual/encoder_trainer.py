@@ -1,6 +1,7 @@
 from typing import *
 
 import gym
+import numpy as np
 import torch
 import torch.nn.functional as F
 
@@ -12,7 +13,7 @@ from networks.net_factory import get_network
 from networks.network_interface import NetworkInterface
 
 
-class EnvEncodingTrainer(object):
+class EnvEncodingController(object):
     class LoggingMetrics(object):
         mean_abs_diff = 'img_encoder/mean_abs_diff'
         loss = 'img_encoder/loss'
@@ -21,14 +22,14 @@ class EnvEncodingTrainer(object):
         self.network_cfg = network_cfg
         self.env_cfg = env_cfg
         trainer: EnvEncodingTask = env_factory.get_state_trainer(env_cfg)
-        obs_space = trainer.get_in_spaces()
-        out_space = trainer.calc_out_space()
+        obs_space: gym.spaces.Space = trainer.get_in_spaces()
+        out_space: gym.spaces.Space = trainer.calc_out_space()
         self.trainer = trainer
-        in_shapes = model_utils.space_to_shapes(obs_space)
-        out_shapes = model_utils.space_to_shapes(out_space)
+        assert isinstance(out_space, gym.spaces.Box)
+        self.y_shape = np.prod(out_space.shape)
         self.network: NetworkInterface = get_network(network_cfg,
-                                                     in_shapes,
-                                                     out_shapes=out_shapes)
+                                                     obs_space=obs_space,
+                                                     out_space=out_space)
 
     def verify(self):
         pass
@@ -59,8 +60,6 @@ class EnvEncodingTrainer(object):
                           gym.spaces.Box), 'assuming we are predicting coordinates'
 
         net_trainer = self.network.create_optimizer()
-        print(out_space.shape)
-        print(exit(9))
         predictor = \
             torch.nn.Linear(in_features=self.network.get_out_features(),
                             out_features=self.y_shape)
@@ -70,8 +69,7 @@ class EnvEncodingTrainer(object):
         for i in range(0, 1000):
             new_batch, y_true = self.trainer.generate_batch(
                 batch_size=batch_size)
-            out = self.network.forward(new_batch)
-            out = predictor(out)
+            out = full_network(new_batch)
             critic_loss = F.smooth_l1_loss(input=out, target=y_true,
                                            reduction='mean')  # .5 * advantage.pow(2).mean()
             logger.add_agent_scalars(label=self.LoggingMetrics.loss,

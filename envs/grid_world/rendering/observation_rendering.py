@@ -3,7 +3,7 @@ from typing import Iterable
 import numpy as np
 from gym import spaces
 
-import envs.grid_world.rendering.shapes as render_shapes
+import envs.grid_world.rendering.draw_shapes as draw_shapes
 import utils.image_utils as image_utils
 import utils.model_utils as model_utils
 
@@ -45,7 +45,7 @@ class ObservationRenderer(object):
         return spaces.Box(high=high, low=low, shape=(
         self.n_channels, self.obs_resolution[0], self.obs_resolution[1]))
 
-    def draw_shape(self, shape: render_shapes.Shape, center: Iterable[float]):
+    def draw_shape(self, shape: draw_shapes.Shape, center: Iterable[float]):
         self.drawing = shape.draw(self.drawing, center=center)
         return self.drawing
 

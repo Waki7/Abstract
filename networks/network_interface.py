@@ -16,10 +16,12 @@ class NetworkInterface(nn.Module):
         super(NetworkInterface, self).__init__()
         if isinstance(in_shapes, tuple):
             in_shapes = [in_shapes, ]
-            logging.warning('please pass in your shapes as a list of tuples as if the network input is multi modal')
+            logging.warning(
+                'please pass in your shapes as a list of tuples as if the network input is multi modal')
         if isinstance(out_shapes, tuple):
             out_shapes = [out_shapes, ]
-            logging.warning('please pass in your shapes as a list of tuples as if the netowrk output is multi modal')
+            logging.warning(
+                'please pass in your shapes as a list of tuples as if the netowrk output is multi modal')
         self.cfg = {} if not hasattr(self, 'cfg') else self.cfg
         self.extra_parameters = nn.ParameterList()
         self.in_shapes = in_shapes
@@ -64,10 +66,13 @@ class NetworkInterface(nn.Module):
         return os.path.join(model_folder, self.CONFIG_FILENAME)
 
     def store_config(self, model_dir_path):
-        storage_utils.save_config(self.cfg, self.get_config_filename(model_dir_path))
+        storage_utils.save_config(self.cfg,
+                                  self.get_config_filename(model_dir_path),
+                                  filename=self.CONFIG_FILENAME)
 
     def load_config(self, model_dir_path):
-        return storage_utils.load_config(self.get_config_filename(model_dir_path))
+        return storage_utils.load_config(
+            self.get_config_filename(model_dir_path))
 
     def get_weights_filepath(self, model_dir_path):
         return os.path.join(model_dir_path, self.WEIGHTS_FILENAME)
@@ -77,7 +82,8 @@ class NetworkInterface(nn.Module):
 
     def load(self, load_folder):
         self.cfg = self.load_config(load_folder)
-        self.load_state_dict(torch.load(self.get_weights_filepath(load_folder), map_location=settings.DEVICE))
+        self.load_state_dict(torch.load(self.get_weights_filepath(load_folder),
+                                        map_location=settings.DEVICE))
 
     def save(self, save_folder):
         self.temp_predictor = nn.Identity()

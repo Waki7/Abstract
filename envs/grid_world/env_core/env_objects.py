@@ -41,8 +41,9 @@ def get_action_unit_vector(index):
     return np.asarray(DISCRETE_ACTIONS[index])
 
 
-class GridObject():
-    def __init__(self, id: str, observed_shape: render_shapes.Shape, location: np.ndarray = None, **kwargs):
+class GridObject(object):
+    def __init__(self, id: str, observed_shape: render_shapes.Shape,
+                 location: np.ndarray = None, **kwargs):
         self.id = id
         self.location = location
         self.shape = observed_shape
@@ -61,8 +62,10 @@ class GridObject():
 
 
 class ActionableItem(GridObject):
-    def __init__(self, observed_shape: render_shapes.Shape, id: str, policy=None, location=None, **kwargs):
-        super(ActionableItem, self).__init__(observed_shape=observed_shape, id=id, location=location, **kwargs)
+    def __init__(self, observed_shape: render_shapes.Shape,
+                 id: str, policy=None, location=None, **kwargs):
+        super(ActionableItem, self).__init__(observed_shape=observed_shape,
+                                             id=id, location=location, **kwargs)
         self.id = id
         self.location = location
         self.policy = policy
@@ -72,6 +75,9 @@ class ActionableItem(GridObject):
         # if self.policy is None:
         #     raise NotImplementedError
         # return self.policy.step(obs)
+
+    def interpret_action(self):
+        raise NotImplementedError
 
     def move_towards(self, destination):
         pass

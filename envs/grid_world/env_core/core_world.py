@@ -4,7 +4,7 @@ from typing import List, Iterable, Dict
 import numpy as np
 from gym import spaces
 
-import envs.grid_world.env_core.core_env_objects as env_objects
+import envs.grid_world.env_core.env_objects as env_objects
 import envs.grid_world.env_core.env_agents as env_agents
 import envs.grid_world.env_core.landmarks as env_landmarks
 import envs.grid_world.rendering.observation_rendering as rendering
@@ -23,8 +23,8 @@ class CoreWorld(object):
         # ---------------------------------------------------------------------------
         self.bounds = cfg.get('bounds', [[-1.0, 1.0], [-1.0, 1.0]])
         if not isinstance(self.bounds[0], Iterable):
-            logging.info(
-                'bounds were provided in one dimension, will infer a box was desired')
+            logging.info('bounds were provided in one dimension,'
+                         ' will infer a box was desired')
             self.bounds = (self.bounds, self.bounds)
         self.dt = cfg.get('dt', .1)  # time grandularity
         observation_cfg = cfg.get('observations')
@@ -32,7 +32,6 @@ class CoreWorld(object):
         # ---------------------------------------------------------------------------
         # initializations
         # ---------------------------------------------------------------------------
-        self.object_coordinates = []
         self.landmark_map: Dict[str, env_landmarks.Landmark] = {}
         self.agent_map: Dict[str, env_agents.EnvAgent] = {}
         self.renderer = rendering.ObservationRenderer(cfg=observation_cfg)
@@ -48,8 +47,7 @@ class CoreWorld(object):
         obs_spaces.append(self.renderer.get_obs_shape())
         logging.info('total of {} observable discrete observations'.format(
             obs_spaces[-1].high.shape))
-        obs_space = spaces.Tuple(obs_spaces)
-        return obs_space
+        return obs_spaces[0]
 
     def get_world_action_space(self) -> spaces.Box:
         high = 1.0

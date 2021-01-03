@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import *
 
 import gym.envs.registration as gym_reg
+import gym
 
 if TYPE_CHECKING:
     from envs.training.base_env_encoding_task import EnvEncodingTask
@@ -19,6 +20,13 @@ def get_state_trainer(env_cfg) -> EnvEncodingTask:
         raise NotImplementedError(
             'state trainer is not implemented for this environment')
     return state_encoder(env_cfg)
+
+
+def get_env(env_cfg: Dict) -> gym.Env:
+    if len(env_cfg) > 1:
+        return gym.make(env_cfg['name'], cfg=env_cfg)
+    else:
+        return gym.make(env_cfg['name'])
 
 
 def register(id, entry_point, state_training: EnvEncodingTask = None,

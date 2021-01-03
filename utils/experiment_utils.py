@@ -49,15 +49,17 @@ def get_experiment_naming(algo):
         root_dir = 'EncodingTasks'
     else:
         root_dir = inspect.getmro(algo)[-2]
-        logging.info("didn't find expected base class, will store log results directory for {},"
-                     " the top parent class after object".format(root_dir))
+        logging.info(
+            "didn't find expected base class, will store log results directory for {},"
+            " the top parent class after object".format(root_dir))
     return root_dir, algo_name
 
 
 class ExperimentLogger(object):
     def __init__(self, dir_to_continue: str = None):
         self.continuation = dir_to_continue is not None
-        self.experiment_root: Optional[str] = None if dir_to_continue is None else dir_to_continue
+        self.experiment_root: Optional[
+            str] = None if dir_to_continue is None else dir_to_continue
         self.run_dir: Optional[str] = None
 
         self.writer = None
@@ -73,10 +75,11 @@ class ExperimentLogger(object):
             self.counts = {}
 
     @property
-    def results_path(self):
+    def run_path(self):
         return os.path.join(self.experiment_root, self.run_dir)
 
-    def create_experiment(self, algo: object, run_dir, config_dict: Dict[str, Dict] = {}):
+    def create_experiment(self, algo: object, run_dir,
+                          config_dict: Dict[str, Dict] = {}):
         '''
 
         :param algo: either pass in a string for the variation of algorithm to make experiment under
@@ -87,28 +90,31 @@ class ExperimentLogger(object):
         :param config_dict: dictionary of configs to store in the folder
         :return:
         '''
-        if self.results_path is not None:
+        if self.experiment_root is None:
             root_dir, algo_name = get_experiment_naming(algo)
             time = datetime.now()
-            self.experiment_root = os.path.join(Directories.LOG_DIR, root_dir, algo_name,
-                                                time.strftime("%Y_%m%d_%H%M_%S"))
+            self.experiment_root = os.path.join(Directories.LOG_DIR, root_dir,
+                                                algo_name,
+                                                time.strftime(
+                                                    "%Y_%m%d_%H%M_%S"))
             self.run_dir = run_dir
-        logging.info(self.results_path)
-        self.writer = SummaryWriter(self.results_path)
+        logging.info('experiment being logged in {}'.format(self.run_path))
+        self.writer = SummaryWriter(self.run_path)
 
         # ----------------------------------------------------------------
         # create empty notes file, directory for weights, models, and animations
         # ----------------------------------------------------------------
-        notes_file = '{}/notes.txt'.format(self.results_path)
+        notes_file = '{}/notes.txt'.format(self.run_path)
         open(notes_file, 'a').close()
-        [os.mkdir('{}/{}'.format(self.results_path, folder)) for folder in
+        [os.mkdir('{}/{}'.format(self.run_path, folder)) for folder in
          ['weights', 'models', 'animations']]
 
         # ----------------------------------------------------------------
         # store any passed in configs
         # ----------------------------------------------------------------
         for name, config, in config_dict.items():
-            storage_utils.save_config(cfg=config, dir=self.results_path, filename=name)
+            storage_utils.save_config(cfg=config, dir=self.run_path,
+                                      filename=name)
 
         self.reset_buffers(True)
 
@@ -133,21 +139,25 @@ class ExperimentLogger(object):
         logging.info(log_output)
         self.reset_buffers(False)
 
-    def add_scalar_dict(self, label, data, step=-1, track_mean=False, track_sum=False, log=False):
+    def add_scalar_dict(self, label, data, step=-1, track_mean=False,
+                        track_sum=False, log=False):
         if len(data) == 0:
             return
         keys = list(data.keys())
         if 'agent' in keys[0]:
             # average over the agents
-            raise NotImplementedError('have the controller combine agent losses')
+            raise NotImplementedError(
+                'have the controller combine agent losses')
             pass
         for key in keys:
-            self.add_agent_scalars(label='{}/{}'.format(label, key), data=data[key], step=step,
+            self.add_agent_scalars(label='{}/{}'.format(label, key),
+                                   data=data[key], step=step,
                                    track_mean=track_mean, track_sum=track_sum,
                                    log=log)
 
     def add_agent_scalars(self, label: str, data: Union[float, Iterable[float]],
-                          step: int = -1, track_mean: bool = False, track_sum: bool = False,
+                          step: int = -1, track_mean: bool = False,
+                          track_sum: bool = False,
                           log: bool = False):
         if data is None:
             return
@@ -155,10 +165,12 @@ class ExperimentLogger(object):
             data = np.mean(data)
 
         if track_mean:
-            self.progress_values_mean[label] = self.progress_values_mean.get(label, [])
+            self.progress_values_mean[label] = self.progress_values_mean.get(
+                label, [])
             self.progress_values_mean[label].append(data)
         if track_sum:
-            self.progress_values_sum[label] = self.progress_values_sum.get(label, [])
+            self.progress_values_sum[label] = self.progress_values_sum.get(
+                label, [])
             self.progress_values_sum[label].append(data)
 
         if log:
@@ -181,7 +193,7 @@ class ExperimentLogger(object):
 
             # --- save animations
             env_animations_path = '{}/animations/environment_episode_{}.gif'.format(
-                self.results_path, episode)
+                self.run_path, episode)
 
             if is_batch_env:
                 animations = environment.render(indices=(0,))[0]
@@ -193,12 +205,14 @@ class ExperimentLogger(object):
                     is_batch_env and environment.has_attr('render_agent_pov')):
                 for agent_key in agent_map.keys():
                     agent_animation_path = '{}/animations/agent_{}_episode_{}.gif'.format(
-                        self.results_path,
+                        self.run_path,
                         agent_key, episode)
 
                     if is_batch_env:
                         agent_animation = \
-                            environment.env_method('render_agent_pov', *(agent_key,), indices=0)[0]
+                            environment.env_method('render_agent_pov',
+                                                   *(agent_key,), indices=0)[0]
                     else:
-                        agent_animation = environment.render_agent_pov(agent_key)
+                        agent_animation = environment.render_agent_pov(
+                            agent_key)
                     write_gif(agent_animation, agent_animation_path, fps=2)

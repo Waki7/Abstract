@@ -4,10 +4,9 @@ import typing as typ
 import gym
 import numpy as np
 
-import envs.grid_world.env_core as core
-import envs.grid_world.env_core.core_env_objects as env_objects
+import envs.grid_world.env_core.env_objects as env_objects
 import envs.grid_world.env_core.env_agents as env_agents
-import envs.grid_world.rendering.shapes as render_shapes
+import envs.grid_world.rendering.draw_shapes as render_shapes
 import utils.image_utils as image_utils
 from envs.grid_world.env_core.action_mapper import ActionMapper
 from envs.grid_world.env_variations.grid_world import GridEnv
@@ -31,15 +30,11 @@ class ManeuverSimple(GridEnv):
         self.cfg = cfg
 
         # ---------------------------------------------------------------------------
-        # set parameters from config
+        # set parameters from configs
         # ---------------------------------------------------------------------------
         agent_shape = render_shapes.Circle(radius=4., observed_value=55)
         self.agents = [env_agents.EnvAgent(id=agent, observed_shape=agent_shape)
                        for agent in self.agent_keys]
-        self.n_agents = cfg.get('n_agents', 1)
-        self.n_landmarks = cfg.get('n_landmarks', 2)
-        self.n_foreign_friendlies = cfg.get('n_foreign_friendlies', 0)
-        self.n_foreign_enemies = cfg.get('n_foreign_enemies', 0)
         self.agent_fov = cfg.get('agent_fov', 0.15)
         self.animation_resolution = cfg.get('animation_resolution', (100, 100))
         self.render_interpolation = cfg.get('render_interpolation')
@@ -103,7 +98,7 @@ class ManeuverSimple(GridEnv):
     def calc_action_space(self):
         action_spaces: typ.List[gym.spaces.Space] = []
         action_spaces.append(
-            gym.spaces.Discrete(len(core.core_objects.DISCRETE_ACTIONS)))
+            gym.spaces.Discrete(len(env_objects.DISCRETE_ACTIONS)))
         logging.info(
             'total of {} actions available'.format(action_spaces[-1].n))
         action_space = gym.spaces.Tuple(action_spaces)

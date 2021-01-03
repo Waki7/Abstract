@@ -1,6 +1,7 @@
 import logging
 import os
 
+import gym.spaces
 import torch
 from torch import nn
 
@@ -30,10 +31,12 @@ def _make_divisible(v, divisor, min_value=None):
 
 
 class ConvBNReLU(nn.Sequential):
-    def __init__(self, in_planes, out_planes, kernel_size=3, stride=1, groups=1):
+    def __init__(self, in_planes, out_planes, kernel_size=3, stride=1,
+                 groups=1):
         padding = (kernel_size - 1) // 2
         super(ConvBNReLU, self).__init__(
-            nn.Conv2d(in_planes, out_planes, kernel_size, stride, padding, groups=groups, bias=False),
+            nn.Conv2d(in_planes, out_planes, kernel_size, stride, padding,
+                      groups=groups, bias=False),
             nn.BatchNorm2d(out_planes),
             nn.ReLU6(inplace=True)
         )
@@ -54,7 +57,8 @@ class InvertedResidual(nn.Module):
             layers.append(ConvBNReLU(inp, hidden_dim, kernel_size=1))
         layers.extend([
             # dw
-            ConvBNReLU(hidden_dim, hidden_dim, stride=stride, groups=hidden_dim),
+            ConvBNReLU(hidden_dim, hidden_dim, stride=stride,
+                       groups=hidden_dim),
             # pw-linear
             nn.Conv2d(hidden_dim, oup, 1, 1, 0, bias=False),
             nn.BatchNorm2d(oup),
@@ -84,7 +88,7 @@ class MobileNetV2(NetworkInterface):
 
     '''
 
-    def __init__(self, in_shapes, cfg={}, **kwargs):
+    def __init__(self, obs_space: gym.spaces.Space, cfg={}, **kwargs):
         """
         MobileNet V2 main class
 
@@ -96,13 +100,12 @@ class MobileNetV2(NetworkInterface):
             Set to 1 to turn off rounding
         """
         # not calling super init here because we need the out_shapes
-        assert isinstance(in_shapes, list) and len(in_shapes) == 1, \
-            '{} is not a multimodal network'.format(self.__class__)
         block = InvertedResidual
         input_channel = 32
         last_channel = 1280
-
-        self.in_channels = in_shapes[0][-3]
+        assert isinstance(obs_space, gym.spaces.Box), \
+            'only handling unimodal, image observation rn'
+        self.in_channels = obs_space.shape[-3]
         self.max_block_repeats = cfg.get('max_block_repeats', 4)
         self.last_block = cfg.get('last_block', -1)
         width_mult = cfg.get('width_mult', 1.0)
@@ -121,15 +124,19 @@ class MobileNetV2(NetworkInterface):
             [6, 320, 1, 1],  # -2
         ]
         # only check the first element, assuming user knows t,c,n,s are required
-        if len(inverted_residual_setting) == 0 or len(inverted_residual_setting[0]) != 4:
+        if len(inverted_residual_setting) == 0 or len(
+                inverted_residual_setting[0]) != 4:
             raise ValueError("inverted_residual_setting should be non-empty "
-                             "or a 4-element list, got {}".format(inverted_residual_setting))
+                             "or a 4-element list, got {}".format(
+                inverted_residual_setting))
         last_block_idx = len(inverted_residual_setting) + 1 + self.last_block
 
         self.excluded_weight_names = set()
         # building first layer
-        input_channel = _make_divisible(input_channel * width_mult, round_nearest)
-        last_channel = _make_divisible(last_channel * max(1.0, width_mult), round_nearest)
+        input_channel = _make_divisible(input_channel * width_mult,
+                                        round_nearest)
+        last_channel = _make_divisible(last_channel * max(1.0, width_mult),
+                                       round_nearest)
         features = [ConvBNReLU(self.in_channels, input_channel, stride=2)]
         # building inverted residual blocks
         for block_num, (t, c, n, s) in enumerate(inverted_residual_setting):
@@ -139,22 +146,30 @@ class MobileNetV2(NetworkInterface):
                     stride = s
                 else:
                     stride = 1
-                if block_num > last_block_idx or i > (self.max_block_repeats - 1):
-                    logging.info('omitting residual block [{}, {}, {}, {}]'.format(t, c, n, s))
+                if block_num > last_block_idx or i > (
+                        self.max_block_repeats - 1):
+                    logging.info(
+                        'omitting residual block [{}, {}, {}, {}]'.format(t, c,
+                                                                          n, s))
                     features.append(nn.Identity())
                 else:
-                    logging.info('using residual block [{}, {}, {}, {}]'.format(t, c, n, s))
-                    features.append(block(input_channel, output_channel, stride, expand_ratio=t))
+                    logging.info(
+                        'using residual block [{}, {}, {}, {}]'.format(t, c, n,
+                                                                       s))
+                    features.append(block(input_channel, output_channel, stride,
+                                          expand_ratio=t))
                     input_channel = output_channel
         logging.info('\n\n')
         # building last several layers
         if self.last_block == -1:
-            features.append(ConvBNReLU(input_channel, last_channel, kernel_size=1))
+            features.append(
+                ConvBNReLU(input_channel, last_channel, kernel_size=1))
         else:
             last_channel = input_channel
 
         # call super now that we have the last channel shape, and also can add the modules now
-        super(MobileNetV2, self).__init__(in_shapes=in_shapes, out_shapes=[(last_channel,)], cfg=cfg)
+        super(MobileNetV2, self).__init__(in_shapes=in_shapes,
+                                          out_shapes=[(last_channel,)], cfg=cfg)
         # make it nn.Sequential
         self.features = nn.Sequential(*features)
 
@@ -187,8 +202,10 @@ class MobileNetV2(NetworkInterface):
         config_path = self.get_config_filename(load_folder)
         if os.path.exists(config_path):
             cfg = storage_utils.load_config(config_path)
-            if self.last_block > cfg['last_block'] or self.max_block_repeats > cfg['max_block_repeats']:
-                logging.warning('you are loading weights which have not been pretrained with the rest of the model')
+            if self.last_block > cfg['last_block'] or self.max_block_repeats > \
+                    cfg['max_block_repeats']:
+                logging.warning(
+                    'you are loading weights which have not been pretrained with the rest of the model')
 
         weights_path = self.get_weights_filepath(load_folder)
         new_dict: dict = torch.load(weights_path)

@@ -2,7 +2,7 @@ import logging
 
 import yaml
 
-from controllers.visual.encoder_trainer import EnvEncodingTrainer
+from controllers.visual.encoder_trainer import EnvEncodingController
 
 with open('./configs/cfg_execution.yaml') as f:
     CFG_EXECUTION = yaml.load(f, Loader=yaml.FullLoader)
@@ -20,7 +20,7 @@ with open('./configs/cfg_encoders.yaml') as f:
 def train_state_encoder(network_namespace, env_namespace):
     network_cfg = CFG_NETWORK[network_namespace]
     env_cfg = CFG_ENV[env_namespace]
-    trainer: EnvEncodingTrainer = EnvEncodingTrainer(env_cfg=env_cfg, network_cfg=network_cfg)
+    trainer: EnvEncodingController = EnvEncodingController(env_cfg=env_cfg, network_cfg=network_cfg)
     trainer.train(CFG_EXECUTION['encoder_training'])
 
 

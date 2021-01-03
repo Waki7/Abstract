@@ -1,10 +1,11 @@
 import logging
 
-from envs import grid_world as core, grid_world as render_shapes
+import envs.grid_world.env_core.env_objects as core_env_objects
+import envs.grid_world.rendering.draw_shapes as draw_shapes
 
 
-class EnvAgent(core.ActionableItem):
-    def __init__(self, observed_shape: render_shapes.Shape, id: str,
+class EnvAgent(core_env_objects.ActionableItem):
+    def __init__(self, observed_shape: draw_shapes.Shape, id: str,
                  policy=None, location=None, **kwargs):
         super(EnvAgent, self).__init__(observed_shape=observed_shape,
                                        policy=policy, id=id, location=location,
@@ -18,7 +19,7 @@ class EnvAgent(core.ActionableItem):
 
 
 class Enemy(EnvAgent):
-    def __init__(self, observed_shape: render_shapes.Shape, policy, id: str,
+    def __init__(self, observed_shape: draw_shapes.Shape, policy, id: str,
                  location=None, **kwargs):
         super(Enemy, self).__init__(observed_shape=observed_shape,
                                     policy=policy, id=id, location=location,
@@ -26,7 +27,7 @@ class Enemy(EnvAgent):
 
 
 class Friendly(EnvAgent):
-    def __init__(self, observed_shape: render_shapes.Shape, policy, id: str,
+    def __init__(self, observed_shape: draw_shapes.Shape, policy, id: str,
                  location=None, **kwargs):
         super(Friendly, self).__init__(observed_shape=observed_shape,
                                        policy=policy, id=id, location=location,
@@ -34,10 +35,6 @@ class Friendly(EnvAgent):
 
     def place(self, location):
         self.location = location
-
-    def reset_to_world(self, world):
-        self.world = world
-        # if we need to add other assignments here
 
     def step(self, env_input):
         return self.policy(env_input)
